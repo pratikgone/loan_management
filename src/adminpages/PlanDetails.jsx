@@ -14,9 +14,11 @@ import { IoMdCloseCircleOutline } from "react-icons/io";
 import { IoMdCheckmark } from "react-icons/io";
 
 
-export function PlanDetails() {
 
-    const navigate = useNavigate();
+export function PlanDetails(){
+
+
+        const navigate = useNavigate();
     //url wise plan details
     const { planId } = useParams();
 
@@ -38,8 +40,8 @@ export function PlanDetails() {
     if (!singlePlan) {
         return <div className="p-6 text-center">Plan not found</div>;
     }
-
-    return (
+    
+       return (
         <div className="p-4 md:p-8 bg-gray-50 min-h-screen">
             <div className="max-w-5xl mx-auto">
                 {/* Back Button */}

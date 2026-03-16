@@ -15,8 +15,10 @@ import { FiEye } from "react-icons/fi";
 import { FiXCircle } from "react-icons/fi";
 
 
-export function Signup() {
-  const [step, setStep] = useState(1);
+export function Signup(){
+
+
+      const [step, setStep] = useState(1);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -287,7 +289,8 @@ export function Signup() {
     }
   };
 
-  return (
+
+     return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-blue-50 px-4 sm:px-6 lg:px-8 py-8 md:py-12">
       <div className="w-full max-w-[420px] sm:max-w-md bg-white rounded-3xl shadow-2xl border border-gray-100/80 p-6 sm:p-8 md:p-10 transform transition-all">
         {/* Step Indicator */}
@@ -713,4 +716,3 @@ export function Signup() {
     </div>
   );
 }
-

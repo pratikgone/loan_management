@@ -1,6 +1,6 @@
 
 import { Login } from './adminpages/Login'
-import { Signup } from './adminpages/signup'
+import { Signup } from './adminpages/Signup'
 import {Routes, Route} from "react-router-dom"
 import './App.css'
 import Dashboard from './adminpages/Dashboard'
@@ -10,13 +10,13 @@ import ForgotPassword from './adminpages/ForgotPassword'
 import AdminLayout from './layouts/AdminLayout'
 import { Lenders } from './adminpages/Lenders'
 import { LenderDetails } from './adminpages/LenderDetails'
-import { PlanDetails } from './adminpages/planDetails'
 import { Revenue } from './adminpages/Revenue'
 import { HelpSupport } from './adminpages/HelpSupport'
 import { PrivacySecurity } from './adminpages/PrivacySecurity'
 import { ChangePassword} from './adminpages/ChangePassword'
 import { ForgotPasswordOTP } from './adminpages/ForgotPasswordOTP'
 import { ForgotPasswordReset } from './adminpages/ForgotPasswordReset'
+import { PlanDetails } from './adminpages/PlanDetails'
 
 
 
