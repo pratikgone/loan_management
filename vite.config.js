@@ -5,6 +5,11 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  resolve: {
+    alias: {
+      './adminpages/Signup': '/src/adminpages/Signup.jsx'
+    }
+  },
   server: {
     proxy: {
       '/api': {
@@ -12,6 +17,11 @@ export default defineConfig({
         changeOrigin: true,
         secure: true
       }
+    }
+  },
+  build: {
+    rollupOptions: {
+      external: []
     }
   }
 })

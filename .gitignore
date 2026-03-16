@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# OneDrive sync issues
+*OneDrive*
+*.one*
+.DS_Store
