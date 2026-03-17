@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IoCallOutline } from "react-icons/io5";
 import { CiLock } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../store/authSlice"
+import { clearError, login } from "../store/authSlice"
 import { FiEyeOff } from "react-icons/fi";
 import { FiEye } from "react-icons/fi";
 
@@ -20,6 +20,10 @@ export function Login() {
   //redux state and dispatch
   const dispatch = useDispatch();
   const { isLoading, error } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+  dispatch(clearError());
+}, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

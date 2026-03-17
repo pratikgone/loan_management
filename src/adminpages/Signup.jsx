@@ -9,7 +9,7 @@ import { IoCallOutline } from "react-icons/io5";
 import { IoCardOutline } from "react-icons/io5";
 import { FaCamera, FaImages, FaCheckCircle } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { signup } from "../store/authSlice";
+import { clearError, signup } from "../store/authSlice";
 import { FiEyeOff } from "react-icons/fi";
 import { FiEye } from "react-icons/fi";
 import { FiXCircle } from "react-icons/fi";
@@ -45,7 +45,11 @@ export function Signup(){
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  const { isLoading } = useSelector((state) => state.auth);
+  const { isLoading, error: reduxError } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+  dispatch(clearError());
+}, []);
 
   // Cleanup webcam on unmount
   useEffect(() => {
@@ -281,11 +285,49 @@ export function Signup(){
       await dispatch(signup(formData)).unwrap();
 
       setToast({ type: "success", message: "Account created successfully! Please login to continue." })
+
       setTimeout(() => {
         navigate("/");
-      },4000);
+      },2000);
+
     } catch (error) {
-      setToast({ type: "error", message: error.message || "Signup failed. Please try again." })
+       // Backend error message
+    let errorMsg = error || "Signup failed";
+
+     console.log("Signup Error:", err);
+
+    // Specific friendly messages (backend compare message )
+    const lowerMsg = errorMsg.toLowerCase();
+
+    if (lowerMsg.includes("mobile") && lowerMsg.includes("already")) {
+      errorMsg = "This mobile number is already in use. Please use a different mobile number.";
+      document.getElementById("mobile")?.focus(); // mobile field pe focus
+    } 
+    else if (lowerMsg.includes("email") && lowerMsg.includes("already")) {
+      errorMsg = "This email is already in use. Please use a different email or login.";
+      document.getElementById("email")?.focus(); // email field pe focus
+    } 
+    else if (lowerMsg.includes("aadhar") || lowerMsg.includes("aadhaar")) {
+      errorMsg = "This Aadhaar number is already registered. Please use a different Aadhaar.";
+      document.getElementById("aadhaar")?.focus();
+    } 
+    else if (lowerMsg.includes("pan") || lowerMsg.includes("pan card")) {
+      errorMsg = "This PAN card number is already in use. Please use a different PAN.";
+      document.getElementById("pan")?.focus();
+    }
+
+    // Local form error dikhao (red box)
+    setError(errorMsg);
+
+    // Toast (user  clear message )
+    setToast({
+      type: "error",
+      message: errorMsg
+    });
+
+      setTimeout(()=>{
+         setToast(null)//after toast message waight 2 sec then invisible
+      },2000);
     }
   };
 
@@ -350,9 +392,9 @@ export function Signup(){
         />
 
         <form onSubmit={handleNext} className="space-y-7">
-          {error && (
+          {(error || reduxError) && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm text-center">
-              {error}
+              {error || reduxError}
             </div>
           )}
 
