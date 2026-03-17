@@ -283,10 +283,34 @@ export function Signup(){
       setToast({ type: "success", message: "Account created successfully! Please login to continue." })
       setTimeout(() => {
         navigate("/");
-      },4000);
+      },2000);
     } catch (error) {
-      setToast({ type: "error", message: error.message || "Signup failed. Please try again." })
-    }
+      // Backend se aaya Redux error message
+  const reduxError = error.message || "Signup failed. Please try again.";
+
+  let friendlyMsg = reduxError;
+  const lowerMsg = reduxError.toLowerCase();
+
+  if (lowerMsg.includes("mobile") && lowerMsg.includes("already")) {
+    friendlyMsg = "This mobile number is already in use. Please use a different number.";
+    document.getElementById("mobile")?.focus();
+  } else if (lowerMsg.includes("email") && lowerMsg.includes("already")) {
+    friendlyMsg = "This email is already in use. Please use a different email or login.";
+    document.getElementById("email")?.focus();
+  }
+
+  // Local error set karo (signup page ke red box mein dikhega)
+  setError(friendlyMsg);
+
+  // Toast bhi dikhao
+  setToast({
+    type: "error",
+    message: friendlyMsg
+  });
+  setTimeout(() => {
+    setToast(null);
+  }, 3000);
+    };
   };
 
 
