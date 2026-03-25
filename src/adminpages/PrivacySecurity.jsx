@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import { FiLock, FiShield, FiEyeOff, FiCheckCircle, FiAlertTriangle, FiMail } from 'react-icons/fi';
-import { BsShieldCheck } from 'react-icons/bs';
-
+import { FiLock, FiShield, FiEyeOff, FiCheckCircle, FiChevronDown } from 'react-icons/fi';
 
 const sections = [
   {
@@ -57,114 +55,137 @@ const sections = [
 ];
 
 export function PrivacySecurity() {
-  const [expanded, setExpanded] = useState(null); // accordion state
+  const [expanded, setExpanded] = useState(null);
 
   return (
-    <div className="p-4 md:p-8 bg-gray-50 min-h-screen">
-      <div className="max-w-5xl mx-auto mb-8 md:mb-12 text-center">
-        <div className="inline-flex items-center gap-2 md:gap-3 mb-4 bg-gradient-to-r from-orange-300 to-orange-500 text-white px-5 py-2.5 md:px-8 md:py-3.5 rounded-full shadow-lg">
-          <BsShieldCheck className="w-5 h-5 md:w-6 md:h-6" />
-          <h1 className="text-lg md:text-2xl font-bold tracking-tight">Privacy & Security</h1>
-        </div>
-        <p className="text-gray-600 text-sm md:text-base max-w-2xl mx-auto leading-relaxed px-2">
-          At LoanHub, protecting your personal and financial information is our top priority. We follow strict security standards and comply with all applicable data protection regulations.
+    <>
+      {/* Heading */}
+      <div className="mb-10">
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Privacy & Security</h1>
+        <p className="mt-2 text-sm md:text-base text-gray-500">
+          Your personal and financial information is protected with bank-grade security standards.
         </p>
       </div>
 
-      {/* Security Highlights Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-10 md:mb-16 max-w-5xl mx-auto">
-        {/* Card 1 - Data Encryption */}
-        <div className="bg-white rounded-2xl shadow-md border border-orange-100 p-5 md:p-6 hover:shadow-xl hover:border-orange-300 transition-all duration-300 group">
-          <div className="flex items-center gap-4 mb-3">
-            <div className="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center group-hover:bg-orange-100 transition-colors flex-shrink-0">
-              <FiShield className="w-5 h-5 text-orange-600" />
+      {/* Security Highlight Cards */}
+      <div className="mb-10">
+        <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">Security Highlights</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
+          {[
+            {
+              icon: <FiShield className="w-5 h-5 text-orange-500" />,
+              title: 'Data Encryption',
+              desc: 'All data is encrypted in transit (TLS 1.3) and at rest (AES-256).',
+              bg: 'bg-orange-50',
+              border: 'border-orange-100',
+              iconBg: 'bg-white',
+            },
+            {
+              icon: <FiLock className="w-5 h-5 text-orange-500" />,
+              title: 'Two-Factor Auth',
+              desc: 'Enable 2FA for an extra layer of protection on your account.',
+              bg: 'bg-orange-50',
+              border: 'border-orange-100',
+              iconBg: 'bg-white',
+            },
+            {
+              icon: <FiEyeOff className="w-5 h-5 text-orange-500" />,
+              title: 'Privacy First',
+              desc: 'We never sell your data. Full control over your personal information.',
+              bg: 'bg-orange-50',
+              border: 'border-orange-100',
+              iconBg: 'bg-white',
+            },
+          ].map((card, i) => (
+            <div
+              key={i}
+              className={`${card.bg} rounded-2xl border ${card.border} shadow-sm p-5 md:p-6 hover:shadow-lg hover:scale-[1.02] transition-all duration-300`}
+            >
+              <div className="flex items-center gap-4 mb-3">
+                <div className={`${card.iconBg} p-3 rounded-xl shadow-sm`}>
+                  {card.icon}
+                </div>
+                <h3 className="text-base font-bold text-gray-900">{card.title}</h3>
+              </div>
+              <p className="text-sm text-gray-600 leading-relaxed">{card.desc}</p>
             </div>
-            <h3 className="text-lg font-bold text-gray-900">
-              Data Encryption
-            </h3>
-          </div>
-          <p className="text-gray-700 leading-relaxed text-sm md:text-base">
-            All data is encrypted in transit (TLS 1.3) and at rest (AES-256).
-          </p>
-        </div>
-
-        {/* Card 2 - Two-Factor Authentication */}
-        <div className="bg-white rounded-2xl shadow-md border border-orange-100 p-6 hover:shadow-xl hover:border-orange-300 transition-all duration-300 group">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center group-hover:bg-orange-100 transition-colors flex-shrink-0">
-              <FiLock className="w-5 h-5 text-orange-600" />
-            </div>
-            <h3 className="text-lg font-bold text-gray-900">
-              Two-Factor Authentication
-            </h3>
-          </div>
-          <p className="text-gray-700 leading-relaxed text-sm md:text-base">
-            Enable 2FA for an extra layer of protection on your account.
-          </p>
-        </div>
-
-        {/* Card 3 - Privacy First */}
-        <div className="bg-white rounded-2xl shadow-md border border-orange-100 p-6 hover:shadow-xl hover:border-orange-300 transition-all duration-300 group">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center group-hover:bg-orange-100 transition-colors flex-shrink-0">
-              <FiEyeOff className="w-5 h-5 text-orange-600" />
-            </div>
-            <h3 className="text-lg font-bold text-gray-900">
-              Privacy First
-            </h3>
-          </div>
-          <p className="text-gray-700 leading-relaxed text-sm md:text-base">
-            We never sell your data. Full control over your personal information.
-          </p>
+          ))}
         </div>
       </div>
 
-      {/* Main Content - Accordion Style Sections */}
-      <div className="max-w-5xl mx-auto bg-white rounded-2xl md:rounded-3xl shadow-sm border border-gray-100 mb-10 overflow-hidden">
-        <div className="p-5 md:p-10">
-          <h2 className="flex items-center gap-3 text-lg md:text-2xl font-bold text-gray-900 mb-6 md:mb-10">
-            <FiShield className="w-6 h-6 md:w-8 md:h-8 text-orange-600 shrink-0 mt-0.5" />
-            Privacy Policy & Security Guidelines
-          </h2>
-
-          <div className="space-y-4">
+      {/* Accordion — Privacy Policy & Terms */}
+      <div className="mb-10">
+        <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
+          Privacy Policy & Security Guidelines
+        </h2>
+        <div className="bg-white rounded-2xl border border-orange-100 shadow-sm p-6">
+          <div className="space-y-3">
             {sections.map((section, index) => (
               <div
                 key={index}
-                className="border border-gray-200 rounded-xl overflow-hidden transition-all duration-300 hover:border-orange-300"
+                className={`rounded-xl border transition-all duration-300 overflow-hidden ${
+                  expanded === index
+                    ? 'border-orange-300 bg-orange-50/40'
+                    : 'border-gray-200 hover:border-orange-200'
+                }`}
               >
                 <button
                   onClick={() => setExpanded(expanded === index ? null : index)}
-                  className="w-full flex items-center justify-between px-6 py-5 text-left bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer"
+                  className="w-full flex items-center justify-between px-5 py-4 text-left cursor-pointer"
                 >
-                  <h3 className="text-sm md:text-base font-bold text-gray-800 pr-4">{section.title}</h3>
-                  <span className={`transform transition-transform cursor-pointer ${expanded === index ? 'rotate-180' : ''}`}>
-                    ▼
-                  </span>
+                  <div className="flex items-center gap-3">
+                    <FiShield
+                      className={`w-5 h-5 flex-shrink-0 transition-colors ${
+                        expanded === index ? 'text-orange-500' : 'text-gray-400'
+                      }`}
+                    />
+                    <h3 className="text-sm md:text-base font-semibold text-gray-900">
+                      {section.title}
+                    </h3>
+                  </div>
+                  <FiChevronDown
+                    className={`w-5 h-5 text-gray-400 flex-shrink-0 transition-transform duration-300 ${
+                      expanded === index ? 'rotate-180 text-orange-500' : ''
+                    }`}
+                  />
                 </button>
 
                 <div
-                  className={`px-4 md:px-6 transition-all duration-300 ease-in-out ${expanded === index ? 'max-h-[1000px] opacity-100 pt-5' : 'max-h-0 opacity-0 overflow-hidden'
-                    }`}
+                  className={`transition-all duration-300 ease-in-out overflow-hidden ${
+                    expanded === index ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+                  }`}
                 >
-                  <p className="text-xs md:text-sm text-gray-600 leading-relaxed whitespace-pre-line">{section.content}</p>
+                  <div className="px-5 pb-5">
+                    <div className="border-t border-orange-100 pt-4">
+                      <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">
+                        {section.content}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         </div>
+      </div>
 
-        {/* Footer Security Note */}
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-5 py-6 md:py-8 border-t border-gray-200 text-center">
-          <p className="flex flex-col md:flex-row text-gray-700 flex items-center justify-center font-bold text-sm md:text-base mb-2">
-            <FiCheckCircle className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
-            Your security is our priority. Last updated: March 2026
-          </p>
-          <p className="text-[10px] md:text-xs text-gray-400 mt-2">
-            For any privacy concerns, contact us at <a href="mailto:privacy@loanhub.com" className="text-blue-600 hover:underline">privacy@loanhub.com</a>
-          </p>
+      {/* Footer Note */}
+      <div className="mb-10">
+        <div className="bg-white rounded-2xl border border-orange-100 shadow-sm p-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <FiCheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
+            <p className="text-sm font-semibold text-gray-700">
+              Your security is our priority · Last updated: March 2026
+            </p>
+          </div>
+          <a
+            href="mailto:privacy@loanhub.com"
+            className="text-sm text-orange-500 hover:text-orange-600 font-medium transition-colors"
+          >
+            privacy@loanhub.com
+          </a>
         </div>
       </div>
-    </div>
+    </>
   );
 }

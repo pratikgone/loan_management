@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { BsClock } from "react-icons/bs";
 import { CiCircleInfo } from "react-icons/ci";
-import { FiCheckCircle } from "react-icons/fi";
+import { FiMail, FiPhone, FiCalendar, FiChevronDown, FiSend } from "react-icons/fi";
+import { MdOutlineSupportAgent } from "react-icons/md";
+import { HiOutlineBookOpen } from "react-icons/hi";
+import { BsPlayCircle, BsPeople, BsCollection } from "react-icons/bs";
 
 export function HelpSupport() {
-
   const [expandedFaq, setExpandedFaq] = useState(null);
+  const [message, setMessage] = useState("");
+  const [sent, setSent] = useState(false);
 
   const faqItems = [
     {
@@ -30,132 +34,164 @@ export function HelpSupport() {
     },
   ];
 
-  return (
-    <div className="p-4 md:p-8 bg-gray-50 min-h-screen">
-      <div className="max-w-4xl mx-auto">
-        {/* Hero */}
-        <div className="text-center mb-10 pt-4">
-          <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-3 tracking-tight">
-            How can we help?
-          </h1>
-          <p className="text-sm md:text-base text-gray-600 max-w-md mx-auto">
-            Quick answers or contact our team.
-          </p>
-        </div>
+  const quickLinks = [
+    { icon: <HiOutlineBookOpen className="w-6 h-6" />, title: "Guides", bg: "bg-blue-50", color: "text-blue-600", iconBg: "bg-blue-100" },
+    { icon: <BsPlayCircle className="w-6 h-6" />, title: "Tutorials", bg: "bg-purple-50", color: "text-purple-600", iconBg: "bg-purple-100" },
+    { icon: <BsPeople className="w-6 h-6" />, title: "Community", bg: "bg-green-50", color: "text-green-600", iconBg: "bg-green-100" },
+    { icon: <BsCollection className="w-6 h-6" />, title: "Resources", bg: "bg-orange-50", color: "text-orange-600", iconBg: "bg-orange-100" },
+  ];
 
-        {/* Quick Help – 4 small cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-12">
-          {[
-            { icon: '📖', title: 'Guides' },
-            { icon: '🎥', title: 'Tutorials' },
-            { icon: '👥', title: 'Community' },
-            { icon: '📚', title: 'Resources' },
-          ].map((item, i) => (
+  const contactCards = [
+    {
+      icon: <FiMail className="w-6 h-6 text-orange-500" />,
+      title: "Email Us",
+      desc: "support@loanhub.com",
+      sub: "Reply within 24 hours",
+      bg: "bg-orange-50",
+      border: "border-orange-100",
+    },
+    {
+      icon: <FiPhone className="w-6 h-6 text-emerald-500" />,
+      title: "Call Us",
+      desc: "+91 98765 43210",
+      sub: "Mon–Fri, 9AM–6PM",
+      bg: "bg-emerald-50",
+      border: "border-emerald-100",
+    },
+    {
+      icon: <FiCalendar className="w-6 h-6 text-blue-500" />,
+      title: "Schedule",
+      desc: "Book a Meetup",
+      sub: "Pick a convenient slot",
+      bg: "bg-blue-50",
+      border: "border-blue-100",
+    },
+  ];
+
+  const handleSend = () => {
+    if (!message.trim()) return;
+    setSent(true);
+    setMessage("");
+    setTimeout(() => setSent(false), 3000);
+  };
+
+ return (
+    <>
+      {/* Heading */}
+      <div className="mb-10">
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900">How can we Help?</h1>
+        <p className="mt-2 text-sm md:text-base text-gray-500">
+          Find answers to common questions or get in touch with our support team
+        </p>
+      </div>
+
+    
+      <div className="mb-10">
+        <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">Quick Access</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 md:gap-6">
+          {quickLinks.map((item, i) => (
             <div
               key={i}
-              className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 text-center hover:border-orange-400 hover:shadow-md transition-all cursor-pointer group"
+              className={`${item.bg} rounded-2xl border border-orange-100 shadow-sm p-5 md:p-6 flex flex-col items-center text-center cursor-pointer hover:shadow-lg hover:scale-[1.02] transition-all duration-300`}
             >
-              <div className="text-3xl mb-2">{item.icon}</div>
-              <h3 className="text-sm font-medium text-gray-900">{item.title}</h3>
+              <div className={`${item.iconBg} p-3 rounded-xl mb-3 ${item.color}`}>
+                {item.icon}
+              </div>
+              <p className={`text-sm font-bold ${item.color}`}>{item.title}</p>
             </div>
           ))}
         </div>
+      </div>
+      
 
-        {/* FAQ Section – Accordion Style */}
-        <div className="mt-12 bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-          <div className="p-5 md:p-8">
-            <h2 className="flex items-center gap-3 text-xl md:text-2xl font-bold text-gray-900 mb-6">
-              <CiCircleInfo className="w-7 h-7 text-orange-600 shrink-0 " />
-              Frequently Asked Questions
-            </h2>
+      {/* Contact Cards */}
+      <div className="mb-10">
+        <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">Contact Us</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
+          {contactCards.map((card, i) => (
+            <div
+              key={i}
+              className={`${card.bg} rounded-2xl border ${card.border} shadow-sm p-5 md:p-6 flex items-center gap-4 hover:shadow-lg hover:scale-[1.02] transition-all duration-300 cursor-pointer`}
+            >
+              <div className="bg-white p-3 rounded-xl shadow-sm">{card.icon}</div>
+              <div>
+                <p className="text-sm font-bold text-gray-900">{card.title}</p>
+                <p className="text-sm text-gray-700 font-medium">{card.desc}</p>
+                <p className="text-xs text-gray-400 mt-0.5">{card.sub}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
 
-            <div className="space-y-4">
-              {faqItems.map((item, index) => (
-                <div
-                  key={index}
-                  className="border border-gray-200 rounded-xl overflow-hidden transition-all duration-300 hover:border-orange-300"
+      {/* FAQ */}
+      <div className="mb-10">
+        <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
+        <div className="bg-white rounded-2xl border border-orange-100 shadow-sm p-6">
+          <div className="space-y-3">
+            {faqItems.map((item, index) => (
+              <div
+                key={index}
+                className={`rounded-xl border transition-all duration-300 overflow-hidden ${
+                  expandedFaq === index ? "border-orange-300 bg-orange-50/40" : "border-gray-200 hover:border-orange-200"
+                }`}
+              >
+                <button
+                  onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
+                  className="w-full flex items-center justify-between px-5 py-4 text-left cursor-pointer"
                 >
-                  <button
-                    onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
-                    className="w-full flex items-center justify-between px-6 py-5 text-left bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer"
-                  >
+                  <div className="flex items-center gap-3">
+                    <CiCircleInfo className={`w-5 h-5 flex-shrink-0 transition-colors ${expandedFaq === index ? "text-orange-500" : "text-gray-400"}`} />
                     <h3 className="text-sm md:text-base font-semibold text-gray-900">{item.q}</h3>
-                    <span className={`transform transition-transform ${expandedFaq === index ? 'rotate-180' : ''}`}>
-                      ▼
-                    </span>
-                  </button>
-
-                  <div
-                    className={`px-6 transition-all duration-300 ease-in-out overflow-hidden ${expandedFaq === index ? 'max-h-[1000px] opacity-100 py-5' : 'max-h-0 opacity-0 py-0'
-                      }`}
-                  >
-                    <p className="text-xs md:text-sm text-gray-700 leading-relaxed whitespace-pre-line">{item.a}</p>
+                  </div>
+                  <FiChevronDown className={`w-5 h-5 text-gray-400 flex-shrink-0 transition-transform duration-300 ${expandedFaq === index ? "rotate-180 text-orange-500" : ""}`} />
+                </button>
+                <div className={`transition-all duration-300 ease-in-out overflow-hidden ${expandedFaq === index ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"}`}>
+                  <div className="px-5 pb-5">
+                    <div className="border-t border-orange-100 pt-4">
+                      <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">{item.a}</p>
+                    </div>
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Contact Options – 3 small cards */}
-        <div className="mb-12 m-[10px]">
-          <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-5 text-center">
-            Contact Us
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {[
-              { icon: '📧', title: 'Email', desc: 'support@loanhub.com' },
-              { icon: '📞', title: 'Call', desc: '+91 98765 43210' },
-              { icon: '🗓️', title: 'Meetup', desc: 'Schedule a call' },
-            ].map((item, i) => (
-              <div
-                key={i}
-                className="bg-white rounded-2xl p-5 text-center border border-gray-100 hover:shadow-lg transition-all"
-              >
-                <div className="text-3xl mb-3">{item.icon}</div>
-                <h3 className="font-bold text-gray-900 mb-1">{item.title}</h3>
-                <p className="text-xs text-gray-500 break-words">{item.desc}</p>
               </div>
             ))}
           </div>
         </div>
+      </div>
 
-        {/* Message Form – smaller */}
-        <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-10 max-w-2xl mx-auto">
-          <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2 text-center">
-            Send Message
-          </h2>
-          <p className="text-gray-500 text-center mb-8 text-sm">
-            Tell us your issue...
-          </p>
-
+      {/* Send Message */}
+      <div className="mb-10">
+        <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">Send a Message</h2>
+        <div className="bg-white rounded-2xl border border-orange-100 shadow-sm p-6">
+          <p className="text-sm text-gray-500 mb-4">Describe your issue and we'll get back to you shortly.</p>
           <textarea
             rows={4}
-            placeholder="Describe your issue or question..."
-            className="w-full px-4 py-4 bg-gray-50 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none resize-none text-sm"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Type your issue or question here..."
+            className="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none resize-none text-sm transition-all"
           />
-
-          <div className="border-t border-gray-200 mt-5 pt-4 text-center">
-            <p className="text-xs text-gray-500">
-              We usually reply within 24 hours.
-            </p>
-          </div>
-
-          <div className="text-center mt-8">
-            <button className="px-8 py-3 bg-orange-600 hover:bg-orange-700 text-white font-medium rounded-xl shadow-md transition-all">
-              Send Message
+          <div className="flex items-center justify-between mt-4">
+           
+            <div className="flex items-center gap-2 text-xs text-gray-400">
+              <BsClock className="w-4 h-4 text-orange-400" />
+              <span>We usually reply within 24 hours · 9AM–6PM, Mon–Fri</span>
+            </div>
+            <button
+              onClick={handleSend}
+              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white font-semibold rounded-xl shadow-md transition-all duration-200 cursor-pointer"
+            >
+              {sent ? <><span>Sent!</span><span>✓</span></> : <><span>Send</span><FiSend className="w-4 h-4" /></>}
             </button>
           </div>
-        </div>
-
-        {/* Support Hours */}
-        <div className="mt-12 bg-white rounded-xl shadow-sm border border-orange-100 p-5 text-center max-w-3xl mx-auto">
-          <div className="flex items-center justify-center gap-3 text-gray-700 text-sm font-medium">
-            <BsClock className="w-5 h-5 text-orange-600" />
-            <span>9AM - 6PM, Monday to Friday</span>
-          </div>
+        
+          {sent && (
+            <div className="mt-4 px-4 py-3 bg-green-50 border border-green-200 rounded-xl text-sm text-green-700 font-medium text-center">
+              ✅ Message sent! We'll get back to you soon.
+            </div>
+          )}
         </div>
       </div>
-    </div>
+    </>
   );
 }
