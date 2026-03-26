@@ -40,7 +40,7 @@ export default function AdminLayout({ children }) {
         className={`
         ${isCollapsed ? "lg:ml-20" : "lg:ml-72"}`}
       >
-        <Navbar toggleSidebar={toggleSidebar} />
+        <Navbar toggleSidebar={toggleSidebar} isCollapsed={isCollapsed} />
 
         <main className="p-6 pt-20">
           {children}

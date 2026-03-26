@@ -22,7 +22,7 @@ import axios from "axios";
 
 
 
-export function Navbar({ toggleSidebar }) {
+export function Navbar({ toggleSidebar, isCollapsed }) {
 
   const dispatch = useDispatch();
 
@@ -45,7 +45,7 @@ export function Navbar({ toggleSidebar }) {
     if (toast) {
       const timer = setTimeout(() => {
         setToast(null);
-      }, 4000)
+      }, 3000)
       return () => clearTimeout(timer);
     }
   }, [toast]);
@@ -134,14 +134,16 @@ export function Navbar({ toggleSidebar }) {
   return (
     <>
       {/* // src/components/Navbar.jsx */}
-      <header className="bg-white border-b border-orange-100 shadow-sm fixed top-0 left-0 right-0 lg:left-72 z-50">
+      <header className={`bg-white border-b border-orange-100 shadow-sm fixed top-0 right-0 left-0 z-50
+  ${isCollapsed ? "lg:left-20" : "lg:left-72"}
+`}>
         <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Left: Hamburger + Logo */}
             <div className="flex items-center gap-4">
               <button
                 onClick={toggleSidebar}
-                className="text-gray-600 hover:text-orange-600 focus:outline-none lg:hidden transition-colors"
+                className="text-gray-600 hover:text-orange-600 focus:outline-none transition-colors cursor-pointer"
                 aria-label="Toggle sidebar"
               >
                 <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -175,7 +177,7 @@ export function Navbar({ toggleSidebar }) {
               </div>
 
               {/* Logout */}
-              <button onClick={() => setShowLogoutConfirm(true)} className="flex items-center gap-2 text-sm font-medium text-orange-600 hover:text-orange-700 transition-colors focus:outline-none cursor-pointer">
+              <button onClick={() => setShowLogoutConfirm(true)} className="flex items-center gap-2 text-sm font-medium text-red-600 hover:bg-red-50  transition-colors focus:outline-none cursor-pointer">
                 <CiLogout className="h-5 w-5" />
                 <span className="hidden sm:inline">Logout</span>
               </button>
@@ -247,7 +249,7 @@ export function Navbar({ toggleSidebar }) {
                     localStorage.removeItem('token');
                     localStorage.removeItem('user');
                     navigate("/");
-                  }, 2000);
+                  }, 1500);
                 }}
                 className="flex-1 py-3 bg-red-600 hover:bg-red-700 text-white font-medium rounded-xl shadow-md transition-all cursor-pointer"
               >

@@ -22,8 +22,8 @@ export function Login() {
   const { isLoading, error } = useSelector((state) => state.auth);
 
   useEffect(() => {
-  dispatch(clearError());
-}, []);
+    dispatch(clearError());
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -72,8 +72,16 @@ export function Login() {
                 id="mobile"
                 type="tel"
                 value={form.mobile}
-                onChange={(e) => setForm({ ...form, mobile: e.target.value })}
+                onChange={(e) => {
+                  const value = e.target.value;
+
+                  // only numbers allow
+                  if (/^\d*$/.test(value)) {
+                    setForm({ ...form, mobile: value });
+                  }
+                }}
                 placeholder="Enter your 10 digit number"
+                maxLength={10}
                 required
                 disabled={isLoading}
                 className="w-full pl-12 px-4 py-3 border border-orange-100 text-sm sm:text-base rounded-lg text-gray-900 focus:outline-none bg-orange-50 transition-all duration-200"
