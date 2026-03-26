@@ -45,7 +45,7 @@ export const fetchSinglePlan = createAsyncThunk(
 //create plan
 
 export const createPlan = createAsyncThunk(
-    "plans.createPlan",
+    "plans/createPlan",
     async (planData, { getState, rejectWithValue }) => {
         try {
             const token = getState().auth.token || localStorage.getItem('token');
@@ -128,7 +128,9 @@ const initialState = {
     isUpdating: false,
     singlePlan: null,
     isLoadingSingle: false,
+
     error: null,
+    createError: null,
 };
 
 
@@ -168,7 +170,7 @@ const plansSlice = createSlice({
             })
             .addCase(createPlan.rejected, (state, action) => {
                 state.isCreating = false;
-                state.error = action.payload;
+                 state.createError = action.payload;
             })
 
             //delete plan

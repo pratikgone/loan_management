@@ -32,6 +32,17 @@ export function Plan() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  //pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const plansPerPage = 6;
+
+
+  const indexOfLastPlan = currentPage * plansPerPage;
+  const indexOfFirstPlan = indexOfLastPlan - plansPerPage;
+  const currentPlans = plans.slice(indexOfFirstPlan, indexOfLastPlan);
+
+  const totalPages = Math.ceil(plans.length / plansPerPage);
+
   // Check if navigated from Dashboard with openModal state
   useEffect(() => {
     if (location.state?.openModal) {
@@ -207,8 +218,8 @@ export function Plan() {
       {toast && (
         <div className="fixed top-20 left-1/2 -translate-x-1/2 w-[90%] max-w-md z-50 animate-fade-in">
           <div className={`px-6 py-4 rounded-xl shadow-xl text-white font-medium flex items-center justify-center gap-3 ${toast.action === 'delete' ? 'bg-red-600 border border-red-700' :
-              toast.action === 'update' ? 'bg-blue-600 border border-blue-700' :
-                'bg-green-600 border border-green-700' // default create/add
+            toast.action === 'update' ? 'bg-blue-600 border border-blue-700' :
+              'bg-green-600 border border-green-700' // default create/add
             }`}>
             {toast.action === 'delete' ? (
               <AiOutlineCloseCircle className="w-5 h-5" />
@@ -434,8 +445,8 @@ export function Plan() {
 
               <button
                 onClick={() => {
-                  // Actual delete call
-                  dispatch(deletePlan(deleteConfirm));
+                  setDeletingPlanId(deleteConfirm); 
+                  dispatch(deletePlan(deleteConfirm)).finally(() => setDeletingPlanId(null));
                   setDeleteConfirm(null);
                   setToast({ action: "delete", message: "Plan deleted successfully..." });
                 }}
@@ -466,11 +477,10 @@ export function Plan() {
             <p className="text-gray-400 mt-2">Create your first plan above.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 xl:gap-8">
-            {plans.map((plan) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+            {currentPlans.map((plan) => (
               <div
                 key={plan._id}
-
                 className="group bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden hover:shadow-2xl hover:border-orange-200/70 transition-all duration-300 transform hover:-translate-y-1 flex flex-col"
               >
                 {/* Card Header */}
@@ -495,7 +505,6 @@ export function Plan() {
 
                 {/* Card Body */}
                 <div className="p-6 space-y-6 flex-grow cursor-pointer" onClick={() => handleViewPlan(plan._id)}>
-                  {/* Key Info */}
                   <div className="grid grid-cols-2 gap-6 text-sm">
                     <div className="space-y-1">
                       <p className="text-gray-500 font-medium">Duration</p>
@@ -509,14 +518,11 @@ export function Plan() {
                     </div>
                   </div>
 
-                  {/* Features Card */}
-                  {/* Plan Features – Ultra Slim / Line Style Card (height bahut kam) */}
                   {plan.planFeatures && Object.keys(plan.planFeatures).length > 0 && (
-                    <div className="pt-2 border-t border-gray-100"> {/* pt-2 se top space kam */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2"> {/* gap-2 se items tight */}
+                    <div className="pt-2 border-t border-gray-100">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         {Object.entries(plan.planFeatures).map(([key, value]) => {
                           if (key === "prioritySupport" && !value) return null;
-
                           return (
                             <div
                               key={key}
@@ -528,7 +534,6 @@ export function Plan() {
                               <span className="capitalize truncate max-w-[130px]">
                                 {key.replace(/([A-Z])/g, " $1").trim()}
                               </span>
-
                               {value ? (
                                 <IoCheckmarkCircleOutline className="text-green-600 w-4 h-4 flex-shrink-0" />
                               ) : (
@@ -573,11 +578,45 @@ export function Plan() {
                     )}
                   </button>
                 </div>
+
               </div>
             ))}
           </div>
         )}
       </div>
+
+      {/*  Pagination — after plans list*/}
+      {plans.length > 0 && (
+        <div className="flex justify-center items-center gap-2 mt-10 flex-wrap">
+          <button
+            onClick={() => setCurrentPage((prev) => prev - 1)}
+            disabled={currentPage === 1}
+            className="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50 cursor-pointer"
+          >
+            Prev
+          </button>
+
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentPage(i + 1)}
+              className={`px-4 py-2 rounded-lg ${
+                currentPage === i + 1 ? "bg-orange-600 text-white" : "bg-gray-100"
+              }`}
+            >
+              {i + 1}
+            </button>
+          ))}
+
+          <button
+            onClick={() => setCurrentPage((prev) => prev + 1)}
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50 cursor-pointer"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 }

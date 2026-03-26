@@ -22,6 +22,19 @@ export function Lenders() {
     //filter icon search state
     const [planStatusFilter, setPlanStatusFilter] = useState("all");
 
+    //pagination state
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 4;
+
+
+ 
+
+useEffect(() => {
+  setCurrentPage(1);
+}, [searchQuery, planStatusFilter]);
+
+
+
     const navigate = useNavigate();
 
     const dispatch = useDispatch();
@@ -69,6 +82,13 @@ export function Lenders() {
         if (planStatusFilter === "expired") return lender.planPurchaseDetails?.isPlanActive === false;
         return true;
     });
+
+       // Pagination logic
+const indexOfLastItem = currentPage * itemsPerPage;
+const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+const currentLenders = statusFilteredLenders.slice(indexOfFirstItem, indexOfLastItem);
+
+const totalPages = Math.ceil(statusFilteredLenders.length / itemsPerPage);
 
     // Stats calculation (redux se direct)
     const totalLenders = lenders.length;
@@ -220,8 +240,8 @@ export function Lenders() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6 max-w-6xl mx-auto">
-                {statusFilteredLenders.length > 0 ? (
-                    statusFilteredLenders.map((lender) => {
+                {currentLenders.length > 0 ? (
+                    currentLenders.map((lender) => {
                         return (
                             <div key={lender._id} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex flex-col hover:shadow-md transition-shadow">
 
@@ -328,6 +348,19 @@ export function Lenders() {
                     </div>
                 )}
             </div>
+            {totalPages > 1 && (
+  <div className="flex justify-center items-center gap-2 mt-6">
+    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+      <button
+        key={page}
+        onClick={() => setCurrentPage(page)}
+        className={`px-3 py-1 rounded-lg text-sm font-medium ${page === currentPage ? 'bg-orange-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+      >
+        {page}
+      </button>
+    ))}
+  </div>
+)}
         </div>
     );
 }

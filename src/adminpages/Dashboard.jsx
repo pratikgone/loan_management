@@ -69,7 +69,7 @@ export default function Dashboard() {
         title: "Total Revenue",
         value: `₹ ${revenue.totalRevenue.toLocaleString()}`,
         icon: (
-          <FiDollarSign className="w-5 h-5 text-orange-500" />
+          <FiDollarSign className="w-6 h-6 md:w-7 md:h-7 text-orange-500" />
 
         ),
         bg: "bg-orange-50",
@@ -78,7 +78,7 @@ export default function Dashboard() {
         title: "Total Purchases",
         value: revenue.totalPurchases.toLocaleString(),
         icon: (
-          <FiShoppingCart className="w-5 h-5 text-orange-500" />
+          <FiShoppingCart className="w-6 h-6 md:w-7 md:h-7 text-orange-500" />
         ),
         bg: "bg-orange-50",
       },
@@ -86,7 +86,7 @@ export default function Dashboard() {
         title: "Avg. Per Purchase",
         value: `₹ ${revenue.averageRevenuePerPurchase.toLocaleString()}`,
         icon: (
-          <HiMiniArrowTrendingUp className="w-5 h-5 text-orange-500" />
+          <HiMiniArrowTrendingUp className="w-6 h-6 md:w-7 md:h-7 text-orange-500" />
 
         ),
         bg: "bg-orange-50",
@@ -95,7 +95,7 @@ export default function Dashboard() {
         title: "Active Plans",
         value: revenue.activePlansCount.toLocaleString(),
         icon: (
-          <FiCheckCircle className="w-5 h-5 text-orange-500" />
+          <FiCheckCircle className="w-6 h-6 md:w-7 md:h-7 text-orange-500" />
 
         ),
         bg: "bg-orange-50",
@@ -185,7 +185,7 @@ export default function Dashboard() {
         <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
           Revenue Overview
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
           {stats.map((stat, index) => (
             <div
               key={index}
@@ -201,8 +201,10 @@ export default function Dashboard() {
                       {stat.value}
                     </p>
                   </div>
-                  <div className="p-3 bg-white/80 rounded-xl shadow-sm">
+                  <div className="p-4 bg-white/90 rounded-2xl shadow-sm group-hover:scale-110 transition-transform duration-300">
+                  <div className="text-orange-500">
                     {stat.icon}
+                    </div>
                   </div>
                 </div>
               </div>
