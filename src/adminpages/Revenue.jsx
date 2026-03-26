@@ -434,7 +434,7 @@ export function Revenue() {
                             yearly.map((year, index) => (
                                 <div
                                     key={index}
-                                    className="bg-white rounded-xl shadow-sm p-5 md:p-6 border border-gray-200 hover:shadow-md hover:border-blue-300 transition-all duration-300 group"
+                                    className="bg-white rounded-xl shadow-sm p-5 md:p-6 border border-gray-200 hover:shadow-md hover:border-orange-300 transition-all duration-300 group"
                                 >
                                     <div className="flex flex-col space-y-4">
                                         <div className="flex items-center justify-between">
@@ -492,7 +492,7 @@ export function Revenue() {
                             purchases.map((purchase, index) => (
                                 <div
                                     key={index}
-                                    className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-all"
+                                    className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:border-orange-300 hover:shadow-md transition-all"
                                 >
                                     <div className="p-5 md:p-6 flex flex-col lg:flex-row justify-between gap-6">
                                         <div className="flex-1">

@@ -210,8 +210,8 @@ const totalPages = Math.ceil(statusFilteredLenders.length / itemsPerPage);
 
 
             {/* Stats White Card - Search bar ke niche */}
-            <div className="mb-8 bg-white rounded-xl border border-orange-100 shadow-sm p-5 max-w-4xl mx-auto">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 divide-y sm:divide-y-0 sm:divide-x divide-gray-100">
+            <div className="mb-8 bg-white rounded-2xl border border-orange-100 shadow-sm p-6 max-w-5xl mx-auto">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 divide-y sm:divide-y-0 sm:divide-x divide-gray-100">
                     {/* Total Lenders */}
                     <div className="py-2 sm:py-0 text-center">
                         <p className="text-xs text-gray-500 font-bold tracking-wider">Total Lenders</p>
@@ -268,9 +268,10 @@ const totalPages = Math.ceil(statusFilteredLenders.length / itemsPerPage);
 
                                     {/* Dynamic Status Tag */}
                                     <div className={`
-                                    text-[9px] md:text-[10px] lg:text-xs font-bold 
-                                    px-2.5 py-1 rounded-full uppercase tracking-wide border 
-                                    self-start sm:self-center whitespace-nowrap
+                                      text-[9px] md:text-[10px] lg:text-[10px] xl:text-[11px] font-bold 
+    px-2 lg:px-1.5 xl:px-2.5 py-1 rounded-full uppercase tracking-tighter border
+    whitespace-nowrap shrink-0
+    ml-2 lg:ml-1 xl:ml-3
                                     ${lender.planPurchaseDetails?.isPlanActive
                                             ? "text-green-600 bg-green-50 border-green-200"
                                             : "text-red-600 bg-red-50 border-red-200"
