@@ -201,6 +201,9 @@ export function Plan() {
 
   return (
     <div className="p-4 md:p-6 bg-gray-50 min-h-screen">
+       <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
+          Plan Management
+        </h2>
       <div className="flex flex-col sm:flex-row justify-between items-center mb-8 items-start sm:items-center gap-4 ">
         <h1 className="text-xl md:text-2xl font-bold text-gray-900">All Plans</h1>
 

@@ -201,6 +201,11 @@ export function Signup(){
         return;
       }
 
+      if(!form.address.trim()) {
+        setError("Address is required");
+        return;
+      }
+
       if (!form.password) {
         setError("Password is required");
         return;
@@ -243,6 +248,11 @@ export function Signup(){
       }
       if (!/^\d{10}$/.test(form.mobile)) {
         setError("Mobile Number must be exactly 10 digits");
+        return;
+      }
+
+      if(!form.pan.trim()) {
+        setError("Pancard Number is required");
         return;
       }
 
@@ -416,7 +426,7 @@ export function Signup(){
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                     placeholder="Enter your full name"
-                    required
+                    
                     className="w-full pl-12 px-4 py-3 border border-gray-300 rounded-lg text-sm sm:text-base bg-orange-50 text-gray-900 focus:outline-none transition-all duration-200"
                   />
                 </div>
@@ -437,7 +447,7 @@ export function Signup(){
                     value={form.email}
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
                     placeholder="Enter your email"
-                    required
+                  
                     className="w-full pl-12 px-4 py-3 border border-gray-300 text-sm sm:text-base rounded-lg bg-orange-50 text-gray-900 focus:outline-none transition-all duration-200"
                   />
                 </div>
@@ -458,7 +468,7 @@ export function Signup(){
                     value={form.address}
                     onChange={(e) => setForm({ ...form, address: e.target.value })}
                     placeholder="Enter your full address"
-                    required
+                    
                     className="w-full pl-12 px-4 py-3 border text-sm sm:text-base border-gray-300 rounded-lg bg-orange-50 text-gray-900 focus:outline-none transition-all duration-200"
                   />
                 </div>
@@ -479,7 +489,7 @@ export function Signup(){
                     value={form.password}
                     onChange={(e) => setForm({ ...form, password: e.target.value })}
                     placeholder="Create password"
-                    required
+                    
                     className="w-full pl-12 px-4 py-3 pr-12 border text-sm sm:text-base border-gray-300 rounded-lg bg-orange-50 text-gray-900 focus:outline-none transition-all duration-200"
                   />
                   {/* Right Eye Icon – placeholder in right side */}
@@ -512,7 +522,7 @@ export function Signup(){
                     value={form.confirmPassword}
                     onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
                     placeholder="Confirm password"
-                    required
+                    
                     className="w-full pl-12 px-4 py-3 pr-12 border text-sm sm:text-base border-gray-300 rounded-lg bg-orange-50 text-gray-900 focus:outline-none transition-all duration-200"
                   />
                   {/* Right Eye Icon */}
@@ -550,7 +560,7 @@ export function Signup(){
                     value={form.aadhaar}
                     onChange={(e) => setForm({ ...form, aadhaar: e.target.value })}
                     placeholder="Enter 12 digit Aadhar number"
-                    required
+                    
                     maxLength={12}
                     className="w-full pl-12 px-4 py-3 border text-sm sm:text-base border-gray-300 rounded-lg bg-orange-50 text-gray-900 focus:outline-none transition-all duration-200"
                   />
@@ -572,7 +582,7 @@ export function Signup(){
                     value={form.mobile}
                     onChange={(e) => setForm({ ...form, mobile: e.target.value })}
                     placeholder="Enter 10 digit mobile number"
-                    required
+                    
                     maxLength={10}
                     className="w-full pl-12 px-4 py-3 border text-sm sm:text-base border-gray-300 rounded-lg bg-orange-50 text-gray-900 focus:outline-none transition-all duration-200"
                   />

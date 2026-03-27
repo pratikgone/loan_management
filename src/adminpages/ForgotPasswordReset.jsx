@@ -30,6 +30,16 @@ export function ForgotPasswordReset() {
     setError("");
     setMessage("");
 
+    if(!newPassword.trim()) {
+      setError("New password is reaquired");
+      return;
+    }
+
+    if(!confirmPassword.trim()) {
+      setError("Confirm password is required");
+      return;
+    }
+
     // 1. Frontend validation
     if (newPassword !== confirmPassword) {
       setError("New password and confirm password do not match!");

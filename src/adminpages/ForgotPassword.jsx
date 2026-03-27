@@ -30,10 +30,10 @@ export default function ForgotPassword() {
 
       setMessage(res.data.message || "Verification code sent to your email!");
 
-      // Success hone pe OTP page pe jao + email pass karo
+      // if Success then going to OTP page + email passing
       setTimeout(() => {
         navigate("/forgotpassword/otp", { state: { email } });
-      }, 1500); // thoda delay taaki message dikhe
+      }, 1500); // delay to show message
     } catch (err) {
       setError(
         err.response?.data?.message ||
@@ -87,7 +87,7 @@ export default function ForgotPassword() {
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={isLoading}
                 placeholder="Enter your email"
-                required
+                
                 className="w-full pl-12 px-4 py-3 text-sm sm:text-base border border-orange-100 rounded-lg bg-orange-50 text-gray-900 focus:outline-none transition-all duration-200"
               />
             </div>

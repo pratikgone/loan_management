@@ -105,13 +105,17 @@ export function ChangePassword() {
       )}
 
       {/* Heading */}
-      <div className="mb-10">
+      <div className="mb-10 flex flex-col items-center">
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Security Settings</h1>
         <p className="mt-2 text-sm md:text-base text-gray-500">
           Manage your administrative credentials and security preferences.
         </p>
       </div>
 
+        <div className="mb-10">
+        <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
+          Secure Your Account
+        </h2>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
 
         {/* Main Form */}
@@ -274,6 +278,7 @@ export function ChangePassword() {
           </div>
 
         </div>
+      </div>
       </div>
     </>
   );

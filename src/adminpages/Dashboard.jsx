@@ -110,6 +110,9 @@ export default function Dashboard() {
     <>
       {/* Welcome back Card */}
       <div className="mb-10">
+         <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
+          Dashboard Overview
+        </h2>
         <div className="bg-gradient-to-br from-orange-400 to-orange-300 rounded-2xl shadow-xl overflow-hidden relative">
           <div className="px-6 py-8 md:px-10 md:py-10 lg:px-12 lg:py-12 pr-28 md:pr-36 lg:pr-40">
             {/* Profile Circle */}

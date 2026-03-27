@@ -17,6 +17,7 @@ import { ChangePassword} from './adminpages/ChangePassword'
 import { ForgotPasswordOTP } from './adminpages/ForgotPasswordOTP'
 import { ForgotPasswordReset } from './adminpages/ForgotPasswordReset'
 import { PlanDetails } from './adminpages/PlanDetails'
+import PrivateRoute from './components/PrivateRoute'
 
 
 
@@ -28,8 +29,13 @@ function App() {
     <Routes>
      <Route path='/' element={<Login/>}></Route>  
       <Route path='/signup' element={<Signup/>}></Route>
+
+       <Route path='/forgotpassword' element={<ForgotPassword/>}></Route>
+       <Route path='/forgotpassword/otp' element={<ForgotPasswordOTP/>}></Route>
+        <Route path='/forgotpassword/reset' element={<ForgotPasswordReset/>}></Route>
     
-     {/* All admin pages AdminLayout ke andar */}
+     {/* All admin pages in PrivateRote then AdminLayout*/}
+        <Route element={<PrivateRoute />}>
         <Route element={<AdminLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/plans" element={<Plan />} />
@@ -42,9 +48,7 @@ function App() {
           <Route path="/password" element={<ChangePassword />} />
           {/*admin pages add here */}
         </Route>
-      <Route path='/forgotpassword' element={<ForgotPassword/>}></Route>
-       <Route path='/forgotpassword/otp' element={<ForgotPasswordOTP/>}></Route>
-        <Route path='/forgotpassword/reset' element={<ForgotPasswordReset/>}></Route>
+        </Route>
       </Routes>
     </>
   )

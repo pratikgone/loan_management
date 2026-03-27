@@ -60,7 +60,7 @@ export function PrivacySecurity() {
   return (
     <>
       {/* Heading */}
-      <div className="mb-10">
+      <div className="mb-10 flex flex-col items-center">
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Privacy & Security</h1>
         <p className="mt-2 text-sm md:text-base text-gray-500">
           Your personal and financial information is protected with bank-grade security standards.

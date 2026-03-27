@@ -18,10 +18,10 @@ const menuItems = [
   { name: "Plans", path: "/plans", icon: <MdOutlineSubscriptions /> },
   { name: "Revenue", path: "/revenue", icon: <FiDollarSign /> },
   { name: "Lenders", path: "/lenders", icon: <FiUsers /> },
-  { name: "Help & Support", path: "/support", icon: <IoIosHelpCircleOutline /> },
+  { name: "Help & Support", path: "/support", icon: <IoIosHelpCircleOutline className="h-5.5 w-5.5 stroke-[1]"/> },
   { name: "Privacy & Security", path: "/security", icon: <FiShield /> },
   {
-    name: "Change Password", path: "/password", icon: <CiLock />
+    name: "Change Password", path: "/password", icon: <CiLock className="h-5.5 w-5.5 stroke-[0.5]"/>
   },
 ];
 

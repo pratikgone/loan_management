@@ -15,18 +15,43 @@ export function Login() {
 
   const [showPassword, setShowPassword] = useState(false);
 
+  const [localError, setLocalError] = useState("");
+
   const navigate = useNavigate();
 
   //redux state and dispatch
   const dispatch = useDispatch();
   const { isLoading, error } = useSelector((state) => state.auth);
 
+  // clear error when components mount
   useEffect(() => {
     dispatch(clearError());
-  }, []);
+    setLocalError("")
+  }, [dispatch]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLocalError("");
+
+    if(!form.mobile){
+      setLocalError("Mobile number is required")
+      return;
+    }
+
+    if(form.mobile.length !== 10){
+      setLocalError("Enter valid 10 digit mobile number")
+      return;
+    }
+
+     if(!form.password){
+      setLocalError("Password is required")
+      return;
+    }
+
+    if(form.password.length < 6){
+      setLocalError("Password must be at least 6 character")
+      return;
+    }
 
     try {
       const resultAction = await dispatch(login({
@@ -38,7 +63,7 @@ export function Login() {
       if (resultAction.token) {
         navigate("/dashboard");
       }
-    } catch (err) {
+    } catch (error) {
       // Error already handled in redux state → shown via {error}
     }
   };
@@ -53,9 +78,10 @@ export function Login() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-7">
-          {error && (
+          {/* Show local error (frontend validation) */}
+          {(localError || error) && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-xs sm:text-sm text-center">
-              {error}
+              {localError || error}
             </div>
           )}
 
@@ -82,7 +108,7 @@ export function Login() {
                 }}
                 placeholder="Enter your 10 digit number"
                 maxLength={10}
-                required
+                
                 disabled={isLoading}
                 className="w-full pl-12 px-4 py-3 border border-orange-100 text-sm sm:text-base rounded-lg text-gray-900 focus:outline-none bg-orange-50 transition-all duration-200"
               />
@@ -104,7 +130,7 @@ export function Login() {
                 value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
                 placeholder="Enter your password"
-                required
+                
                 disabled={isLoading}
                 className="w-full pl-12 px-4 py-3 pr-12 border text-sm sm:text-base border-orange-100 rounded-lg text-gray-900 focus:outline-none bg-orange-50 transition-all duration-200"
               />

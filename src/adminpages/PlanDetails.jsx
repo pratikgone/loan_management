@@ -52,9 +52,16 @@ export function PlanDetails(){
                     ← Back to Plans
                 </button>
 
+                
+        <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
+          Plan Details
+        </h2>
+               
+
                 {/* First Card – Hero Section */}
 
                 <div className="bg-white rounded-2xl md:rounded-3xl shadow-xl border border-gray-100 overflow-hidden mb-6 md:mb-8">
+                    
 
                     <div className="bg-gradient-to-r from-orange-50 via-orange-50 to-orange-100 px-6 py-8 md:px-8 md:py-10">
 

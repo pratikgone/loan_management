@@ -136,6 +136,9 @@ export function Revenue() {
     return (
 
         <div className="p-4 md:p-6 lg:p-8 bg-gray-50 min-h-screen">
+        <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
+          Revenue Report
+        </h2>
             {/* Horizontal "All Data" Card */}
             <div className="mb-6 md:mb-8 max-w-7xl mx-auto">
                 <div

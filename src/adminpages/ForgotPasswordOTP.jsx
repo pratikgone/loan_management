@@ -48,6 +48,11 @@ export function ForgotPasswordOTP() {
     e.preventDefault();
     const otpString = otp.join("");
 
+    if (otpString.length === 0) {
+    setError("Please enter OTP");
+    return;
+  }
+
     if (otpString.length !== 6) {
       setError("Please enter complete 6-digit OTP");
       return;
@@ -85,6 +90,12 @@ export function ForgotPasswordOTP() {
     try {
       const res = await axios.post(`${BASE_URL}/resend-otp`, { email });
       setMessage(res.data.message || "Verification code sent to your email!");
+      setOtp(["", "", "", "", "", ""]);
+
+      //first box focus
+      setTimeout(() => {
+      inputRefs.current[0]?.focus();
+    }, 300);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to resend OTP");
     } finally {
@@ -102,8 +113,8 @@ export function ForgotPasswordOTP() {
             Enter OTP
           </h1>
           <p className="mt-3 text-sm sm:text-base text-gray-600 leading-relaxed">
-            We sent a 6-digit verification code to <br />
-            <span className="font-semibold text-orange-600 break-all">{email || "codecraftwt@gmail.com."}</span>
+We sent a 6-digit verification code to <br />
+            <span className="font-semibold text-orange-600 break-all">{email || "your email address"}</span>
           </p>
         </div>
 
@@ -138,7 +149,7 @@ export function ForgotPasswordOTP() {
 
           <button
             type="submit"
-            disabled={isLoading || otp.join("").length !== 6}
+            disabled={isLoading}
             className={`w-full py-3.5 px-4 bg-orange-400 text-white font-semibold rounded-xl shadow-md hover:bg-orange-200 transition-all cursor-pointer ${isLoading || otp.join("").length !== 6 ? "opacity-70 cursor-not-allowed" : ""
               }`}
           >

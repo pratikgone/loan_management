@@ -153,9 +153,12 @@ export function Navbar({ toggleSidebar, isCollapsed }) {
 
               {/* Logo: navbar*/}
               <Link to="/dashboard" className="flex items-center gap-2">
-                <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white font-bold shadow-md">
-                  LA
-                </div>
+                <img 
+                src="/logo.png"
+                alt="Loan Admin Logo"
+                className="h-9 w-auto rounded-lg object-contain bg-gradient-to-br from-orange-500 to-orange-600 flex item shadow-md">
+                  
+                </img>
                 {/* Full name optional - in mobile small view */}
                 <span className="text-xl font-bold text-orange-600 tracking-tight hidden">
                   LoanAdmin

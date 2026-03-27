@@ -95,6 +95,10 @@ export function LenderDetails() {
       </button>
 
       <div className="max-w-3xl mx-auto space-y-6 sm:space-y-8">
+        
+         <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
+          Lender Details
+        </h2>
 
         {/* 2. TOP PROFILE CARD */}
         <div className="bg-white rounded-2xl sm:rounded-[2rem] shadow-sm border border-orange-100 p-6 sm:p-8 flex flex-col md:flex-row items-center gap-6 sm:gap-8 relative overflow-hidden">
