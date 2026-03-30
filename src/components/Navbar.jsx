@@ -2,7 +2,7 @@
 import { Link } from "react-router-dom";
 import { CiLogout } from "react-icons/ci";
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { logout, updateProfile } from "../store/authSlice";
 import { useNavigate } from "react-router-dom";
 import { CiCircleInfo } from "react-icons/ci";
@@ -18,8 +18,105 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import { FiLogOut } from "react-icons/fi";
 import React from "react";
 import axios from "axios";
+import { FiEdit2 } from "react-icons/fi";
+import { IoClose } from "react-icons/io5";
 
 
+
+// ─── Toast Icons ─────────────────────────────────────────────
+const ToastIcons = {
+  success: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+      strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  ),
+  error: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+      strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+      <circle cx="12" cy="12" r="10" />
+      <line x1="12" y1="8" x2="12" y2="12" />
+      <line x1="12" y1="16" x2="12.01" y2="16" />
+    </svg>
+  ),
+};
+
+const toastStyles = {
+  success: { icon: "bg-green-100 text-green-700", bar: "bg-green-500" },
+  error: { icon: "bg-red-100   text-red-700", bar: "bg-red-500" },
+};
+
+function ToastItem({ id, type, message, duration = 4000, onRemove }) {
+  const [removing, setRemoving] = useState(false);
+  const s = toastStyles[type] || toastStyles.error;
+
+  const dismiss = useCallback(() => {
+    setRemoving(true);
+    setTimeout(() => onRemove(id), 220);
+  }, [id, onRemove]);
+
+  useEffect(() => {
+    const t = setTimeout(dismiss, duration);
+    return () => clearTimeout(t);
+  }, [dismiss, duration]);
+
+  return (
+    <div className={`relative flex items-start gap-3 bg-white border border-gray-200
+      rounded-xl shadow-md p-4 min-w-[280px] max-w-sm overflow-hidden
+      transition-all duration-[220ms]
+      ${removing ? "opacity-0 translate-x-full" : "opacity-100 translate-x-0"}`}>
+      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${s.icon}`}>
+        {ToastIcons[type]}
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-medium text-gray-900 leading-snug">{message}</p>
+        <p className="text-xs text-gray-500 mt-0.5">
+          {type === "success" ? "Action completed successfully." : "Something went wrong."}
+        </p>
+      </div>
+      <button onClick={dismiss}
+        className="text-gray-400 hover:text-gray-600 hover:bg-gray-100
+          rounded p-0.5 transition-colors flex-shrink-0 mt-0.5 border-0 bg-transparent cursor-pointer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+          strokeLinecap="round" className="w-3 h-3">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+      <div className={`absolute bottom-0 left-0 h-0.5 ${s.bar}`}
+        style={{ animation: `shrink ${duration}ms linear forwards` }} />
+      <style>{`@keyframes shrink { from { width: 100%; } to { width: 0%; } }`}</style>
+    </div>
+  );
+}
+
+function ToastContainer({ toasts, onRemove }) {
+  return (
+    <div className="fixed top-5 right-5 z-[200] flex flex-col gap-2.5 pointer-events-none">
+      {toasts.map((t) => (
+        <div key={t.id} className="pointer-events-auto">
+          <ToastItem {...t} onRemove={onRemove} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+let _toastId = 0;
+function useToast() {
+  const [toasts, setToasts] = useState([]);
+
+  const showToast = useCallback(({ type, message, duration = 4000 }) => {
+    const id = ++_toastId;
+    setToasts((prev) => [...prev, { id, type, message, duration }]);
+  }, []);
+
+  const removeToast = useCallback((id) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  }, []);
+
+  return { toasts, showToast, removeToast };
+}
 
 
 export function Navbar({ toggleSidebar, isCollapsed }) {
@@ -32,23 +129,14 @@ export function Navbar({ toggleSidebar, isCollapsed }) {
   // Auth slice to real user data  (login time save )
   const { isLoading, user } = useSelector((state) => state.auth || {});
 
+  const { toasts, showToast, removeToast } = useToast();
+
 
   const [isEditing, setIsEditing] = useState(false);
 
-  const [toast, setToast] = useState(null);
+
 
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
-
-
-
-  useEffect(() => {
-    if (toast) {
-      const timer = setTimeout(() => {
-        setToast(null);
-      }, 3000)
-      return () => clearTimeout(timer);
-    }
-  }, [toast]);
 
 
 
@@ -64,7 +152,7 @@ export function Navbar({ toggleSidebar, isCollapsed }) {
   const [editForm, setEditForm] = useState({});
   const [newProfilePic, setNewProfilePic] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
-  // const fileInputRef = useRef(null);
+  const fileInputRef = useRef(null);
 
   // Sync form with user data when modal opens
   useEffect(() => {
@@ -74,6 +162,7 @@ export function Navbar({ toggleSidebar, isCollapsed }) {
         mobileNo: user.mobileNo || "",
         email: user.email || "",
         address: user.address || "",
+        aadharCardNo: user.aadharCardNo || "",
       });
       setNewProfilePic(null);
       setPreviewUrl(null);
@@ -84,45 +173,75 @@ export function Navbar({ toggleSidebar, isCollapsed }) {
     setEditForm({ ...editForm, [e.target.name]: e.target.value });
   };
 
-  // const handleImageChange = (e) => {
-  //   const file = e.target.files[0];
-  //   if (file) {
-  //     setNewProfilePic(file);
-  //     const reader = new FileReader();
-  //     reader.onloadend = () => setPreviewUrl(reader.result);
-  //     reader.readAsDataURL(file);
-  //   }
-  // };
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setNewProfilePic(file);
 
-  // const handleRetake = () => {
-  //   setNewProfilePic(null);
-  //   setPreviewUrl(null);
-  //   if (fileInputRef.current) fileInputRef.current.value = null;
-  // };
+      const reader = new FileReader();
+      reader.onloadend = () => setPreviewUrl(reader.result);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRetake = () => {
+    setNewProfilePic(null);
+    setPreviewUrl(null);
+    if (fileInputRef.current) fileInputRef.current.value = null;
+  };
 
   const handleSave = async () => {
     setIsSaving(true);
-    try {
+    // console.log("Uploading image...", newProfilePic);
 
+    try {
       const payload = {
         userData: {
           userName: editForm.userName,
           email: editForm.email,
           mobileNo: editForm.mobileNo,
-          address: editForm.address
-        }
+          address: editForm.address,
+        },
       };
 
       await dispatch(updateProfile(payload)).unwrap();
 
+      //  image upload 
+      if (newProfilePic) {
+        const imgData = new FormData();
+        imgData.append("profileImage", newProfilePic);
+
+        const token = localStorage.getItem("token");
+
+        const res = await axios.post(
+          "https://loan-backend-cv1k.onrender.com/api/user/uploadProfileImage",
+          imgData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        //  update redux + localStorage
+        dispatch({
+          type: "auth/updateProfile/fulfilled",
+          payload: res.data.user,
+        });
+
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+      }
+
       setIsEditing(false);
       setNewProfilePic(null);
       setPreviewUrl(null);
-      setToast({ type: "success", message: "Profile Updated Successfully!" });
+
+      showToast({ type: "success", message: "Profile Updated Successfully!" });
       setIsProfileModalOpen(false);
 
     } catch (error) {
-      setToast({ type: "error", message: "Failed to update profile" });
+      console.log(error);
+      showToast({ type: "error", message: "Failed to update profile" });
     } finally {
       setIsSaving(false);
     }
@@ -153,11 +272,11 @@ export function Navbar({ toggleSidebar, isCollapsed }) {
 
               {/* Logo: navbar*/}
               <Link to="/dashboard" className="flex items-center gap-2">
-                <img 
-                src="/logo.png"
-                alt="Loan Admin Logo"
-                className="h-9 w-auto rounded-lg object-contain bg-gradient-to-br from-orange-500 to-orange-600 flex item shadow-md">
-                  
+                <img
+                  src="/logo.png"
+                  alt="Loan Admin Logo"
+                  className="h-9 w-auto rounded-lg object-contain bg-gradient-to-br from-orange-500 to-orange-600 flex item shadow-md">
+
                 </img>
                 {/* Full name optional - in mobile small view */}
                 <span className="text-xl font-bold text-orange-600 tracking-tight hidden">
@@ -191,25 +310,7 @@ export function Navbar({ toggleSidebar, isCollapsed }) {
 
 
       {/* toast message */}
-      {toast && (
-        <div className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 z-[100] animate-fade-in 
-                  w-[92%] sm:w-auto min-w-[280px] max-w-[420px]">
-          <div className={`px-5 py-3 rounded-2xl shadow-2xl text-white font-bold flex items-center gap-3 border backdrop-blur-md ${toast.type === "success" ? "bg-green-600 border border-green-700" : "bg-red-600 border border-red-700"
-            }`}>
-            <div className="shrink-0">
-              {toast.type === "success" ? (
-                <IoMdCheckmarkCircleOutline className="w-5 h-5 sm:w-6 sm:h-6 " />
-              ) : (
-                <AiOutlineCloseCircle className="w-5 h-5 sm:w-6 sm:h-6" />
-              )}
-            </div>
-            <span className="text-sm sm:text-base leading-tight">{toast.message}</span>
-
-            {/* Optional: Close line/timer effect */}
-            <div className="absolute bottom-0 left-0 h-1 bg-white/30 animate-progress-shrink rounded-full" />
-          </div>
-        </div>
-      )}
+      <ToastContainer toasts={toasts} onRemove={removeToast} />
 
       {/* Logout confirmation popup */}
       {showLogoutConfirm && (
@@ -245,7 +346,7 @@ export function Navbar({ toggleSidebar, isCollapsed }) {
               <button
                 onClick={() => {
                   setShowLogoutConfirm(false);
-                  setToast({ type: "success", message: "Logout successfully!" });
+                  showToast({ type: "success", message: "Logout successfully!" });
 
                   setTimeout(() => {
                     dispatch(logout());
@@ -273,9 +374,9 @@ export function Navbar({ toggleSidebar, isCollapsed }) {
               <button onClick={() => { setIsProfileModalOpen(false); setIsEditing(false); }} className="w-10 h-10 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 transition-colors text-white text-3xl font-light cursor-pointer">×</button>
             </div>
 
-            <div className="p-5 sm:p-8 overflow-y-auto space-y-8 custom-scrollbar">
+            <div className="p-5 sm:p-8 overflow-y-auto space-y-6 custom-scrollbar">
               <div className="flex flex-col items-center text-center">
-                <div className="relative h-28 w-28 sm:h-32 sm:w-32 rounded-full border-4 border-orange-50 shadow-xl overflow-hidden mb-4 bg-orange-100 flex items-center justify-center">
+                <div className="relative h-24 w-24 sm:h-32 sm:w-32 rounded-full border-4 border-orange-50 shadow-xl overflow-hidden mb-4 bg-orange-100 flex items-center justify-center">
                   {newProfilePic || previewUrl ? (
                     <img src={previewUrl || URL.createObjectURL(newProfilePic)} alt="Preview" className="w-full h-full object-cover" />
                   ) : profilePic ? (
@@ -283,7 +384,7 @@ export function Navbar({ toggleSidebar, isCollapsed }) {
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-orange-600 text-4xl sm:text-5xl font-bold">{userInitials}</div>
                   )}
-                  {/* {isEditing && (
+                  {isEditing && (
                     <input
                       type="file"
                       ref={fileInputRef}
@@ -291,21 +392,36 @@ export function Navbar({ toggleSidebar, isCollapsed }) {
                       onChange={handleImageChange}
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                     />
-                  )} */}
-                  {/* {newProfilePic && (
+
+                  )}
+
+
+                  {/*  Edit Icon */}
+                  {isEditing && (
+                    <button
+                      onClick={() => fileInputRef.current.click()}
+                      className="absolute bottom-2 right-2 bg-white p-2 rounded-full shadow-md hover:bg-orange-100 transition cursor-pointer"
+                    >
+                      <FiEdit2 className="text-orange-600 w-4 h-4" />
+                    </button>
+                  )}
+
+                  {/*  Cancel Icon */}
+                  {isEditing && newProfilePic && (
                     <button
                       onClick={handleRetake}
-                      className="absolute -top-2 -right-2 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center text-xs shadow-lg hover:bg-red-600 transition-all"
+                      className="absolute top-2 right-2 bg-red-500 p-1.5 rounded-full shadow-md hover:bg-red-600 transition cursor-pointer"
                     >
-                      ×
+                      <IoClose className="text-white w-4 h-4" />
                     </button>
-                  )} */}
+                  )}
+
                 </div>
                 <h3 className="text-xl sm:text-2xl font-extrabold text-gray-900">{displayName}</h3>
               </div>
 
-              <div className="bg-gray-50/50 rounded-2xl p-4 sm:p-6 border border-gray-200/60 shadow-sm">
-                <div className="flex items-center gap-3 mb-6">
+              <div className="bg-gray-50/50 rounded-2xl p-4 sm:p-6 border border-gray-200/60 shadow-sm space-y-4">
+                <div className="flex items-center gap-3 mb-2">
                   <div className="p-2 bg-indigo-100 rounded-lg"><CiCircleInfo className="w-5 h-5 text-indigo-600" /></div>
                   <h4 className="text-lg font-bold text-gray-900">Personal Information</h4>
                 </div>
@@ -342,15 +458,30 @@ export function Navbar({ toggleSidebar, isCollapsed }) {
                   ))}
 
                   {/* Aadhar Row - Non editable for safety */}
-                  {!isEditing && (
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white rounded-xl border border-gray-100 shadow-sm gap-2">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 bg-blue-100 text-blue-600 rounded-lg shrink-0"><FiCreditCard className="w-5 h-5" /></div>
-                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-wider">Aadhar Number</span>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white rounded-xl border border-gray-100 shadow-sm gap-2 sm:text-center">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-blue-100 text-blue-600 rounded-lg shrink-0">
+                        <FiCreditCard className="w-5 h-5" />
                       </div>
-                      <span className="text-sm font-bold text-gray-800 sm:text-right pl-10 sm:pl-0">{user?.aadharCardNo || "Not available"}</span>
+                      <span className="text-[10px] font-black text-gray-400 uppercase tracking-wider">
+                        Aadhar Number
+                      </span>
                     </div>
-                  )}
+
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        name="aadharCardNo"
+                        value={editForm.aadharCardNo}
+                        onChange={handleChange}
+                        className="text-sm font-bold text-gray-900 bg-orange-50/50 border border-orange-200 rounded px-2 py-1 outline-none focus:ring-1 focus:ring-orange-400 w-full sm:w-auto sm:text-right"
+                      />
+                    ) : (
+                      <span className="text-sm font-bold text-gray-800">
+                        {user?.aadharCardNo || "Not available"}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

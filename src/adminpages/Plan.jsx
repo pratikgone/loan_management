@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createPlan, deletePlan, fetchPlans, updatePlan } from "../store/plansSlice";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
@@ -9,9 +9,121 @@ import { MdDeleteOutline } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
 
 
+// ─── Toast Icons ─────────────────────────────────────────────
+const ToastIcons = {
+  create: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+      strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  ),
+  update: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+      strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+    </svg>
+  ),
+  delete: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+      strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+      <polyline points="3 6 5 6 21 6" />
+      <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+      <path d="M10 11v6M14 11v6" />
+    </svg>
+  ),
+};
+
+const toastStyles = {
+  create: { icon: "bg-green-100 text-green-700", bar: "bg-green-500" },
+  update: { icon: "bg-blue-100  text-blue-700",  bar: "bg-blue-500"  },
+  delete: { icon: "bg-red-100   text-red-700",   bar: "bg-red-500"   },
+};
+
+// ─── Toast Item ───────────────────────────────────────────────
+function ToastItem({ id, action, message, duration = 4000, onRemove }) {
+  const [removing, setRemoving] = useState(false);
+  const s = toastStyles[action] || toastStyles.create;
+
+  const dismiss = useCallback(() => {
+    setRemoving(true);
+    setTimeout(() => onRemove(id), 220);
+  }, [id, onRemove]);
+
+  useEffect(() => {
+    const t = setTimeout(dismiss, duration);
+    return () => clearTimeout(t);
+  }, [dismiss, duration]);
+
+  return (
+    <div className={`relative flex items-start gap-3 bg-white border border-gray-200
+      rounded-xl shadow-md p-4 min-w-[280px] max-w-sm overflow-hidden
+      transition-all duration-[220ms]
+      ${removing ? "opacity-0 translate-x-full" : "opacity-100 translate-x-0"}`}>
+      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${s.icon}`}>
+        {ToastIcons[action]}
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-medium text-gray-900 leading-snug">{message}</p>
+        <p className="text-xs text-gray-500 mt-0.5">
+          {action === "create" ? "New plan has been added."
+            : action === "update" ? "Plan details have been saved."
+            : "Plan has been permanently removed."}
+        </p>
+      </div>
+      <button onClick={dismiss}
+        className="text-gray-400 hover:text-gray-600 hover:bg-gray-100
+          rounded p-0.5 transition-colors flex-shrink-0 mt-0.5 border-0 bg-transparent cursor-pointer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+          strokeLinecap="round" className="w-3 h-3">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+      <div className={`absolute bottom-0 left-0 h-0.5 ${s.bar}`}
+        style={{ animation: `shrink ${duration}ms linear forwards` }} />
+      <style>{`@keyframes shrink { from { width: 100%; } to { width: 0%; } }`}</style>
+    </div>
+  );
+}
+
+// ─── Toast Container ──────────────────────────────────────────
+function ToastContainer({ toasts, onRemove }) {
+  return (
+    <div className="fixed top-5 right-5 z-[200] flex flex-col gap-2.5 pointer-events-none">
+      {toasts.map((t) => (
+        <div key={t.id} className="pointer-events-auto">
+          <ToastItem {...t} onRemove={onRemove} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ─── useToast Hook ────────────────────────────────────────────
+let _toastId = 0;
+function useToast() {
+  const [toasts, setToasts] = useState([]);
+
+  const showToast = useCallback(({ action, message, duration = 4000 }) => {
+    const id = ++_toastId;
+    setToasts((prev) => [...prev, { id, action, message, duration }]);
+  }, []);
+
+  const removeToast = useCallback((id) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  }, []);
+
+  return { toasts, showToast, removeToast };
+}
+
+
 export function Plan() {
   const dispatch = useDispatch();
   const { plans, isLoading, isCreating, error } = useSelector((state) => state.plans || {});
+
+
+const { toasts, showToast, removeToast } = useToast();
 
   const [formData, setFormData] = useState({
     planName: '',
@@ -80,16 +192,7 @@ export function Plan() {
   //to show loading on specific time
   const [deletingPlanId, setDeletingPlanId] = useState(null);
 
-  //toast message
-  const [toast, setToast] = useState(null);
 
-  // tost hide for after 4 sec.
-  useEffect(() => {
-    if (toast) {
-      const timer = setTimeout(() => setToast(null), 4000);
-      return () => clearTimeout(timer);
-    }
-  }, [toast]);
 
   // Load all plans on mount
   useEffect(() => {
@@ -127,10 +230,23 @@ export function Plan() {
       setFormError("Plan Name is required");
       return;
     }
+    
+    
+    if(!formData.duration) {
+      setFormError("Duration is required");
+      return;
+    }
+
+    if(!formData.priceMonthly) {
+      setFormError("Monthly Price is required");
+      return;
+    }
+
     if (!formData.priceMonthly || Number(formData.priceMonthly) <= 0) {
       setFormError("Monthly Price must be a positive number");
       return;
     }
+
 
     setFormError(null);
     setFormSuccess(null);
@@ -139,11 +255,11 @@ export function Plan() {
       if (isEditMode) {
         // UPDATE
         await dispatch(updatePlan({ planId: editingPlanId, updatedData: formData })).unwrap();
-        setToast({ action: "update", message: "Plan updated successfully!" })
+        showToast({ action: "update", message: "Plan updated successfully!" })
       } else {
         // CREATE
         await dispatch(createPlan(formData)).unwrap();
-        setToast({ action: "create", message: "Plan added successfully!" })
+        showToast({ action: "create", message: "Plan added successfully!" })
       }
 
       // Reset & close modal
@@ -218,23 +334,8 @@ export function Plan() {
       </div>
 
       {/* popup message including add,update,delete,edit*/}
-      {toast && (
-        <div className="fixed top-20 left-1/2 -translate-x-1/2 w-[90%] max-w-md z-50 animate-fade-in">
-          <div className={`px-6 py-4 rounded-xl shadow-xl text-white font-medium flex items-center justify-center gap-3 ${toast.action === 'delete' ? 'bg-red-600 border border-red-700' :
-            toast.action === 'update' ? 'bg-blue-600 border border-blue-700' :
-              'bg-green-600 border border-green-700' // default create/add
-            }`}>
-            {toast.action === 'delete' ? (
-              <AiOutlineCloseCircle className="w-5 h-5" />
-            ) : toast.action === 'update' ? (
-              <FiEdit className="w-5 h-5" />
-            ) : (
-              <IoCheckmarkCircleOutline className="w-5 h-5" />
-            )}
-            <span className="text-sm md:text-base">{toast.message}</span>
-          </div>
-        </div>
-      )}
+       <ToastContainer toasts={toasts} onRemove={removeToast} />
+     
       {/* Create/Edit Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 sm:p-6 md:p-10">
@@ -277,7 +378,7 @@ export function Plan() {
                       onChange={handleChange}
                       placeholder="e.g., Premium Plan"
                       className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none transition-all text-base"
-                      required
+                      
                     />
                   </div>
 
@@ -289,7 +390,7 @@ export function Plan() {
                       value={formData.duration}
                       onChange={handleChange}
                       className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none bg-white text-base cursor-pointer"
-                      required
+                      
                     >
                       <option value="1 month">1 month</option>
                       <option value="2 months">2 months</option>
@@ -311,7 +412,7 @@ export function Plan() {
                         onChange={handleChange}
                         placeholder="999.00"
                         className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none text-base"
-                        required
+                    
                       />
                     </div>
                   </div>
@@ -451,7 +552,7 @@ export function Plan() {
                   setDeletingPlanId(deleteConfirm); 
                   dispatch(deletePlan(deleteConfirm)).finally(() => setDeletingPlanId(null));
                   setDeleteConfirm(null);
-                  setToast({ action: "delete", message: "Plan deleted successfully..." });
+                  showToast({ action: "delete", message: "Plan deleted successfully..." });
                 }}
                 className="px-6 py-2.5 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-all shadow-md cursor-pointer"
               >

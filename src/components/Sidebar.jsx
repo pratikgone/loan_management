@@ -7,7 +7,7 @@ import { IoIosHelpCircleOutline } from "react-icons/io";
 import { FiShield } from "react-icons/fi";
 import { CiLock } from "react-icons/ci";
 import { useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FiLogOut } from "react-icons/fi";
 import { logout } from "../store/authSlice";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
@@ -25,6 +25,103 @@ const menuItems = [
   },
 ];
 
+
+
+// ─── Toast Icons ─────────────────────────────────────────────
+const ToastIcons = {
+  success: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+      strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  ),
+  error: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+      strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+      <circle cx="12" cy="12" r="10" />
+      <line x1="12" y1="8" x2="12" y2="12" />
+      <line x1="12" y1="16" x2="12.01" y2="16" />
+    </svg>
+  ),
+};
+
+const toastStyles = {
+  success: { icon: "bg-green-100 text-green-700", bar: "bg-green-500" },
+  error:   { icon: "bg-red-100   text-red-700",   bar: "bg-red-500"   },
+};
+
+function ToastItem({ id, type, message, duration = 4000, onRemove }) {
+  const [removing, setRemoving] = useState(false);
+  const s = toastStyles[type] || toastStyles.error;
+
+  const dismiss = useCallback(() => {
+    setRemoving(true);
+    setTimeout(() => onRemove(id), 220);
+  }, [id, onRemove]);
+
+  useEffect(() => {
+    const t = setTimeout(dismiss, duration);
+    return () => clearTimeout(t);
+  }, [dismiss, duration]);
+
+  return (
+    <div className={`relative flex items-start gap-3 bg-white border border-gray-200
+      rounded-xl shadow-md p-4 min-w-[280px] max-w-sm overflow-hidden
+      transition-all duration-[220ms]
+      ${removing ? "opacity-0 translate-x-full" : "opacity-100 translate-x-0"}`}>
+      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${s.icon}`}>
+        {ToastIcons[type]}
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-medium text-gray-900 leading-snug">{message}</p>
+        <p className="text-xs text-gray-500 mt-0.5">
+          {type === "success" ? "Action completed successfully." : "Something went wrong."}
+        </p>
+      </div>
+      <button onClick={dismiss}
+        className="text-gray-400 hover:text-gray-600 hover:bg-gray-100
+          rounded p-0.5 transition-colors flex-shrink-0 mt-0.5 border-0 bg-transparent cursor-pointer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+          strokeLinecap="round" className="w-3 h-3">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+      <div className={`absolute bottom-0 left-0 h-0.5 ${s.bar}`}
+        style={{ animation: `shrink ${duration}ms linear forwards` }} />
+      <style>{`@keyframes shrink { from { width: 100%; } to { width: 0%; } }`}</style>
+    </div>
+  );
+}
+
+function ToastContainer({ toasts, onRemove }) {
+  return (
+    <div className="fixed top-5 right-5 z-[200] flex flex-col gap-2.5 pointer-events-none">
+      {toasts.map((t) => (
+        <div key={t.id} className="pointer-events-auto">
+          <ToastItem {...t} onRemove={onRemove} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+let _toastId = 0;
+function useToast() {
+  const [toasts, setToasts] = useState([]);
+
+  const showToast = useCallback(({ type, message, duration = 4000 }) => {
+    const id = ++_toastId;
+    setToasts((prev) => [...prev, { id, type, message, duration }]);
+  }, []);
+
+  const removeToast = useCallback((id) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  }, []);
+
+  return { toasts, showToast, removeToast };
+}
+
 export default function Sidebar({
   isMobileOpen,
   setIsMobileOpen,
@@ -37,18 +134,9 @@ export default function Sidebar({
   const navigate = useNavigate();
 
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
-  const [toast, setToast] = useState(null);
 
+  const {toasts, showToast, removeToast} = useToast();
 
-  useEffect(()=>{
-     if (toast) {
-    const timer = setTimeout(() => {
-      setToast(null);
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }
-  },[toast]);
 
   return (
     <>
@@ -189,7 +277,7 @@ export default function Sidebar({
         <button
           onClick={() => {
             setShowLogoutConfirm(false);
-             setToast({ type: "success", message: "Logout successfully!" });
+             showToast({ type: "success", message: "Logout successfully!" });
             setTimeout(() => {
               dispatch(logout());
               localStorage.removeItem("token");
@@ -207,27 +295,8 @@ export default function Sidebar({
   </div>
 )}
 
-{toast && (
-  <div className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 z-[200] animate-fade-in 
-            w-[92%] sm:w-auto min-w-[280px] max-w-[420px]">
-    <div className={`px-5 py-3 rounded-2xl shadow-2xl text-white font-bold flex items-center gap-3 border backdrop-blur-md ${
-      toast.type === "success"
-        ? "bg-green-600 border-green-700"
-        : "bg-red-600 border-red-700"
-    }`}>
-      <div className="shrink-0">
-        {toast.type === "success" ? (
-          <IoMdCheckmarkCircleOutline className="w-5 h-5 sm:w-6 sm:h-6" />
-        ) : (
-          <AiOutlineCloseCircle className="w-5 h-5 sm:w-6 sm:h-6" />
-        )}
-      </div>
-      <span className="text-sm sm:text-base">{toast.message}</span>
-
-      <div className="absolute bottom-0 left-0 h-1 bg-white/30 animate-progress-shrink rounded-full" />
-    </div>
-  </div>
-)}
+   {/* toast */}
+   <ToastContainer toasts={toasts} onRemove={removeToast}/>
     </>
   );
 }

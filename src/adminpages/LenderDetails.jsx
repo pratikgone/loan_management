@@ -85,24 +85,27 @@ export function LenderDetails() {
 
 
   return (
-    <div className="p-4 sm:p-8 bg-slate-50 min-h-screen font-sans">
+     <div className="p-4 md:p-8 bg-gray-50 min-h-screen">
+    <div className="max-w-6xl mx-auto">
       {/* 1. Back Button */}
       <button
         onClick={() => navigate(-1)}
         className="mb-6 sm:mb-8 flex items-center gap-2 text-orange-600 font-bold hover:gap-4 transition-all cursor-pointer"
       >
-        <span className="text-xl">←</span> Back to Lenders
+        ← Back to Lenders
       </button>
 
-      <div className="max-w-3xl mx-auto space-y-6 sm:space-y-8">
+      
         
          <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
           Lender Details
         </h2>
 
         {/* 2. TOP PROFILE CARD */}
-        <div className="bg-white rounded-2xl sm:rounded-[2rem] shadow-sm border border-orange-100 p-6 sm:p-8 flex flex-col md:flex-row items-center gap-6 sm:gap-8 relative overflow-hidden">
+        <div className="bg-white rounded-2xl md:rounded-3xl shadow-xl border border-gray-100 overflow-hidden mb-6 md:mb-8">
           <div className="absolute top-0 right-0 w-32 h-32 bg-orange-50 rounded-full -mr-16 -mt-16 opacity-50" />
+          <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-6 md:gap-8'>
+          <div className="flex items-center gap-4">
           <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-4 border-orange-200 shadow-lg flex-shrink-0 z-10">
             {lenderData.profileImage ? (
               <img src={lenderData.profileImage} alt={lenderData.userName} className="w-full h-full object-cover" />
@@ -120,10 +123,12 @@ export function LenderDetails() {
               <CiLocationOn className="stroke-2 flex-shrink-0" /> {lenderData.address || 'Address not provided'}
             </p>
           </div>
+          </div>
+          </div>
         </div>
 
         {/* 3. PERSONAL INFORMATION CARD */}
-        <div className="bg-white rounded-2xl sm:rounded-[2rem] shadow-sm border border-orange-100 p-6 sm:p-8">
+        <div className="bg-white rounded-2xl md:rounded-3xl shadow-lg border border-orange-100 p-6 md:p-8 mb-6 md:mb-8">
           <h2 className="text-lg sm:text-xl font-black mb-6 sm:mb-8 text-slate-800 flex items-center gap-3">
             <div className="p-2 bg-orange-50 rounded-xl text-orange-600"><FiUser /></div>
             Personal Information
@@ -148,7 +153,7 @@ export function LenderDetails() {
         </div>
 
         {/* 4. ACCOUNT STATUS CARD */}
-        <div className="bg-slate-900 rounded-2xl sm:rounded-[2rem] shadow-xl p-6 sm:p-8 text-white">
+        <div className="bg-slate-900 rounded-2xl sm:rounded-[2rem] shadow-xl p-6 sm:p-8 text-white p-6 md:p-8 mb-6 md:mb-8">
           <h2 className="text-lg sm:text-xl font-black mb-6 flex items-center gap-3 text-orange-400">
             <MdOutlineShield /> Account Status
           </h2>
@@ -268,8 +273,9 @@ export function LenderDetails() {
               </div>
             </div>
           </div>
-        </div>
+     
       </div>
+    </div>
     </div>
   );
 }

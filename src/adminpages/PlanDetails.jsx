@@ -43,7 +43,7 @@ export function PlanDetails(){
     
        return (
         <div className="p-4 md:p-8 bg-gray-50 min-h-screen">
-            <div className="max-w-5xl mx-auto">
+            <div className="max-w-6xl mx-auto">
                 {/* Back Button */}
                 <button
                     onClick={() => navigate(-1)}
