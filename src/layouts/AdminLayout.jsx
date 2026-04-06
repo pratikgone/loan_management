@@ -30,7 +30,7 @@ export default function AdminLayout({ children }) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
 
       <Sidebar
         isMobileOpen={isMobileOpen}
@@ -45,7 +45,7 @@ export default function AdminLayout({ children }) {
       >
         <Navbar toggleSidebar={toggleSidebar} isCollapsed={isCollapsed} />
 
-        <main className="p-6 pt-20">
+        <main className="p-6 pt-20 min-h-[calc(100vh-80px)] bg-gray-50 dark:bg-gray-900">
           {children}
           <Outlet />
         </main>

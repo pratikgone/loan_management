@@ -107,23 +107,25 @@ export function ActivityDetails() {
   }
 
   return (
-    <div className="p-4 md:p-6 bg-gray-50 min-h-screen">
-
-
+    <div className="p-4 md:p-6">
       {/* Back + Title */}
-      <div className="mb-6">
+      <div className="mb-6 md:mb-8">
         <button
           onClick={() => navigate(-1)}
           className="mb-2 flex items-center gap-2 text-orange-600 font-bold hover:gap-4 transition-all cursor-pointer"
         >
           ← Back to Dashboard
         </button>
-        <h2 className="text-xl md:text-2xl font-bold text-gray-900">Recent Activity</h2>
-        <p className="text-sm text-gray-400 mt-1">Complete log of all recent actions</p>
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+          <div>
+              <h2 className="text-xl md:text-2xl font-bold text-gray-900">Recent Activity</h2>
+              <p className="text-sm text-gray-400 mt-1">Complete log of all recent actions</p>
+          </div>
+        </div>
       </div>
 
       {/* ── Stats Row ── */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-8">
         {[
           { label: "Total", value: total, bg: "bg-white border border-gray-200", color: "text-gray-800", icon: <FiActivity className="w-5 h-5 text-gray-400" /> },
           { label: "Created", value: created, bg: "bg-orange-50 border border-orange-100", color: "text-orange-600", icon: <GrAddCircle className="w-5 h-5 text-orange-400" /> },
@@ -132,16 +134,16 @@ export function ActivityDetails() {
         ].map((s, i) => (
           <div key={i} className={`${s.bg} rounded-2xl p-4 flex items-center justify-between shadow-sm`}>
             <div>
-              <p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">{s.label}</p>
+              <p className="text-[10px] md:text-xs text-gray-500 font-bold uppercase tracking-wide">{s.label}</p>
               <p className={`text-2xl font-black mt-0.5 ${s.color}`}>{s.value}</p>
             </div>
-            <div className="opacity-60">{s.icon}</div>
+            <div className="bg-white p-2 rounded-xl shadow-sm">{s.icon}</div>
           </div>
         ))}
       </div>
 
       {/*  Search + Filter  */}
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 mb-6 flex flex-col sm:flex-row gap-3 items-center">
+      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-3 md:p-4 mb-6 flex flex-col lg:flex-row gap-4 items-stretch lg:items-center">
         {/* Search */}
         <div className="relative flex-1 w-full">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
@@ -159,7 +161,7 @@ export function ActivityDetails() {
         </div>
 
         {/* Filter Pills */}
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-2 flex-wrap grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
           {FILTERS.map((f) => (
             <button
               key={f.value}
@@ -205,7 +207,7 @@ export function ActivityDetails() {
                   {/* Main Row */}
                   <div
                     onClick={() => setExpanded(isOpen ? null : i)}
-                    className={`px-6 py-4 grid grid-cols-12 gap-4 items-center cursor-pointer transition-colors hover:bg-orange-50/30 ${isOpen ? "bg-orange-50/40" : ""}`}
+                    className={`px-4 md:px-6 py-4 flex md:grid md:grid-cols-12 items-center gap-3 md:gap-4 cursor-pointer transition-colors hover:bg-orange-50/30 ${isOpen ? "bg-orange-50/40" : ""}`}
                   >
                     {/* Icon */}
                     <div className="col-span-1">
@@ -215,11 +217,11 @@ export function ActivityDetails() {
                     </div>
 
                     {/* Short message */}
-                    <div className="col-span-8 md:col-span-5">
-                      <p className="text-sm font-bold text-gray-900 leading-snug">
+                    <div className="col-span-8 md:col-span-5 min-w-0 flex-1">
+                      <p className="text-sm md:text-base font-bold text-gray-900 truncate">
                         {activity.shortMessage || "Activity"}
                       </p>
-                      <p className="text-xs text-gray-400 mt-0.5 truncate">
+                      <p className="text-xs text-gray-500 line-clamp-1">
                         {activity.message}
                       </p>
                       <p className="text-xs text-gray-300 mt-0.5 md:hidden">

@@ -18,6 +18,7 @@ import React from "react";
 import axios from "axios";
 import { FiEdit2 } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
+import { useDarkMode } from "./useDarkMode";
 
 
 
@@ -152,6 +153,10 @@ export function Navbar({ toggleSidebar, isCollapsed }) {
   const [previewUrl, setPreviewUrl] = useState(null);
   const fileInputRef = useRef(null);
 
+
+  const { isDark, toggle } = useDarkMode();
+
+
   // Sync form with user data when modal opens
   useEffect(() => {
     if (isProfileModalOpen && user) {
@@ -189,29 +194,29 @@ export function Navbar({ toggleSidebar, isCollapsed }) {
 
   const validateProfile = (data) => {
 
-  if (!/^\d{10}$/.test(data.mobileNo)) {
-    return "Mobile number must be exactly 10 digits";
-  }
+    if (!/^\d{10}$/.test(data.mobileNo)) {
+      return "Mobile number must be exactly 10 digits";
+    }
 
-  // basic email check
-  if (!/^\S+@\S+\.\S+$/.test(data.email)) {
-    return "Enter valid email";
-  }
+    // basic email check
+    if (!/^\S+@\S+\.\S+$/.test(data.email)) {
+      return "Enter valid email";
+    }
 
-  return null; // no error
-};
+    return null; // no error
+  };
 
   const handleSave = async () => {
 
 
     const validationError = validateProfile(editForm);
 
-      if (validationError) {
-    showToast({ type: "error", message: validationError });
-    return;
-  }
+    if (validationError) {
+      showToast({ type: "error", message: validationError });
+      return;
+    }
 
-      setIsSaving(true);
+    setIsSaving(true);
     // console.log("Uploading image...", newProfilePic);
 
     try {
@@ -273,7 +278,7 @@ export function Navbar({ toggleSidebar, isCollapsed }) {
   return (
     <>
       {/* // src/components/Navbar.jsx */}
-      <header className={`bg-white border-b border-orange-100 shadow-sm fixed top-0 right-0 left-0 z-50
+      <header className={`bg-white border-b border-orange-100 dark:bg-gray-900 dark:border-gray-700 shadow-sm fixed top-0 right-0 left-0 z-50
   ${isCollapsed ? "lg:left-20" : "lg:left-72"}
 `}>
         <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
@@ -282,7 +287,7 @@ export function Navbar({ toggleSidebar, isCollapsed }) {
             <div className="flex items-center gap-4">
               <button
                 onClick={toggleSidebar}
-                className="text-gray-600 hover:text-orange-600 focus:outline-none transition-colors cursor-pointer"
+                className="text-gray-600 hover:text-orange-600 dark:text-gray-300 dark:hover-text-orange-400 focus:outline-none transition-colors cursor-pointer"
                 aria-label="Toggle sidebar"
               >
                 <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -295,17 +300,46 @@ export function Navbar({ toggleSidebar, isCollapsed }) {
             <div className="flex items-center gap-6">
               {/* username Profile */}
               <div onClick={() => setIsProfileModalOpen(true)} className="flex items-center gap-3 cursor-pointer">
-                <div className="h-10 w-10 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white font-semibold shadow-md ring-2 ring-orange-100">
+                <div className="h-10 w-10 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white font-semibold shadow-md ring-2 dark:ring-orange-500/30 ring-orange-100">
                   {userInitials}
                 </div>
                 <div className="hidden md:block">
-                  <p className="text-sm font-medium text-gray-800">{displayName}</p>
-                  <p className="text-xs text-gray-500">Admin</p>
+                  <p className="text-sm font-medium text-gray-800 dark:text-gray-200">{displayName}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Admin</p>
                 </div>
               </div>
 
+              {/* Dark Mode Toggle */}
+              <button
+                onClick={toggle}
+                className="relative w-14 h-7 rounded-full transition-colors duration-300 cursor-pointer focus:outline-none flex-shrink-0"
+                style={{
+                  background: isDark
+                    ? "linear-gradient(135deg, #1e1b4b, #3730a3)"
+                    : "linear-gradient(135deg, #fed7aa, #f97316)",
+                }}
+                title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+              >
+                {/* Track icons */}
+                <span className="absolute left-1.5 top-1/2 -translate-y-1/2 text-[10px]">
+                  ☀️
+                </span>
+                <span className="absolute right-1.5 top-1/2 -translate-y-1/2 text-[10px]">
+                  🌙
+                </span>
+
+                {/* Thumb */}
+                <span
+                  className={`absolute top-0.5 w-6 h-6 bg-white rounded-full shadow-md
+      transition-transform duration-300 flex items-center justify-center text-xs
+      ${isDark ? "translate-x-7" : "translate-x-0.5"}`}
+                >
+                  {isDark ? "🌙" : "☀️"}
+                </span>
+              </button>
+
               {/* Logout */}
-              <button onClick={() => setShowLogoutConfirm(true)} className="flex items-center gap-2 text-sm font-medium text-red-600 hover:bg-red-50  transition-colors focus:outline-none cursor-pointer">
+              <button onClick={() => setShowLogoutConfirm(true)} className="flex items-center gap-2 text-sm font-medium text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/30 dark:hover:text-red-300 transition-colors focus:outline-none cursor-pointer">
                 <CiLogout className="h-5 w-5" />
                 <span className="hidden sm:inline">Logout</span>
               </button>

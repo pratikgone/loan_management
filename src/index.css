@@ -1,3 +1,17 @@
 @import "tailwindcss";
 
 
+
+/* ENABLE CLASS BASED DARK MODE */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Global backgrounds for dark/light mode */
+html {
+  background-color: rgb(249 250 251); /* Tailwind gray-50 */
+  color-scheme: light;
+}
+
+html.dark {
+  background-color: rgb(17 24 39); /* Tailwind gray-900 */
+  color-scheme: dark;
+}

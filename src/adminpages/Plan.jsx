@@ -372,29 +372,29 @@ export function Plan() {
 
 
   return (
-    <div className="relative p-4 md:p-6 bg-gray-50 min-h-screen">
+    <div className="relative p-4 md:p-6 transition-colors duration-300">
       
   
-      <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
+      <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-6">
         Plan Management
       </h2>
       <div className="flex flex-col sm:flex-row justify-between items-center mb-8 items-start sm:items-center gap-4 ">
-        <h1 className="text-xl md:text-2xl font-bold text-gray-900">All Plans</h1>
+        <h1 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">All Plans</h1>
 
 
 
         {/* Top Right + Add Plan Button */}
         <button
           onClick={openAddModal}
-          className="w-full sm:w-auto bg-emerald-300 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg font-medium flex items-center gap-2 shadow-md hover:shadow-lg transition-all cursor-pointer"
+          className="w-full sm:w-auto bg-emerald-300 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 text-white px-6 py-3 rounded-lg font-medium flex items-center gap-2 shadow-md hover:shadow-lg transition-all cursor-pointer"
         >
           <FaPlus className="w-3 h-3" />
           Create Plan
         </button>
       </div>
       {/* Search Bar */}
-      <div className="mb-6 flex items-center gap-3 bg-white rounded-xl border border-orange-100 shadow-sm p-3 max-w-4xl mx-auto">
-        <IoIosSearch className="w-4 h-4 text-gray-500 flex-shrink-0" />
+      <div className="mb-6 flex items-center gap-3 bg-white rounded-xl border border-orange-100 dark:bg-gray-800 dark:border-gray-700 shadow-sm p-3 max-w-4xl mx-auto">
+        <IoIosSearch className="w-4 h-4 text-gray-500 dark:text-gray-400 flex-shrink-0" />
 
         <input
           type="text"
@@ -405,13 +405,13 @@ export function Plan() {
           }}
 
           placeholder="Search by plan name, description, or price"
-          className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400 text-sm"
+          className="flex-1 bg-transparent outline-none text-gray-700 dark:text-gray-200 dark:placeholder-gray-500 placeholder-gray-400 text-sm"
         />
 
-        <div className="h-6 w-[1px] bg-gray-200 hidden sm:block"></div>
+        <div className="h-6 w-[1px] bg-gray-200 hidden dark:bg-gray-700 sm:block"></div>
         <button
           onClick={() => setIsFilterOpen(true)}
-          className="flex items-center gap-2 text-orange-500 hover:text-orange-600 transition-colors flex-shrink-0 px-1"
+          className="flex items-center gap-2 text-orange-500 dark:text-orange-400 dark:hover-text-orange-300 hover:text-orange-600 transition-colors flex-shrink-0 px-1"
         >
 
           <FiFilter className="w-5 h-5 cursor-pointer" />
@@ -683,10 +683,10 @@ export function Plan() {
             {currentPlans.map((plan) => (
               <div
                 key={plan._id}
-                className="group bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden hover:shadow-2xl hover:border-orange-200/70 transition-all duration-300 transform hover:-translate-y-1 flex flex-col"
+                className="group bg-white rounded-2xl shadow-md border border-gray-200 dark:bg-gray-800 dark:border-gray-700 overflow-hidden hover:shadow-2xl dark:hover:border-orange-500 hover:border-orange-200/70 transition-all duration-300 transform hover:-translate-y-1 flex flex-col"
               >
                 {/* Card Header */}
-                <div className="bg-gradient-to-r from-orange-50 via-orange-100 to-orange-50 px-6 py-5 text-gray-900 border-b border-orange-200/50">
+                <div className="bg-gradient-to-r from-orange-50 via-orange-100 to-orange-50 dark:from-gray-700 dark:to-gray-800 dark:text-white dark:border-gray-600 px-6 py-5 text-gray-900 border-b border-orange-200/50">
                   <div className="flex items-center justify-between">
                     <h3 className="text-xl font-bold tracking-tight group-hover:text-orange-700 transition-colors">
                       {plan.planName}
@@ -700,7 +700,7 @@ export function Plan() {
                       {plan.isActive ? "Active" : "Inactive"}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-600 mt-2 line-clamp-2">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-2 line-clamp-2">
                     {plan.description || "No description provided"}
                   </p>
                 </div>
@@ -709,11 +709,11 @@ export function Plan() {
                 <div className="p-6 space-y-6 flex-grow cursor-pointer" onClick={() => handleViewPlan(plan._id)}>
                   <div className="grid grid-cols-2 gap-6 text-sm">
                     <div className="space-y-1">
-                      <p className="text-gray-500 font-medium">Duration</p>
-                      <p className="font-semibold text-gray-900">{plan.duration}</p>
+                      <p className="text-gray-500 dark:text-gray-400 font-medium">Duration</p>
+                      <p className="font-semibold text-gray-900 dark:text-white">{plan.duration}</p>
                     </div>
                     <div className="space-y-1">
-                      <p className="text-gray-500 font-medium">Monthly Price</p>
+                      <p className="text-gray-500 dark:text-gray-400 font-medium">Monthly Price</p>
                       <p className="font-semibold text-orange-600 text-lg">
                         ₹{plan.priceMonthly?.toLocaleString() || "0"}
                       </p>
@@ -750,7 +750,7 @@ export function Plan() {
                 </div>
 
                 {/* Edit & Delete Buttons */}
-                <div className="p-4 bg-gray-50 border-t border-gray-300 flex flex-row justify-center gap-3">
+                <div className="p-4 bg-gray-50 dark:bg-gray-700 border-t border-gray-300 flex flex-row justify-center gap-3">
                   <button
                     onClick={() => handleEdit(plan._id)}
                     className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-all shadow-sm hover:shadow-md flex items-center gap-2 cursor-pointer"
@@ -793,7 +793,7 @@ export function Plan() {
           <button
             onClick={() => setCurrentPage((prev) => prev - 1)}
             disabled={currentPage === 1}
-            className="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50 cursor-pointer"
+            className="px-4 py-2 bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 rounded-lg disabled:opacity-50 cursor-pointer hover:bg-gray-300 transition"
           >
             Prev
           </button>
@@ -802,7 +802,7 @@ export function Plan() {
             <button
               key={i}
               onClick={() => setCurrentPage(i + 1)}
-              className={`px-4 py-2 rounded-lg ${currentPage === i + 1 ? "bg-orange-600 text-white" : "bg-gray-100"
+              className={`px-4 py-2 rounded-lg ${currentPage === i + 1 ? "bg-orange-600 text-white" : "bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
                 }`}
             >
               {i + 1}
@@ -812,7 +812,7 @@ export function Plan() {
           <button
             onClick={() => setCurrentPage((prev) => prev + 1)}
             disabled={currentPage === totalPages}
-            className="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50 cursor-pointer"
+            className="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 cursor-pointer hover:bg-gray-300 transition"
           >
             Next
           </button>

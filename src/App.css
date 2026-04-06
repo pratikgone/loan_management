@@ -6,3 +6,27 @@ input[type="password"]::-ms-reveal,
 input[type="password"]::-ms-clear {
     display: none;
 }
+
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+
+
+/* Dark scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #9ca3af;
+  border-radius: 10px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #4b5563;
+}
+

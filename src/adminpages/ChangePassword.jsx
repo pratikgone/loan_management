@@ -179,7 +179,7 @@ export function ChangePassword() {
 
  return (
     <>
-    <div className="p-4 sm:p-6 bg-gray-50 min-h-screen">
+    <div className="p-4 sm:p-6">
       {/* Toast */}
       <ToastContainer toasts={toasts} onRemove={removeToast}/>
 

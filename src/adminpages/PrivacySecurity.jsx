@@ -59,7 +59,7 @@ export function PrivacySecurity() {
 
   return (
     <>
-    <div className='p-4 sm:p-6 bg-gray-50 min-h-screen'>
+    <div className='p-4 sm:p-6'>
       {/* Heading */}
       <div className="mb-10 flex flex-col items-center">
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Privacy & Security</h1>

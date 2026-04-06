@@ -49,7 +49,8 @@ export function PlanDetails() {
     }
 
   return (
-  <div className="p-4 md:p-6 bg-gray-50 min-h-screen">
+  <div className="p-4 md:p-6">
+
     
 
       {/* Back Button + Title + Toggle */}

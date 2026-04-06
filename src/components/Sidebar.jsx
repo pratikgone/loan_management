@@ -150,7 +150,7 @@ export default function Sidebar({
       {/* Sidebar */}
       <aside
         className={`
-    fixed inset-y-0 left-0 z-50 bg-white border-r border-orange-100
+    fixed inset-y-0 left-0 z-50 bg-white border-r border-orange-100 dark:bg-gray-900 dark:border-gray-700
     shadow-xl overflow-visible
     
     ${isMobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
@@ -163,7 +163,7 @@ export default function Sidebar({
         <div className="h-full flex flex-col">
           {/* Header / Logo */}
 
-          <div className={`border-b border-orange-100 flex items-center
+          <div className={`border-b border-orange-100 flex items-center dark:border-gray-700
            ${isCollapsed
               ? "justify-center p-3"
               : "justify-between px-5 py-4"
@@ -242,7 +242,7 @@ export default function Sidebar({
             {/* Mobile close button */}
             <button
               onClick={() => setIsMobileOpen(false)}
-              className="lg:hidden text-gray-500 hover:text-orange-600 transition-colors"
+              className="lg:hidden text-gray-500 dark:text-gray-400 dark:hover-text-orange-400 hover:text-orange-600 transition-colors"
             >
               <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -251,7 +251,7 @@ export default function Sidebar({
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 px-3 py-6 space-y-1.5 overflow-y-auto">
+          <nav className="flex-1 px-3 py-6 space-y-1.5 overflow-y-auto dark:bg-gray-900">
             {menuItems.map((item) => (
               <Link
                 key={item.path}
@@ -262,7 +262,7 @@ export default function Sidebar({
         ${isCollapsed ? "justify-center py-4" : "px-4 py-3 gap-3"}
         ${location.pathname === item.path
                     ? "bg-gradient-to-r from-orange-50 to-orange-100 text-orange-700 font-medium shadow-sm"
-                    : "text-gray-700 hover:bg-orange-50 hover:text-orange-700"
+                    : "text-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-orange-400 hover:bg-orange-50 hover:text-orange-700"
                   }
       `}
               >
@@ -289,7 +289,7 @@ export default function Sidebar({
                 )}
 
                 {/* Icon */}
-                <span className={`text-xl transition-colors ${location.pathname === item.path ? "text-orange-600" : "text-gray-500 group-hover:text-orange-600"}`}>
+                <span className={`text-xl transition-colors ${location.pathname === item.path ? "text-orange-600" : "text-gray-500 group-hover:text-orange-600 dark:text-gray-400 dark:group-hover:text-orange-400"}`}>
                   {item.icon}
                 </span>
 
@@ -302,10 +302,10 @@ export default function Sidebar({
           </nav>
 
 
-          <div className="p-4 border-t border-orange-100">
+          <div className="p-4 border-t border-orange-100 dark:border-gray-700">
             <button
               onClick={() => setShowLogoutConfirm(true)}
-              className="w-full flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-xl transition-all cursor-pointer"
+              className="w-full flex items-center gap-3 px-4 py-3 text-red-600 dark:text-red-400 dark:hover:bg-red-900/30 hover:bg-red-50 rounded-xl transition-all cursor-pointer"
             >
               <FiLogOut className="text-lg" />
 
@@ -323,7 +323,7 @@ export default function Sidebar({
 
           {/* Footer (optional subtle info) */}
           {!isCollapsed && (
-            <div className="p-4 border-t border-orange-100 text-xs text-gray-500 text-center">
+            <div className="p-4 border-t border-orange-100 dark:border-gray-700 dark:text-gray-400 text-xs text-gray-500 text-center">
               © {new Date().getFullYear()} LoanAdmin. All rights reserved
             </div>
           )}

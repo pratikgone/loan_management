@@ -96,7 +96,7 @@ export function Lenders() {
     const expiredPlans = lenders.filter((l) => l.planPurchaseDetails?.isPlanActive === false).length;
 
     return (
-        <div className="p-4 sm:p-6 bg-gray-50 min-h-screen">
+        <div className="p-4 sm:p-6">
              
            
             <div className="flex items-center justify-between">
@@ -358,7 +358,7 @@ export function Lenders() {
                     <button
                         onClick={() => setCurrentPage((prev) => prev - 1)}
                         disabled={currentPage === 1}
-                        className="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50 cursor-pointer"
+                        className="px-4 py-2 bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 rounded-lg disabled:opacity-50 cursor-pointer"
                     >
                         Prev
                     </button>
@@ -369,7 +369,7 @@ export function Lenders() {
                             onClick={() => setCurrentPage(i + 1)}
                             className={`px-4 py-2 rounded-lg ${currentPage === i + 1
                                     ? "bg-orange-600 text-white"
-                                    : "bg-gray-100"
+                                    : "bg-gray-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
                                 }`}
                         >
                             {i + 1}
@@ -379,7 +379,7 @@ export function Lenders() {
                     <button
                         onClick={() => setCurrentPage((prev) => prev + 1)}
                         disabled={currentPage === totalPages}
-                        className="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50 cursor-pointer"
+                        className="px-4 py-2 bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 rounded-lg disabled:opacity-50 cursor-pointer"
                     >
                         Next
                     </button>
