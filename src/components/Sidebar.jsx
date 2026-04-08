@@ -12,16 +12,18 @@ import { FiLogOut } from "react-icons/fi";
 import { logout } from "../store/authSlice";
 import { PiClockCounterClockwise } from "react-icons/pi";
 import { CiSettings } from "react-icons/ci";
+import { MdCurrencyRupee } from "react-icons/md";
+import { useTranslation } from "react-i18next";
 
 const menuItems = [
-  { name: "Dashboard", path: "/dashboard", icon: <MdOutlineDashboardCustomize /> },
-  { name: "Plans", path: "/plans", icon: <MdOutlineSubscriptions /> },
-  { name: "Revenue", path: "/revenue", icon: <FiDollarSign /> },
-  { name: "Lenders", path: "/lenders", icon: <FiUsers /> },
-  { name: "Activity", path: "/activityDetails", icon: <PiClockCounterClockwise />},
-  { name: "Support", path: "/support", icon: <IoIosHelpCircleOutline className="h-5.5 w-5.5 stroke-[1]" /> },
-  { name: "Security", path: "/security", icon: <FiShield /> },
-  { name: "Settings", path: "/password", icon: <CiSettings className="h-5.5 w-5.5" /> },
+  { key: "dashboard", path: "/dashboard", icon: <MdOutlineDashboardCustomize /> },
+  { key: "plans", path: "/plans", icon: <MdOutlineSubscriptions /> },
+  { key: "revenue", path: "/revenue", icon: <MdCurrencyRupee /> },
+  { key: "lenders", path: "/lenders", icon: <FiUsers /> },
+  { key: "activity", path: "/activityDetails", icon: <PiClockCounterClockwise /> },
+  // { key: "support", path: "/support", icon: <IoIosHelpCircleOutline className="h-5.5 w-5.5 stroke-[1]" /> },
+  // { key: "security", path: "/security", icon: <FiShield /> },
+  { key: "settings", path: "/password", icon: <CiSettings className="h-5.5 w-5.5" /> },
 ];
 
 
@@ -135,6 +137,8 @@ export default function Sidebar({
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   const { toasts, showToast, removeToast } = useToast();
+
+  const { t } = useTranslation();
 
 
   return (
@@ -252,53 +256,36 @@ export default function Sidebar({
 
           {/* Navigation */}
           <nav className="flex-1 px-3 py-6 space-y-1.5 overflow-y-auto dark:bg-gray-900">
-            {menuItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                onClick={() => setIsMobileOpen(false)}
-                className={`
-        group flex relative items-center rounded-xl 
-        ${isCollapsed ? "justify-center py-4" : "px-4 py-3 gap-3"}
-        ${location.pathname === item.path
-                    ? "bg-gradient-to-r from-orange-50 to-orange-100 text-orange-700 font-medium shadow-sm"
-                    : "text-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-orange-400 hover:bg-orange-50 hover:text-orange-700"
-                  }
-      `}
-              >
-                {/* Tooltip */}
-                {isCollapsed && (
-                  <span
-                    className="
-             fixed
-             left-[60px]
-            
-             translate-x-2
-    bg-gray-900 text-white text-xs font-medium
-    px-3 py-1.5 rounded-md shadow-lg
-    whitespace-nowrap
-    opacity-0 group-hover:opacity-100
-    transition-all duration-200 ease-out
-    pointer-events-none z-[9999]
-          "
+             {menuItems.map((item) => (
+  <Link
+    key={item.path}
+    to={item.path}
+    onClick={() => setIsMobileOpen(false)}
+    className={`group flex relative items-center rounded-xl 
+      ${isCollapsed ? "justify-center py-4" : "px-4 py-3 gap-3"}
+      ${location.pathname === item.path
+        ? "bg-gradient-to-r from-orange-50 to-orange-100 text-orange-700 font-medium shadow-sm"
+        : "text-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-orange-400 hover:bg-orange-50 hover:text-orange-700"
+      }`}
+  >
+    {/* Tooltip when collapsed */}
+    {isCollapsed && (
+      <span className="fixed left-[70px] bg-gray-900 text-white text-xs font-medium px-3 py-1.5 rounded-md shadow-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all z-[9999]">
+        {t(`sidebar.${item.key}`)}
+      </span>
+    )}
 
-                  >
+    {/* Icon */}
+    <span className={`text-xl transition-colors ${location.pathname === item.path ? "text-orange-600" : "text-gray-500 group-hover:text-orange-600 dark:text-gray-400 dark:group-hover:text-orange-400"}`}>
+      {item.icon}
+    </span>
 
-                    {item.name}
-                  </span>
-                )}
-
-                {/* Icon */}
-                <span className={`text-xl transition-colors ${location.pathname === item.path ? "text-orange-600" : "text-gray-500 group-hover:text-orange-600 dark:text-gray-400 dark:group-hover:text-orange-400"}`}>
-                  {item.icon}
-                </span>
-
-                {/* Text */}
-                <span className={`text-sm font-medium ${isCollapsed ? "lg:hidden" : "block"}`}>
-                  {item.name}
-                </span>
-              </Link>
-            ))}
+    {/* Menu Name - Translated */}
+    <span className={`text-sm font-medium ${isCollapsed ? "lg:hidden" : "block"}`}>
+      {t(`sidebar.${item.key}`)}
+    </span>
+  </Link>
+))}
           </nav>
 
 
@@ -315,7 +302,7 @@ export default function Sidebar({
         ${isCollapsed ? "lg:hidden" : "block"}
       `}
               >
-                Logout
+                {t("sidebar.logout")}
               </span>
             </button>
           </div>
@@ -337,17 +324,17 @@ export default function Sidebar({
             <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-6 py-5 border-b border-orange-200">
               <h3 className="text-xl font-bold text-gray-900 flex items-center gap-3 selected-card-title">
                 <FiLogOut className="w-6 h-6 text-orange-600" />
-                Confirm Logout
+                {t("sidebar.confirmLogout")}
               </h3>
             </div>
 
             {/* Body */}
             <div className="p-6 space-y-4">
               <p className="text-gray-700 text-center">
-                Are you sure you want to logout?
+                {t("sidebar.logoutQuestion")}
               </p>
               <p className="text-sm text-gray-500 text-center">
-                You'll need to sign in again to access your account.
+                {t("sidebar.logoutNote")}
               </p>
             </div>
 
@@ -357,7 +344,7 @@ export default function Sidebar({
                 onClick={() => setShowLogoutConfirm(false)}
                 className="flex-1 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-xl transition-all cursor-pointer"
               >
-                No, Cancel
+                {t("sidebar.cancel")}
               </button>
 
               <button
@@ -373,7 +360,7 @@ export default function Sidebar({
                 }}
                 className="flex-1 py-3 bg-red-600 hover:bg-red-700 text-white font-medium rounded-xl shadow-md transition-all cursor-pointer"
               >
-                Yes, Logout
+                {t("sidebar.confirm")}
               </button>
             </div>
 

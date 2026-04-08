@@ -9,6 +9,9 @@ import { MdDeleteOutline } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
 import { IoIosSearch } from "react-icons/io";
 import { FiFilter } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
+
+
 
 
 // ─── Toast Icons ─────────────────────────────────────────────
@@ -44,6 +47,9 @@ const toastStyles = {
 
 // ─── Toast Item ───────────────────────────────────────────────
 function ToastItem({ id, action, message, duration = 4000, onRemove }) {
+
+  const {t} = useTranslation();
+
   const [removing, setRemoving] = useState(false);
   const s = toastStyles[action] || toastStyles.create;
 
@@ -68,9 +74,9 @@ function ToastItem({ id, action, message, duration = 4000, onRemove }) {
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium text-gray-900 leading-snug">{message}</p>
         <p className="text-xs text-gray-500 mt-0.5">
-          {action === "create" ? "New plan has been added."
-            : action === "update" ? "Plan details have been saved."
-              : "Plan has been permanently removed."}
+          {action === "create" ?  t("toastCreateDesc")
+            : action === "update" ?  t("toastUpdateDesc")
+              : t("toastDeleteDesc")}
         </p>
       </div>
       <button onClick={dismiss}
@@ -120,12 +126,18 @@ function useToast() {
 }
 
 
+
+
 export function Plan() {
+
+
   const dispatch = useDispatch();
   const { plans, isLoading, isCreating, isUpdating, error } = useSelector((state) => state.plans || {});
 
 
   const { toasts, showToast, removeToast } = useToast();
+
+  const {t} = useTranslation();
 
   const [formData, setFormData] = useState({
     planName: '',
@@ -245,50 +257,50 @@ export function Plan() {
     e.preventDefault();
 
     if (!formData.planName.trim()) {
-      setFormError("Plan Name is required");
+      setFormError(t("planNameRequired"));
       return;
     }
 
 
     if (!formData.duration) {
-      setFormError("Duration is required");
+      setFormError(t("durationRequired"));
       return;
     }
 
     if (!formData.priceMonthly) {
-      setFormError("Monthly Price is required");
+      setFormError(t("priceRequired"));
       return;
     }
 
     if (Number(formData.priceMonthly) < 99) {
-      setFormError("Minimum plan price should be ₹ 99");
+      setFormError(t("minPrice"));
       return;
     }
 
     if (Number(formData.priceMonthly) > 999999) {
-      setFormError("Price should not exceed ₹ 9,99,999");
+      setFormError(t("maxPrice"));
       return;
     }
 
     if (!formData.priceMonthly || Number(formData.priceMonthly) <= 0) {
-      setFormError("Monthly Price must be a positive number");
+      setFormError(t("positivePrice"));
       return;
     }
 
     if (!formData.description.trim()) {
-      setFormError("Description is required");
+      setFormError(t("descriptionRequired"));
       return;
     }
 
     // atleast
     if (formData.description.trim().length < 5) {
-      setFormError("Description must be at least 10 characters");
+      setFormError(t("descriptionMin"));
       return;
     }
 
     //maximum
     if (formData.description.trim().length > 200) {
-      setFormError("Description cannot exceed 200 characters");
+      setFormError(t("descriptionMax"));
       return;
     }
 
@@ -300,11 +312,11 @@ export function Plan() {
       if (isEditMode) {
         // UPDATE
         await dispatch(updatePlan({ planId: editingPlanId, updatedData: formData })).unwrap();
-        showToast({ action: "update", message: "Plan updated successfully!" })
+        showToast({ action: "update", message: t("planUpdated") })
       } else {
         // CREATE
         await dispatch(createPlan(formData)).unwrap();
-        showToast({ action: "create", message: "Plan added successfully!" })
+        showToast({ action: "create", message: t("planAdded") })
       }
 
       // Reset & close modal
@@ -319,7 +331,7 @@ export function Plan() {
       });
       setIsModalOpen(false);
     } catch (err) {
-      setFormError(err.message || "Failed to save plan. Please try again.");
+      setFormError(err.message ||  t("saveFailed"));
     }
   };
 
@@ -364,7 +376,7 @@ export function Plan() {
     <div className="flex items-center justify-center h-[60vh] bg-gray-50">
       <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-orange-500"></div>
       <span className="ml-4 text-lg text-gray-600 font-medium">
-        Loading Plans...
+        {t("loadingPlans")}
       </span>
     </div>
   );
@@ -376,10 +388,10 @@ export function Plan() {
       
   
       <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
-        Plan Management
+        {t("planManagement")}
       </h2>
       <div className="flex flex-col sm:flex-row justify-between items-center mb-8 items-start sm:items-center gap-4 ">
-        <h1 className="text-xl md:text-2xl font-bold text-gray-900">All Plans</h1>
+        <h1 className="text-xl md:text-2xl font-bold text-gray-900">{t("allPlans")}</h1>
 
 
 
@@ -389,7 +401,7 @@ export function Plan() {
           className="w-full sm:w-auto bg-emerald-300 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg font-medium flex items-center gap-2 shadow-md hover:shadow-lg transition-all cursor-pointer"
         >
           <FaPlus className="w-3 h-3" />
-          Create Plan
+          {t("createPlan")}
         </button>
       </div>
       {/* Search Bar */}
@@ -404,7 +416,7 @@ export function Plan() {
             setCurrentPage(1);
           }}
 
-          placeholder="Search by plan name, description, or price"
+          placeholder= {t("searchPlaceholder")}
           className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400 text-sm"
         />
 
@@ -436,7 +448,7 @@ export function Plan() {
             {/* 1. Modal Header (Fixed) */}
             <div className="bg-gradient-to-r from-orange-600 to-orange-500 px-6 py-5 text-white flex justify-between items-center shrink-0">
               <h2 className="text-xl md:text-2xl font-bold tracking-tight">
-                {isEditMode ? "Edit Plan" : "Create New Plan"}
+                {isEditMode ? t("editPlan") : t("createNewPlan")}
               </h2>
               <button
                 onClick={() => setIsModalOpen(false)}
@@ -455,13 +467,13 @@ export function Plan() {
 
                   {/* Plan Name */}
                   <div className="space-y-2 md:col-span-2">
-                    <label className="block text-sm font-bold text-gray-700">Plan Name <span className="text-red-500">*</span></label>
+                    <label className="block text-sm font-bold text-gray-700">{t("planName")}<span className="text-red-500">*</span></label>
                     <input
                       type="text"
                       name="planName"
                       value={formData.planName}
                       onChange={handleChange}
-                      placeholder="e.g., Premium Plan"
+                      placeholder={t("planNamePlaceholder")}
                       className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none transition-all text-base"
 
                     />
@@ -469,7 +481,7 @@ export function Plan() {
 
                   {/* Duration Dropdown */}
                   <div className="space-y-2">
-                    <label className="block text-sm font-bold text-gray-700">Duration <span className="text-red-500">*</span></label>
+                    <label className="block text-sm font-bold text-gray-700">{t("duration")} <span className="text-red-500">*</span></label>
                     <select
                       name="duration"
                       value={formData.duration}
@@ -487,7 +499,7 @@ export function Plan() {
 
                   {/* Monthly Price */}
                   <div className="space-y-2">
-                    <label className="block text-sm font-bold text-gray-700">Monthly Price (₹) <span className="text-red-500">*</span></label>
+                    <label className="block text-sm font-bold text-gray-700">{t("monthlyPrice")} (₹) <span className="text-red-500">*</span></label>
                     <div className="relative">
                       <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-bold">₹</span>
                       <input
@@ -497,7 +509,7 @@ export function Plan() {
                         onChange={handleChange}
                         // min={99}
                         // max={999999}
-                        placeholder="999.00"
+                        placeholder={t("pricePlaceholder")}
                         className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none text-base"
 
                       />
@@ -506,33 +518,33 @@ export function Plan() {
 
                   {/* Razorpay Plan ID */}
                   <div className="space-y-2 md:col-span-2">
-                    <label className="block text-sm font-bold text-gray-700">Razorpay Plan ID (Optional)</label>
+                    <label className="block text-sm font-bold text-gray-700">{t("razorpayPlanId")}</label>
                     <input
                       type="text"
                       name="razorpayPlanId"
                       value={formData.razorpayPlanId}
                       onChange={handleChange}
-                      placeholder="plan_123"
+                      placeholder={t("razorpayPlaceholder")}
                       className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none text-base"
                     />
                   </div>
 
                   {/* Description */}
                   <div className="space-y-2 md:col-span-2">
-                    <label className="block text-sm font-bold text-gray-700">Description <span className="text-red-500">*</span></label>
+                    <label className="block text-sm font-bold text-gray-700">{t("description")} <span className="text-red-500">*</span></label>
                     <textarea
                       name="description"
                       value={formData.description}
                       onChange={handleChange}
                       rows={3}
-                      placeholder="Enter plan details..."
+                      placeholder={t("descriptionPlaceholder")}
                       className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none resize-none text-base"
                     />
                   </div>
 
                   {/* Features Section */}
                   <div className="md:col-span-2 space-y-3">
-                    <label className="block text-sm font-bold text-gray-700">Plan Features</label>
+                    <label className="block text-sm font-bold text-gray-700">{t("planFeatures")}</label>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <label className="flex items-center gap-3 p-4 border border-gray-100 rounded-xl hover:bg-orange-50/50 transition-all cursor-pointer group">
                         <input
@@ -542,7 +554,7 @@ export function Plan() {
                           onChange={handleChange}
                           className="w-5 h-5 text-orange-600 rounded focus:ring-orange-500 cursor-pointer"
                         />
-                        <span className="text-gray-800 font-medium group-hover:text-orange-600 transition-colors">Advanced Analytics</span>
+                        <span className="text-gray-800 font-medium group-hover:text-orange-600 transition-colors">{t("advancedAnalytics")}</span>
                       </label>
 
                       <label className="flex items-center gap-3 p-4 border border-gray-100 rounded-xl hover:bg-orange-50/50 transition-all cursor-pointer group">
@@ -553,7 +565,7 @@ export function Plan() {
                           onChange={handleChange}
                           className="w-5 h-5 text-orange-600 rounded focus:ring-orange-500 cursor-pointer"
                         />
-                        <span className="text-gray-800 font-medium group-hover:text-orange-600 transition-colors">Priority Support</span>
+                        <span className="text-gray-800 font-medium group-hover:text-orange-600 transition-colors">{t("prioritySupport")}</span>
                       </label>
                     </div>
                   </div>
@@ -569,8 +581,8 @@ export function Plan() {
                     className="w-6 h-6 text-orange-600 rounded focus:ring-orange-500 cursor-pointer"
                   />
                   <div>
-                    <p className="font-bold text-gray-800">Active Status</p>
-                    <p className="text-xs text-gray-500">Visible to lenders for purchase</p>
+                    <p className="font-bold text-gray-800">{t("activeStatus")}</p>
+                    <p className="text-xs text-gray-500">{t("activeStatusDesc")}</p>
                   </div>
                 </div>
 
@@ -590,7 +602,7 @@ export function Plan() {
                   onClick={() => setIsModalOpen(false)}
                   className="flex-1 max-w-[120px] sm:w-auto sm:px-8 py-2.5 sm:py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm sm:text-base font-bold rounded-lg sm:rounded-xl transition-all active:scale-95 cursor-pointer"
                 >
-                  Cancel
+                  {t("cancel")}
                 </button>
                 <button
                   type="submit"
@@ -602,17 +614,17 @@ export function Plan() {
                   {isCreating ? (
                     <>
                       <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-white"></div>
-                      "Saving..."
+                      {t("saving")}
                     </>
                   ) : isUpdating ? (
                     <>
                       <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-white"></div>
-                      "Updating..."
+                      {t("updating")}
                     </>
                   ) : isEditMode ? (
-                    "Update Plan"
+                    t("updatePlan")
                   ) : (
-                    "Create Plan"
+                    t("createPlan")
                   )}
                 </button>
               </div>
@@ -629,15 +641,15 @@ export function Plan() {
             <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-6 py-5 border-b border-orange-200">
               <h3 className="text-xl font-bold text-gray-900 flex items-center gap-3">
                 <span className="text-red-600 text-2xl">!</span>
-                Confirm Delete
+                {t("confirmDelete")}
               </h3>
             </div>
 
             {/* Body */}
             <div className="p-6 space-y-4">
               <p className="text-gray-700">
-                Are you sure you want to delete this plan? <br />
-                <span className="font-medium text-red-600">This action cannot be undone.</span>
+                {t("deleteConfirmText")} <br />
+                <span className="font-medium text-red-600">{t("deleteWarning")}</span>
               </p>
             </div>
 
@@ -647,7 +659,7 @@ export function Plan() {
                 onClick={() => setDeleteConfirm(null)}
                 className="px-6 py-2.5 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-lg transition-all cursor-pointer"
               >
-                Cancel
+                {t("cancel")}
               </button>
 
               <button
@@ -655,11 +667,11 @@ export function Plan() {
                   setDeletingPlanId(deleteConfirm);
                   dispatch(deletePlan(deleteConfirm)).finally(() => setDeletingPlanId(null));
                   setDeleteConfirm(null);
-                  showToast({ action: "delete", message: "Plan deleted successfully..." });
+                  showToast({ action: "delete", message: t("planDeleted") });
                 }}
                 className="px-6 py-2.5 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-all shadow-md cursor-pointer"
               >
-                Delete Plan
+                {t("deletePlan")}
               </button>
             </div>
           </div>
@@ -670,13 +682,13 @@ export function Plan() {
       <div className="mt-12">
         { error ? (
           <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-6 rounded-xl max-w-3xl mx-auto">
-            <p className="font-medium">Error loading plans:</p>
+            <p className="font-medium">{t("errorLoadingPlans")}</p>
             <p className="mt-1">{error}</p>
           </div>
         ) : plans.length === 0 ? (
           <div className="text-center py-20 bg-white rounded-2xl border border-orange-100 shadow-sm">
-            <p className="text-xl text-gray-500 font-medium">No plans created yet.</p>
-            <p className="text-gray-400 mt-2">Create your first plan above.</p>
+            <p className="text-xl text-gray-500 font-medium">{t("noPlans")}</p>
+            <p className="text-gray-400 mt-2">{t("createFirstPlan")}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
@@ -697,11 +709,11 @@ export function Plan() {
                         : "bg-red-100 text-red-800 border border-red-200"
                         }`}
                     >
-                      {plan.isActive ? "Active" : "Inactive"}
+                      {plan.isActive ? t("active") : t("inactive")}
                     </span>
                   </div>
                   <p className="text-sm text-gray-600 mt-2 line-clamp-2 plan-card-desc">
-                    {plan.description || "No description provided"}
+                    {plan.description || t("noDescription")}
                   </p>
                 </div>
 
@@ -709,11 +721,11 @@ export function Plan() {
                 <div className="p-6 space-y-6 flex-grow cursor-pointer" onClick={() => handleViewPlan(plan._id)}>
                   <div className="grid grid-cols-2 gap-6 text-sm">
                     <div className="space-y-1">
-                      <p className="text-gray-500 font-medium">Duration</p>
+                      <p className="text-gray-500 font-medium">{t("duration")}</p>
                       <p className="font-semibold text-gray-900">{plan.duration}</p>
                     </div>
                     <div className="space-y-1">
-                      <p className="text-gray-500 font-medium">Monthly Price</p>
+                      <p className="text-gray-500 font-medium">{t("monthlyPrice")}</p>
                       <p className="font-semibold text-orange-600 text-lg">
                         ₹{plan.priceMonthly?.toLocaleString() || "0"}
                       </p>
@@ -756,7 +768,7 @@ export function Plan() {
                     className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-all shadow-sm hover:shadow-md flex items-center gap-2 cursor-pointer"
                   >
                     <FiEdit className="h-4 w-4" />
-                    Edit
+                    {t("edit")}
                   </button>
 
                   <button
@@ -770,12 +782,12 @@ export function Plan() {
                     {deletingPlanId === plan._id ? (
                       <>
                         <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-white"></div>
-                        Deleting...
+                        {t("deleting")}
                       </>
                     ) : (
                       <>
                         <MdDeleteOutline className="h-4 w-4" />
-                        Delete
+                        {t("delete")}
                       </>
                     )}
                   </button>
@@ -795,7 +807,7 @@ export function Plan() {
             disabled={currentPage === 1}
             className="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50 cursor-pointer hover:bg-gray-300 transition"
           >
-            Prev
+            {t("prev")}
           </button>
 
           {Array.from({ length: totalPages }, (_, i) => (
@@ -814,7 +826,7 @@ export function Plan() {
             disabled={currentPage === totalPages}
             className="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50 cursor-pointer hover:bg-gray-300 transition"
           >
-            Next
+            {t("next")}
           </button>
         </div>
       )}

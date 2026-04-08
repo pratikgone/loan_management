@@ -9,6 +9,7 @@ import { BsBoxSeam } from "react-icons/bs";
 import { CiClock2 } from "react-icons/ci";
 import { fetchRecentActivities } from "../store/dashboardSlice";
 import { FiChevronDown } from "react-icons/fi";
+import { MdCurrencyRupee } from "react-icons/md";
 
 // Activity style per type 
 function getActivityStyle(type = "") {
@@ -299,7 +300,7 @@ export function ActivityDetails() {
                         {activity.priceMonthly && (
                           <div className="flex items-center gap-3 bg-white rounded-xl border border-gray-100 p-3">
                             <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                              <FiDollarSign className="w-4 h-4 text-green-600" />
+                              <MdCurrencyRupee className="w-4 h-4 text-green-600" />
                             </div>
                             <div>
                               <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Price</p>

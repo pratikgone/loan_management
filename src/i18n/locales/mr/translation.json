@@ -1,0 +1,254 @@
+{
+  "navbar": {
+    "logout": "लॉगआउट",
+    "profile": "प्रोफाइल",
+    "admin": "अॅडमिन",
+    "darkMode": "डार्क मोडमध्ये बदला",
+    "lightMode": "लाइट मोडमध्ये बदला"
+  },
+  "toast": {
+    "logoutSuccess": "यशस्वीपणे लॉगआउट झाले!",
+    "profileUpdated": "प्रोफाइल यशस्वीरित्या अपडेट झाले!",
+    "error": "काहीतरी चूक झाली",
+    "success": "क्रिया यशस्वीरित्या पूर्ण झाली"
+  },
+  "logoutModal": {
+    "title": "लॉगआउटची खात्री करा",
+    "message": "तुम्हाला खरोखर लॉगआउट करायचे आहे का?",
+    "subMessage": "तुमच्या खात्यात प्रवेश करण्यासाठी तुम्हाला पुन्हा साइन इन करावे लागेल.",
+    "cancel": "नाही, रद्द करा",
+    "confirm": "होय, लॉगआउट"
+  },
+  "profileModal": {
+    "title": "प्रोफाइल तपशील",
+    "personalInfo": "वैयक्तिक माहिती",
+    "name": "नाव",
+    "phone": "फोन नंबर",
+    "email": "ईमेल पत्ता",
+    "address": "पत्ता",
+    "editProfile": "प्रोफाइल संपादित करा",
+    "saveChanges": "जतन करत आहे...",
+    "cancel": "रद्द करा",
+    "close": "बंद करा",
+    "notAvailable": "उपलब्ध नाही"
+  },
+  
+  "sidebar": {
+    "dashboard": "डॅशबोर्ड",
+    "plans": "योजना",
+    "revenue": "उत्पन्न",
+    "lenders": "कर्जदार",
+    "activity": "क्रियाकलाप",
+    "support": "सपोर्ट",
+    "security": "सुरक्षा",
+    "settings": "सेटिंग्ज",
+    "logout": "लॉगआउट",
+    "confirmLogout": "लॉगआउट पुष्टी करा",
+    "logoutQuestion": "तुम्हाला खरोखर लॉगआउट करायचे आहे का?",
+    "logoutNote": "तुमच्या खात्यात प्रवेश करण्यासाठी पुन्हा लॉगिन करावे लागेल.",
+    "cancel": "नाही, रद्द करा",
+    "confirm": "होय, लॉगआउट करा"
+  },
+
+  
+  "dashboard": {
+    "title": "डॅशबोर्ड आढावा",
+    "welcome": "पुन्हा स्वागत आहे",
+    "adminPanel": "अॅडमिन पॅनल",
+    "manageText": "तुमचे सबस्क्रिप्शन आणि उत्पन्न व्यवस्थापित करा",
+
+    "quickActions": "त्वरित क्रिया",
+    "addPlan": "प्लॅन जोडा",
+    "addPlanDesc": "नवीन सबस्क्रिप्शन प्लॅन तयार करा",
+    "lenderList": "लेंडर यादी",
+    "lenderListDesc": "सर्व लेंडर्स पहा आणि व्यवस्थापित करा",
+
+    "revenueOverview": "उत्पन्न आढावा",
+    "viewDetails": "तपशील पहा",
+
+    "recentActivity": "अलीकडील क्रियाकलाप",
+    "seeAll": "सर्व पहा",
+    "noActivity": "अलीकडील क्रियाकलाप नाहीत",
+
+    "stats": {
+      "totalRevenue": "एकूण उत्पन्न",
+      "totalPurchases": "एकूण खरेदी",
+      "avgPerPurchase": "प्रति खरेदी सरासरी",
+      "activePlans": "सक्रिय प्लॅन्स"
+    },
+
+    "loading": "उत्पन्न डेटा आणि क्रियाकलाप लोड होत आहेत...",
+    "noDescription": "कोणतेही वर्णन उपलब्ध नाही",
+    "activity": "क्रियाकलाप"
+  },
+
+
+  
+  "planManagement": "प्लॅन व्यवस्थापन",
+  "allPlans": "सर्व प्लॅन्स",
+  "createPlan": "प्लॅन तयार करा",
+  "searchPlaceholder": "प्लॅन नाव, वर्णन किंवा किंमत शोधा",
+
+  "loadingPlans": "प्लॅन्स लोड होत आहेत...",
+
+  "createNewPlan": "नवीन प्लॅन तयार करा",
+  "editPlan": "प्लॅन संपादित करा",
+
+  "planName": "प्लॅन नाव",
+  "duration": "कालावधी",
+  "monthlyPrice": "मासिक किंमत",
+  "razorpayPlanId": "रेजरपे प्लॅन आयडी (पर्यायी)",
+  "description": "वर्णन",
+  "planFeatures": "प्लॅन वैशिष्ट्ये",
+  "advancedAnalytics": "प्रगत विश्लेषण",
+  "prioritySupport": "प्राधान्य समर्थन",
+
+  "activeStatus": "सक्रिय स्थिती",
+  "activeStatusDesc": "लेंडर्सना दिसेल",
+
+  "cancel": "रद्द करा",
+  "saving": "सेव्ह होत आहे...",
+  "updating": "अपडेट होत आहे...",
+  "updatePlan": "प्लॅन अपडेट करा",
+
+  "confirmDelete": "डिलीटची पुष्टी करा",
+  "deleteWarning": "ही क्रिया परत घेता येणार नाही",
+  "deletePlan": "प्लॅन हटवा",
+
+  "noPlans": "कोणतेही प्लॅन्स नाहीत",
+  "createFirstPlan": "पहिला प्लॅन तयार करा",
+
+  "active": "सक्रिय",
+  "inactive": "निष्क्रिय",
+
+  "edit": "संपादित करा",
+  "delete": "हटवा",
+  "deleting": "हटवले जात आहे...",
+
+  "prev": "मागील",
+  "next": "पुढील",
+
+  
+  "planAdded": "प्लॅन यशस्वीरित्या जोडला गेला!",
+  "planUpdated": "प्लॅन यशस्वीरित्या अपडेट झाला!",
+  "planDeleted": "प्लॅन यशस्वीरित्या हटवला गेला!",
+
+  "toastCreateDesc": "नवीन प्लॅन जोडला गेला आहे.",
+  "toastUpdateDesc": "प्लॅन तपशील जतन करण्यात आला आहे.",
+  "toastDeleteDesc": "प्लॅन कायमस्वरूपी हटवला गेला आहे.",
+
+
+  
+  "planNameRequired": "प्लॅनचे नाव आवश्यक आहे",
+  "durationRequired": "कालावधी आवश्यक आहे",
+  "priceRequired": "मासिक किंमत आवश्यक आहे",
+  "minPrice": "किमान किंमत ₹99 असावी",
+  "maxPrice": "कमाल किंमत ₹9,99,999 असू शकते",
+  "positivePrice": "किंमत सकारात्मक संख्या असावी",
+  "descriptionRequired": "वर्णन आवश्यक आहे",
+  "descriptionMin": "किमान 10 अक्षरे आवश्यक आहेत",
+  "descriptionMax": "जास्तीत जास्त 200 अक्षरे परवानगी आहेत",
+
+  "planNamePlaceholder": "उदा.: प्रीमियम प्लॅन",
+  "pricePlaceholder": "999.00",
+  "razorpayPlaceholder": "plan_123",
+  "descriptionPlaceholder": "प्लॅनचे तपशील भरा...",
+
+  "deleteConfirmText": "तुम्हाला हा प्लॅन हटवायचा आहे का?",
+
+  "errorLoadingPlans": "प्लॅन लोड करताना त्रुटी आली",
+  "saveFailed": "प्लॅन सेव करण्यात अयशस्वी. कृपया पुन्हा प्रयत्न करा.",
+
+  "noDescription": "वर्णन उपलब्ध नाही",
+
+
+  
+  "revenueReport": "उत्पन्न अहवाल",
+  "exportPDF": "पीडीएफ निर्यात करा",
+  "cards": "कार्ड्स",
+  "charts": "चार्ट्स",
+
+  "searchPlaceholderRevenue": "नाव, ईमेल किंवा मोबाईलने शोधा",
+
+  "filters": "फिल्टर्स",
+  "groupBy": "गट करा",
+  "allData": "सर्व डेटा",
+  "byPlan": "प्लॅननुसार",
+  "byMonth": "महिन्यानुसार",
+  "byYear": "वर्षानुसार",
+
+  "clearAll": "सर्व साफ करा",
+  "applyFilters": "फिल्टर लागू करा",
+
+  "totalRevenue": "एकूण उत्पन्न",
+  "totalPurchases": "एकूण खरेदी",
+  "avgPerPurchase": "प्रति खरेदी सरासरी",
+  "activePlans": "सक्रिय प्लॅन",
+
+  "totalRevenueDesc": "सर्व प्लॅन खरेदीतून मिळालेलं एकूण उत्पन्न.",
+  "totalPurchasesDesc": "एकूण प्लॅन खरेदींची संख्या.",
+  "avgPerPurchaseDesc": "प्रति व्यवहार सरासरी उत्पन्न.",
+  "activePlansDesc": "सध्या सक्रिय सबस्क्रिप्शन प्लॅन्सची संख्या.",
+
+  "loadingRevenue": "उत्पन्न डेटा लोड होत आहे...",
+  "error": "त्रुटी",
+
+  "na": "उपलब्ध नाही",
+
+  "revenueByPlan": "प्लॅननुसार उत्पन्न",
+  "monthlyRevenue": "मासिक उत्पन्न",
+  "yearlyRevenue": "वार्षिक उत्पन्न",
+  "recentPurchases": "अलीकडील खरेदी",
+
+  "purchases": "खरेदी",
+  "expired": "कालबाह्य",
+  "average": "सरासरी",
+
+  "purchaseDate": "खरेदी तारीख",
+  "expiresOn": "समाप्ती तारीख",
+  "status": "स्थिती",
+  "daysRemaining": "{{count}} दिवस शिल्लक",
+  "expiredText": "कालबाह्य",
+  "noPlanRevenue": "कोणताही प्लॅन उत्पन्न डेटा उपलब्ध नाही",
+  "noMonthlyRevenue": "कोणताही मासिक उत्पन्न डेटा उपलब्ध नाही",
+  "noYearlyRevenue": "कोणताही वार्षिक उत्पन्न डेटा उपलब्ध नाही",
+  "noPurchases": "अलीकडील खरेदी आढळली नाही",
+  "revenueShareByPlan": "प्लॅननुसार उत्पन्न वाटा",
+  "activeVsExpired": "सक्रिय विरुद्ध कालबाह्य खरेदी",
+  "revenueShareByMonth": "महिन्यानुसार उत्पन्न वाटा",
+  "revenueShareByYear": "वर्षानुसार उत्पन्न वाटा",
+  "month": "महिना",
+  "year": "वर्ष",
+  "plan": "प्लॅन",
+  "amount": "रक्कम",
+  "total": "एकूण",
+  "revenue": "महसूल",
+  "share": "शेयर",
+
+  
+
+
+  
+  "lendersWithPlans": "प्लॅन असलेले कर्जदार",
+  "searchByNameEmailMobile": "नाव, ईमेल किंवा मोबाइलने शोधा",
+  "planStatus": "प्लॅन स्थिती",
+  "totalLenders": "एकूण कर्जदार",
+  "expiredPlans": "समाप्त प्लॅन्स",
+  "unknownLender": "अज्ञात कर्जदार",
+  "viewDetails": "तपशील पहा",
+  "loadingLenders": "कर्जदार डेटा लोड होत आहे...",
+  "noLendersFound": "\"{{searchQuery}}\" शी जुळणारे कोणतेही कर्जदार सापडले नाहीत",
+  "activePlan": "सक्रिय प्लॅन",
+  "currentPlan": "सध्याचा प्लॅन",
+  "price": "किंमत",
+  "purchased": "खरेदी केली",
+  "expires": "समाप्ती",
+  "remaining": "शिल्लक",
+  "joined": "जॉईन केले"
+
+
+ 
+  
+
+
+}

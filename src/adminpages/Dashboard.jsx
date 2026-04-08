@@ -13,6 +13,7 @@ import { HiMiniArrowTrendingUp } from "react-icons/hi2";
 import { FiCheckCircle } from "react-icons/fi";
 import { FiDollarSign } from "react-icons/fi";
 import { FiShoppingCart } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 
 export default function Dashboard() {
 
@@ -24,6 +25,8 @@ export default function Dashboard() {
   const { user } = useSelector(state => state.auth);
 
   const navigate = useNavigate();
+
+    const { t } = useTranslation();
 
   useEffect(() => {
 
@@ -49,7 +52,7 @@ export default function Dashboard() {
     return (
       <div className="flex items-center justify-center h-[60vh] bg-gray-50">
         <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-orange-500 border-solid"></div>
-        <span className="ml-4 text-lg text-gray-600 font-medium">Loading Revenue Data & Activities...</span>
+        <span className="ml-4 text-lg text-gray-600 font-medium">{t("dashboard.loading")}</span>
       </div>
     );
   }
@@ -66,7 +69,7 @@ export default function Dashboard() {
   const stats = revenue ?
     [
       {
-        title: "Total Revenue",
+        title: t("dashboard.stats.totalRevenue"),
         value: `₹ ${revenue.totalRevenue.toLocaleString()}`,
         icon: (
           <FiDollarSign className="w-6 h-6 md:w-7 md:h-7 text-orange-500" />
@@ -75,7 +78,7 @@ export default function Dashboard() {
         bg: "bg-orange-50",
       },
       {
-        title: "Total Purchases",
+        title: t("dashboard.stats.totalPurchases"),
         value: revenue.totalPurchases.toLocaleString(),
         icon: (
           <FiShoppingCart className="w-6 h-6 md:w-7 md:h-7 text-orange-500" />
@@ -83,7 +86,7 @@ export default function Dashboard() {
         bg: "bg-orange-50",
       },
       {
-        title: "Avg. Per Purchase",
+        title: t("dashboard.stats.avgPerPurchase"),
         value: `₹ ${revenue.averageRevenuePerPurchase.toLocaleString()}`,
         icon: (
           <HiMiniArrowTrendingUp className="w-6 h-6 md:w-7 md:h-7 text-orange-500" />
@@ -92,7 +95,7 @@ export default function Dashboard() {
         bg: "bg-orange-50",
       },
       {
-        title: "Active Plans",
+        title: t("dashboard.stats.activePlans"),
         value: revenue.activePlansCount.toLocaleString(),
         icon: (
           <FiCheckCircle className="w-6 h-6 md:w-7 md:h-7 text-orange-500" />
@@ -105,6 +108,8 @@ export default function Dashboard() {
       // ...stats array
     ];
 
+    
+
 
  return (
   <>
@@ -112,7 +117,7 @@ export default function Dashboard() {
 
       {/* ── Dashboard Overview ── */}
       <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
-        Dashboard Overview
+        {t("dashboard.title")}
       </h2>
 
       {/* ── Welcome Hero Card ── */}
@@ -138,14 +143,14 @@ export default function Dashboard() {
             </div>
 
             <span className="inline-block px-3 py-1 bg-white/20 text-white text-xs font-semibold rounded-full mb-3 backdrop-blur-sm">
-              Admin Panel
+              {t("dashboard.adminPanel")}
             </span>
-            <p className="text-white/80 text-sm md:text-base">Welcome back,</p>
+            <p className="text-white/80 text-sm md:text-base">{t("dashboard.welcome")},</p>
             <h2 className="text-2xl md:text-3xl font-black text-white tracking-tight mt-0.5">
               {displayName}
             </h2>
             <p className="mt-2 text-white/70 text-sm md:text-base">
-              Manage your subscriptions &amp; revenue
+              {t("dashboard.manageText")}
             </p>
           </div>
         </div>
@@ -154,7 +159,7 @@ export default function Dashboard() {
       {/* ── Quick Actions ── */}
       <div className="mb-8">
         <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-5">
-          Quick Actions
+          {t("dashboard.quickActions")}
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
@@ -166,8 +171,8 @@ export default function Dashboard() {
               flex items-center justify-between">
             <div className="absolute -right-4 -bottom-4 w-20 h-20 bg-white/10 rounded-full" />
             <div>
-              <h3 className="text-lg md:text-xl font-black text-white mb-1">Add Plan</h3>
-              <p className="text-white/70 text-sm">Create a new subscription plan</p>
+              <h3 className="text-lg md:text-xl font-black text-white mb-1">{t("dashboard.addPlan")}</h3>
+              <p className="text-white/70 text-sm">{t("dashboard.addPlanDesc")}</p>
             </div>
             <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
               <GrAddCircle className="w-6 h-6 md:w-7 md:h-7 text-white group-hover:scale-110 transition-transform" />
@@ -182,8 +187,8 @@ export default function Dashboard() {
               flex items-center justify-between">
             <div className="absolute -right-4 -bottom-4 w-20 h-20 bg-white/10 rounded-full" />
             <div>
-              <h3 className="text-lg md:text-xl font-black text-white mb-1">Lender List</h3>
-              <p className="text-white/70 text-sm">View and manage all lenders</p>
+              <h3 className="text-lg md:text-xl font-black text-white mb-1">{t("dashboard.lenderList")}</h3>
+              <p className="text-white/70 text-sm">{t("dashboard.lenderList")}</p>
             </div>
             <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
               <FiUsers className="w-6 h-6 md:w-7 md:h-7 text-white group-hover:scale-110 transition-transform" />
@@ -196,13 +201,13 @@ export default function Dashboard() {
       <div className="mb-8">
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-xl md:text-2xl font-bold text-gray-900">
-            Revenue Overview
+            {t("dashboard.revenueOverview")}
           </h2>
           <button onClick={() => navigate("/revenue")}
             className="text-sm font-semibold text-orange-600
               hover:text-orange-700
               transition-colors flex items-center gap-1 cursor-pointer">
-            View Details →
+            {t("dashboard.viewDetails")} →
           </button>
         </div>
 
@@ -242,13 +247,13 @@ export default function Dashboard() {
       <div className="mb-8">
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-xl md:text-2xl font-bold text-gray-900">
-            Recent Activity
+            {t("dashboard.recentActivity")}
           </h2>
           <button onClick={() => navigate("/activityDetails")}
             className="text-sm font-semibold text-orange-600
               hover:text-orange-700
               transition-colors cursor-pointer">
-            See All →
+            {t("dashboard.seeAll")} →
           </button>
         </div>
 
@@ -302,12 +307,12 @@ export default function Dashboard() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-2">
                         <p className="text-sm font-bold text-gray-900 truncate">
-                          {activity.shortMessage || "Activity"}
+                          {activity.shortMessage || t("dashboard.activity")}
                         </p>
                         <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${dotColor}`} />
                       </div>
                       <p className="text-xs text-gray-600 mt-0.5 line-clamp-1">
-                        {activity.message || "No description available"}
+                        {activity.message || t("dashboard.noDescription")}
                       </p>
                       <p className="text-[10px] text-gray-400 mt-1 font-medium">
                         {activity.relativeTime || new Date(activity.createdAt).toLocaleString()}
@@ -319,7 +324,7 @@ export default function Dashboard() {
             </div>
           ) : (
             <div className="text-center text-gray-400 py-16 text-sm">
-              No recent activities found.
+              {t("dashboard.noActivity")}
             </div>
           )}
         </div>

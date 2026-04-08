@@ -1,0 +1,266 @@
+
+
+{
+  "navbar": {
+    "logout": "Logout",
+    "profile": "Profile",
+    "admin": "Admin",
+    "darkMode": "Switch to Dark Mode",
+    "lightMode": "Switch to Light Mode"
+  },
+  "toast": {
+    "logoutSuccess": "Logout successfully!",
+    "profileUpdated": "Profile updated successfully!",
+    "error": "Something went wrong",
+    "success": "Action completed successfully"
+  },
+  "logoutModal": {
+    "title": "Confirm Logout",
+    "message": "Are you sure you want to logout?",
+    "subMessage": "You'll need to sign in again to access your account.",
+    "cancel": "No, Cancel",
+    "confirm": "Yes, Logout"
+  },
+  "profileModal": {
+    "title": "Profile Details",
+    "personalInfo": "Personal Information",
+    "name": "Name",
+    "phone": "Phone Number",
+    "email": "Email Address",
+    "address": "Address",
+    "editProfile": "Edit Profile",
+    "saveChanges": "Saving...",
+    "cancel": "Cancel",
+    "close": "Close",
+    "notAvailable": "Not available"
+  },
+
+
+   "sidebar": {
+    "dashboard": "Dashboard",
+    "plans": "Plans",
+    "revenue": "Revenue",
+    "lenders": "Lenders",
+    "activity": "Activity",
+    "support": "Support",
+    "security": "Security",
+    "settings": "Settings",
+    "logout": "Logout",
+    "confirmLogout": "Confirm Logout",
+    "logoutQuestion": "Are you sure you want to logout?",
+    "logoutNote": "You'll need to sign in again to access your account.",
+    "cancel": "No, Cancel",
+    "confirm": "Yes, Logout"
+  },
+
+  
+  "dashboard": {
+    "title": "Dashboard Overview",
+    "welcome": "Welcome back",
+    "adminPanel": "Admin Panel",
+    "manageText": "Manage your subscriptions & revenue",
+
+    "quickActions": "Quick Actions",
+    "addPlan": "Add Plan",
+    "addPlanDesc": "Create a new subscription plan",
+    "lenderList": "Lender List",
+    "lenderListDesc": "View and manage all lenders",
+
+    "revenueOverview": "Revenue Overview",
+    "viewDetails": "View Details",
+
+    "recentActivity": "Recent Activity",
+    "seeAll": "See All",
+    "noActivity": "No recent activities found",
+
+    "stats": {
+      "totalRevenue": "Total Revenue",
+      "totalPurchases": "Total Purchases",
+      "avgPerPurchase": "Avg. Per Purchase",
+      "activePlans": "Active Plans"
+    },
+
+    "loading": "Loading Revenue Data & Activities...",
+    "noDescription": "No description available",
+    "activity": "Activity"
+  },
+
+
+  
+  "planManagement": "Plan Management",
+  "allPlans": "All Plans",
+  "createPlan": "Create Plan",
+  "searchPlaceholder": "Search by plan name, description, or price",
+
+  "loadingPlans": "Loading Plans...",
+
+  "createNewPlan": "Create New Plan",
+  "editPlan": "Edit Plan",
+
+  "planName": "Plan Name",
+  "duration": "Duration",
+  "monthlyPrice": "Monthly Price",
+  "razorpayPlanId": "Razorpay Plan ID (Optional)",
+  "description": "Description",
+  "planFeatures": "Plan Features",
+  "advancedAnalytics": "Advanced Analytics",
+  "prioritySupport": "Priority Support",
+
+  "activeStatus": "Active Status",
+  "activeStatusDesc": "Visible to lenders for purchase",
+
+  "cancel": "Cancel",
+  "saving": "Saving...",
+  "updating": "Updating...",
+  "updatePlan": "Update Plan",
+
+  "confirmDelete": "Confirm Delete",
+  "deleteWarning": "This action cannot be undone.",
+  "deletePlan": "Delete Plan",
+
+  "noPlans": "No plans created yet.",
+  "createFirstPlan": "Create your first plan above.",
+
+  "active": "Active",
+  "inactive": "Inactive",
+
+  "edit": "Edit",
+  "delete": "Delete",
+  "deleting": "Deleting...",
+
+  "prev": "Prev",
+  "next": "Next",
+
+  
+  "planAdded": "Plan added successfully!",
+  "planUpdated": "Plan updated successfully!",
+  "planDeleted": "Plan deleted successfully...",
+
+  "toastCreateDesc": "New plan has been added.",
+  "toastUpdateDesc": "Plan details have been saved.",
+  "toastDeleteDesc": "Plan has been permanently removed.",
+
+  
+  "planNameRequired": "Plan name is required",
+  "durationRequired": "Duration is required",
+  "priceRequired": "Monthly price is required",
+  "minPrice": "Minimum price is ₹99",
+  "maxPrice": "Maximum price is ₹9,99,999",
+  "positivePrice": "Price must be positive",
+  "descriptionRequired": "Description is required",
+  "descriptionMin": "Minimum 10 characters required",
+  "descriptionMax": "Max 200 characters allowed",
+
+  "planNamePlaceholder": "e.g., Premium Plan",
+  "pricePlaceholder": "999.00",
+  "razorpayPlaceholder": "plan_123",
+  "descriptionPlaceholder": "Enter plan details...",
+
+  "deleteConfirmText": "Are you sure you want to delete this plan?",
+
+  "errorLoadingPlans": "Error loading plans",
+  "saveFailed": "Failed to save plan. Please try again.",
+
+  "noDescription": "No description provided",
+
+
+  
+  "revenueReport": "Revenue Report",
+  "exportPDF": "Export PDF",
+  "cards": "Cards",
+  "charts": "Charts",
+
+  "searchPlaceholderRevenue": "Search by name, email, or mobile",
+
+  "filters": "Filters",
+  "groupBy": "Group By",
+  "allData": "All Data",
+  "byPlan": "By Plan",
+  "byMonth": "By Month",
+  "byYear": "By Year",
+
+  "clearAll": "Clear All",
+  "applyFilters": "Apply Filters",
+
+  "totalRevenue": "Total Revenue",
+  "totalPurchases": "Total Purchases",
+  "avgPerPurchase": "Avg. Per Purchase",
+  "activePlans": "Active Plans",
+
+  "totalRevenueDesc": "Total revenue generated from all plan purchases.",
+  "totalPurchasesDesc": "Total number of plan purchases made.",
+  "avgPerPurchaseDesc": "Average revenue per purchase transaction.",
+  "activePlansDesc": "Number of currently active subscription plans.",
+
+  "loadingRevenue": "Loading Revenue Data...",
+  "error": "Error",
+
+  "na": "N/A",
+
+  "revenueByPlan": "Revenue by Plan",
+  "monthlyRevenue": "Monthly Revenue",
+  "yearlyRevenue": "Yearly Revenue",
+  "recentPurchases": "Recent Purchases",
+
+  "purchases": "Purchases",
+  
+  "expired": "Expired",
+  "average": "Average",
+
+  "purchaseDate": "Purchase Date",
+  "expiresOn": "Expires On",
+  "status": "Status",
+  "daysRemaining": "{{count}} days remaining",
+  "expiredText": "Expired",
+  "noPlanRevenue": "No plan revenue data available",
+  "noMonthlyRevenue": "No monthly revenue data available",
+  "noYearlyRevenue": "No yearly revenue data available",
+  "noPurchases": "No recent purchases found",
+  "revenueShareByPlan": "Revenue Share by Plan",
+  "activeVsExpired": "Active vs Expired Purchases",
+  "revenueShareByMonth": "Revenue Share by Month",
+  "revenueShareByYear": "Revenue Share by Year",
+  "month": "Month",
+  "year": "Year",
+  "plan": "Plan",
+  "amount": "Amount",
+  "revenue": "Revenue",
+  "share": "Share",
+  "total": "Total",
+  "revenueTooltip": "Revenue",
+
+
+
+  "lendersWithPlans": "Lenders with Plans",
+  "searchByNameEmailMobile": "Search by name, email, or mobile",
+  "planStatus": "Plan Status",
+  "totalLenders": "Total Lenders",
+  "expiredPlans": "Expired Plans",
+  "unknownLender": "Unknown Lender",
+  "viewDetails": "View Details",
+  "loadingLenders": "Loading Lenders Data...",
+  "noLendersFound": "No lenders found matching \"{{searchQuery}}\"",
+  "activePlan": "Active Plan",
+  "currentPlan": "Current Plan",
+  "price": "Price",
+  "purchased": "Purchased",
+  "expires": "Expires",
+  "remaining": "Remaining",
+  "joined": "Joined"
+
+
+
+}
+
+
+  
+
+
+
+
+
+
+
+
+
+ 

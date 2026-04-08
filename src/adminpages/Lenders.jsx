@@ -9,6 +9,7 @@ import { fetchLendersWithPlans } from "../store/lendersSlice";
 import { useNavigate } from "react-router-dom";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { BsBoxSeam } from "react-icons/bs";
+import { useTranslation } from "react-i18next";
 
 export function Lenders() {
 
@@ -25,6 +26,8 @@ export function Lenders() {
     //pagination state
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 4;
+
+    const {t} = useTranslation();
 
 
 
@@ -53,7 +56,7 @@ export function Lenders() {
         return (
             <div className="flex justify-center items-center h-[60vh] bg-gray-50">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-orange-500 border-solid"></div>
-                <span className="ml-4 text-lg text-gray-600 font-medium">Loading Lenders Data...</span>
+                <span className="ml-4 text-lg text-gray-600 font-medium">{t("loadingLenders")}</span>
             </div>
         );
     }
@@ -100,7 +103,7 @@ export function Lenders() {
              
            
             <div className="flex items-center justify-between">
-                <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">Lenders with Plans</h1>
+                <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">{t("lendersWithPlans")}</h1>
             </div>
 
             {/* Search Bar */}
@@ -111,7 +114,7 @@ export function Lenders() {
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search by name, email, or mobile"
+                    placeholder={t("searchByNameEmailMobile")}
                     className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400 text-sm"
                 />
 
@@ -136,7 +139,7 @@ export function Lenders() {
                         {/* Header: flex-shrink-0 taaki ye upar fix rahe */}
                         <div className="flex-shrink-0 flex items-center justify-between px-6 py-5 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
                             <div className="flex items-center gap-3">
-                                <h3 className="text-xl font-bold text-gray-900 selected-card-title">Filters</h3>
+                                <h3 className="text-xl font-bold text-gray-900 selected-card-title">{t("filters")}</h3>
                             </div>
                             <button
                                 onClick={() => setIsFilterOpen(false)}
@@ -151,16 +154,16 @@ export function Lenders() {
                             <div>
                                 <div className="flex items-center gap-3 mb-4">
                                     <FiFilter className="w-5 h-5 text-orange-600" />
-                                    <h4 className="text-lg font-semibold text-gray-900">Plan Status</h4>
+                                    <h4 className="text-lg font-semibold text-gray-900">{t("planStatus")}</h4>
                                 </div>
 
                                 <div className="border-b border-gray-200 mb-6"></div>
 
                                 <div className="space-y-4">
                                     {[
-                                        { value: 'all', label: 'All Plans' },
-                                        { value: 'active', label: 'Active' },
-                                        { value: 'expired', label: 'Expired' },
+                                        { value: 'all', label: t("allPlans") },
+                                        { value: 'active', label: t("active") },
+                                        { value: 'expired', label: t("expired") },
                                     ].map((option) => (
                                         <label
                                             key={option.value}
@@ -194,14 +197,14 @@ export function Lenders() {
                                 className="flex-1 max-w-[130px] sm:w-auto flex items-center justify-center gap-1.5 px-3 sm:px-7 py-2.5 sm:py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg transition-all duration-200 text-xs sm:text-sm font-medium shadow-sm cursor-pointer"
                             >
                                 <IoIosCloseCircleOutline className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
-                                <span className="whitespace-nowrap">Clear All</span>
+                                <span className="whitespace-nowrap">{t("clearAll")}</span>
                             </button>
 
                             <button
                                 onClick={() => setIsFilterOpen(false)}
                                 className="flex-[1.5] max-w-[180px] sm:w-auto flex items-center justify-center gap-1.5 px-4 sm:px-12 py-2.5 sm:py-3 bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white rounded-lg transition-all duration-200 text-xs sm:text-sm font-medium shadow-md cursor-pointer"
                             >
-                                <span className="whitespace-nowrap">Apply Filters</span>
+                                <span className="whitespace-nowrap">{t("applyFilters")}</span>
                                 <FiCheck className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
                             </button>
                         </div>
@@ -216,7 +219,7 @@ export function Lenders() {
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 divide-y sm:divide-y-0 sm:divide-x divide-gray-100">
                     {/* Total Lenders */}
                     <div className="py-2 sm:py-0 text-center">
-                        <p className="text-xs text-gray-500 font-bold tracking-wider">Total Lenders</p>
+                        <p className="text-xs text-gray-500 font-bold tracking-wider">{t("totalLenders")}</p>
                         <h3 className="text-2xl font-bold text-orange-600">
                             {totalLenders}
                         </h3>
@@ -224,7 +227,7 @@ export function Lenders() {
 
                     {/* Active Plans */}
                     <div className="py-2 sm:py-0 sm:pl-4 text-center">
-                        <p className="text-xs text-gray-500 font-bold tracking-wider">Active Plans</p>
+                        <p className="text-xs text-gray-500 font-bold tracking-wider">{t("activePlans")}</p>
                         <h3 className="text-2xl font-bold text-green-600">
                             {activePlans}
                         </h3>
@@ -232,7 +235,7 @@ export function Lenders() {
                     </div>
                     {/* Expired Plans */}
                     <div className="py-2 sm:py-0 sm:pl-4 text-center">
-                        <p className="text-sm text-gray-600 mt-1">Expired Plans</p>
+                        <p className="text-sm text-gray-600 mt-1">{t("expiredPlans")}</p>
                         <h3 className="text-2xl font-bold text-red-600">
                             {expiredPlans}
                         </h3>
@@ -258,7 +261,7 @@ export function Lenders() {
 
                                         <div className="min-w-0 flex-1">
                                             <h3 className="text-sm md:text-base lg:text-lg font-bold text-gray-800 truncate leading-tight">
-                                                {lender.userName || "Unknown Lender"}
+                                                {lender.userName || t("unknownLender")}
                                             </h3>
                                             <p className="text-[11px] md:text-xs text-gray-500 truncate max-w-[180px] md:max-w-full">
                                                 {lender.email || "No Email"}
@@ -280,7 +283,7 @@ export function Lenders() {
                                             : "text-red-600 bg-red-50 border-red-200"
                                         }
                                        `}>
-                                        {lender.planPurchaseDetails?.isPlanActive ? "Active Plan" : "Expired"}
+                                        {lender.planPurchaseDetails?.isPlanActive ? t("activePlan") : t("expired")}
                                     </div>
                                 </div>
 
@@ -289,23 +292,23 @@ export function Lenders() {
                                 <div className="bg-orange-50/90 rounded-lg p-4 mb-4 mx-auto w-[96%] border-l-4 border-orange-600">
                                     <h4 className="text-sm font-bold mb-4 tracking-wide flex items-center gap-3">
                                         <BsBoxSeam className="w-3 h-3 text-orange-600 flex-shrink-0" />
-                                        Current Plan
+                                        {t("currentPlan")}
                                     </h4>
                                     <div className="space-y-2 text-sm text-gray-700">
 
                                         {/* Har row mein 'flex justify-between' hai taaki gap maintain rahe */}
                                         <div className="flex justify-between">
-                                            <span className="font-semibold text-sm text-gray-500">Plan:</span>
+                                            <span className="font-semibold text-sm text-gray-500">{t("plan")}</span>
                                             <span className=" text-gray-800 font-bold text-sm">{lender.currentPlan?.planName || "N/A"}</span>
                                         </div>
 
                                         <div className="flex justify-between">
-                                            <span className="font-semibold text-sm text-gray-500">Price:</span>
+                                            <span className="font-semibold text-sm text-gray-500">{t("price")}</span>
                                             <span className=" text-gray-800 font-bold text-sm">₹{lender.currentPlan?.priceMonthly || 0}</span>
                                         </div>
 
                                         <div className="flex justify-between">
-                                            <span className="font-semibold text-sm text-gray-500">Purchased:</span>
+                                            <span className="font-semibold text-sm text-gray-500">{t("purchased")}</span>
                                             <span className="text-gray-800 font-bold text-sm">
                                                 {lender.planPurchaseDetails?.planPurchaseDate
                                                     ? new Date(lender.planPurchaseDetails.planPurchaseDate).toLocaleDateString()
@@ -314,7 +317,7 @@ export function Lenders() {
                                         </div>
 
                                         <div className="flex justify-between">
-                                            <span className="font-semibold text-gray-500 text-sm">Expires:</span>
+                                            <span className="font-semibold text-gray-500 text-sm">{t("expires")}</span>
                                             <span className="text-red-600 font-bold text-sm">
                                                 {lender.planPurchaseDetails?.planExpiryDate
                                                     ? new Date(lender.planPurchaseDetails.planExpiryDate).toLocaleDateString()
@@ -323,7 +326,7 @@ export function Lenders() {
                                         </div>
 
                                         <div className="flex justify-between">
-                                            <span className="font-semibold text-gray-500 text-sm">Remaining:</span>
+                                            <span className="font-semibold text-gray-500 text-sm">{t("remaining")}</span>
                                             <span className="text-green-600 font-bold font-bold text-sm">
                                                 {lender.planPurchaseDetails?.remainingDays ?? 0} Days
                                             </span>
@@ -335,11 +338,11 @@ export function Lenders() {
                                 {/* Bottom Footer Section */}
                                 <div className="mt-auto pt-3 flex justify-between items-center text-xs border-t border-gray-50">
                                     <span className="text-gray-500">
-                                        Joined: {lender.createdAt ? new Date(lender.createdAt).toLocaleDateString() : "N/A"}
+                                        {t("joined")}: {lender.createdAt ? new Date(lender.createdAt).toLocaleDateString() : "N/A"}
                                     </span>
                                     <button className="text-orange-600 font-bold hover:underline cursor-pointer"
                                         onClick={() => navigate(`/lenders/${lender._id}/details`, { state: { lender } })}>
-                                        View Details
+                                        {t("viewDetails")}
                                     </button>
                                 </div>
 
@@ -348,7 +351,7 @@ export function Lenders() {
                     })
                 ) : (
                     <div className="col-span-full text-center text-gray-500 py-10">
-                        No lenders found matching "{searchQuery}"
+                       {t("noLendersFound", { searchQuery })}
                     </div>
                 )}
             </div>
@@ -360,7 +363,7 @@ export function Lenders() {
                         disabled={currentPage === 1}
                         className="px-4 py-2 bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 rounded-lg disabled:opacity-50 cursor-pointer"
                     >
-                        Prev
+                        {t("prev")}
                     </button>
 
                     {Array.from({ length: totalPages }, (_, i) => (
@@ -381,7 +384,7 @@ export function Lenders() {
                         disabled={currentPage === totalPages}
                         className="px-4 py-2 bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 rounded-lg disabled:opacity-50 cursor-pointer"
                     >
-                        Next
+                        {t("next")}
                     </button>
 
                 </div>

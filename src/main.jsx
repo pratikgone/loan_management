@@ -5,6 +5,7 @@ import './App.css'
 import App from './App.jsx'
 import "./styles/dark.css"
 import "./styles/font.css"
+import "./i18n";
 import { BrowserRouter } from 'react-router-dom'
 import { store } from './store/index.js'
 import {Provider} from "react-redux"

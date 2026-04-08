@@ -14,16 +14,15 @@ import { HiMiniArrowTrendingUp } from "react-icons/hi2";
 import { FiCheckCircle } from "react-icons/fi";
 import { IoIosSearch } from "react-icons/io";
 import { FiFilter } from "react-icons/fi";
-//line chart
-// import {
-//   ResponsiveContainer, LineChart, Line, BarChart, Bar,
-//   XAxis, YAxis, CartesianGrid, Tooltip, Legend
-// } from "recharts";
+import { MdCurrencyRupee } from "react-icons/md";
+
 
 //pie chart
 import {
   ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend
 } from "recharts";
+import { exportRevenuePDF } from '../utils/exportRevenuePDF';
+import { useTranslation } from 'react-i18next';
 
 export function Revenue() {
   const dispatch = useDispatch();
@@ -37,6 +36,9 @@ export function Revenue() {
   const [viewMode, setViewMode] = useState("card");
 
   const [searchQuery, setSearchQuery] = useState("");
+
+
+  const {t} = useTranslation();
 
 
 
@@ -119,36 +121,36 @@ export function Revenue() {
 
   const summaryCards = [
     {
-      title: "Total Revenue",
+      title: t("totalRevenue"),
       value: `₹${summary.totalRevenue?.toLocaleString() || "0"}`,
-      icon: <FiDollarSign className="w-5 h-5 text-green-600" />,
+      icon: <MdCurrencyRupee className="w-5 h-5 text-green-600" />,
       bg: "bg-green-50",
       color: "text-green-600",
-      description: "Total revenue generated from all plan purchases."
+      description: t("totalRevenueDesc")
     },
     {
-      title: "Total Purchases",
+      title: t("totalPurchases"),
       value: summary.totalPurchases || "0",
       icon: <FiShoppingCart className="w-5 h-5 text-blue-600" />,
       bg: "bg-blue-50",
       color: "text-blue-600",
-      description: "Total number of plan purchases made."
+      description: t("totalPurchasesDesc")
     },
     {
-      title: "Avg. Per Purchase",
+      title: t("avgPerPurchase"),
       value: `₹${summary.averageRevenuePerPurchase?.toLocaleString() || "0"}`,
       icon: <HiMiniArrowTrendingUp className="w-5 h-5 text-orange-600" />,
       // bg: "bg-orange-50",
       color: "text-orange-600",
-      description: "Average revenue per purchase transaction."
+      description: t("avgPerPurchaseDesc")
     },
     {
-      title: "Active Plans",
+      title: t("activePlans"),
       value: summary.activePlansCount || "0",
       icon: <FiCheckCircle className="w-5 h-5 text-green-600" />,
       bg: "bg-green-50",
       color: "text-green-600",
-      description: "Number of currently active subscription plans."
+      description: t("activePlansDesc")
     }
   ];
 
@@ -156,13 +158,13 @@ export function Revenue() {
     return (
       <div className="flex items-center justify-center h-[60vh]">
         <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-orange-500 border-solid"></div>
-        <span className="ml-4 text-lg text-gray-600 font-medium">Loading Revenue Data...</span>
+        <span className="ml-4 text-lg text-gray-600 font-medium">{t("loadingRevenue")}</span>
       </div>
     );
   }
 
   if (error) {
-    return <div className="text-red-600 text-center p-6 font-medium">Error: {error}</div>;
+    return <div className="text-red-600 text-center p-6 font-medium">{t("error")}: {error}</div>;
   }
 
   const formatDate = (isoDate) => {
@@ -200,7 +202,23 @@ export function Revenue() {
 
       {/* Title + Toggle */}
       <div className="flex items-center w-full sm:w-auto gap-1 justify-between gap-4 mb-6">
-        <h2 className="text-xl md:text-2xl mb-6 font-bold text-gray-900">Revenue Report</h2>
+        <h2 className="text-xl md:text-2xl mb-6 font-bold text-gray-900">{t("revenueReport")}</h2>
+
+        <div className='flex items-center gap-3'>
+          <button  onClick={() =>
+        exportRevenuePDF({ summary, plans, monthly, yearly, purchases, groupBy })
+      } className='flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600
+        text-white text-sm font-semibold rounded-xl shadow-sm
+        transition-all cursor-pointer active:scale-95'>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+        strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+           <span className=''>{t("exportPDF")}</span> 
+          </button>
+        </div>
 
         <div className="flex items-center gap-1.5 bg-white border border-gray-200 rounded-xl p-1 shadow-sm">
           <button
@@ -217,7 +235,7 @@ export function Revenue() {
               <rect x="3" y="14" width="7" height="7" rx="1" />
               <rect x="14" y="14" width="7" height="7" rx="1" />
             </svg>
-            <span className="hidden sm:inline">Cards</span>
+            <span className="hidden sm:inline">{t("cards")}</span>
           </button>
           <button
             onClick={() => setViewMode("chart")}
@@ -232,7 +250,7 @@ export function Revenue() {
               <rect x="10" y="8" width="4" height="13" rx="1" />
               <rect x="17" y="5" width="4" height="16" rx="1" />
             </svg>
-            <span className="hidden sm:inline">Charts</span>
+            <span className="hidden sm:inline">{t("charts")}</span>
           </button>
         </div>
       </div>
@@ -246,7 +264,7 @@ export function Revenue() {
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search by name, email, or mobile"
+          placeholder={t("searchPlaceholderRevenue")}
           className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400 text-sm"
         />
 
@@ -304,21 +322,21 @@ export function Revenue() {
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden border border-gray-100">
             <div className="flex-shrink-0 flex items-center justify-between px-6 py-5 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
-              <h3 className="text-2xl font-bold text-gray-900 selected-card-title">Filters</h3>
+              <h3 className="text-2xl font-bold text-gray-900 selected-card-title">{t("filters")}</h3>
               <button onClick={() => setIsFilterModalOpen(false)}
                 className="text-gray-500 hover:text-orange-600 text-3xl font-bold transition-colors cursor-pointer">×</button>
             </div>
             <div className="flex-grow overflow-y-auto p-6 space-y-6">
               <h4 className="text-lg font-bold text-gray-900 flex items-center gap-3">
-                <CiFilter className="w-6 h-6 text-orange-600" /> Group By
+                <CiFilter className="w-6 h-6 text-orange-600" /> {t("groupBy")}
               </h4>
               <div className="border-t border-gray-200 my-4"></div>
               <div className="space-y-4">
                 {[
-                  { value: "all", label: "All Data" },
-                  { value: "plan", label: "By Plan" },
-                  { value: "month", label: "By Month" },
-                  { value: "year", label: "By Year" },
+                  { value: "all", label: t("allData") },
+                  { value: "plan", label: t("byPlan") },
+                  { value: "month", label: t("byMonth") },
+                  { value: "year", label: t("byYear") },
                 ].map((option) => (
                   <label key={option.value}
                     className={`flex items-center gap-4 p-4 rounded-xl border cursor-pointer transition-all duration-200 ${tempGroupBy === option.value
@@ -339,12 +357,12 @@ export function Revenue() {
                 onClick={() => { setTempGroupBy("all"); setIsFilterModalOpen(false); }}
                 className="flex-1 max-w-[130px] flex items-center justify-center gap-2 px-3 sm:px-7 py-2.5 sm:py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg transition-all text-xs sm:text-sm font-medium cursor-pointer">
                 <IoIosCloseCircleOutline className="w-5 h-5 flex-shrink-0" />
-                <span className="whitespace-nowrap">Clear All</span>
+                <span className="whitespace-nowrap">{t("clearAll")}</span>
               </button>
               <button
                 onClick={() => { setGroupBy(tempGroupBy); setIsFilterModalOpen(false); }}
                 className="flex-[2] max-w-[200px] flex items-center justify-center gap-2 px-4 sm:px-12 py-2.5 sm:py-3 bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white rounded-lg transition-all text-xs sm:text-sm font-medium cursor-pointer">
-                <span className="whitespace-nowrap">Apply Filters</span>
+                <span className="whitespace-nowrap">{t("applyFilters")}</span>
                 <FiCheck className="w-5 h-5 flex-shrink-0" />
               </button>
             </div>
@@ -360,7 +378,7 @@ export function Revenue() {
           {/* Revenue by Plan — Cards */}
           {showByPlan && (
             <div className="mb-10">
-              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">Revenue by Plan {searchQuery && `(${filteredData.plans.length} results)`}</h2>
+              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">{t("revenueByPlan")} {searchQuery && `(${filteredData.plans.length} results)`}</h2>
               <div className="grid grid-cols-1 gap-4 md:gap-6">
                 {filteredData.plans.length > 0 ? filteredData.plans.map((plan, index) => (
                   <div key={index} className="bg-white rounded-2xl shadow-sm border border-gray-200 p-5 md:p-7 hover:border-orange-300 transition-all">
@@ -397,7 +415,7 @@ export function Revenue() {
                       ))}
                     </div>
                   </div>
-                )) : <div className="text-center text-gray-500 py-10">No plan revenue data available</div>}
+                )) : <div className="text-center text-gray-500 py-10">{t("noPlanRevenue")}</div>}
               </div>
             </div>
           )}
@@ -405,7 +423,7 @@ export function Revenue() {
           {/* Monthly Revenue — Cards */}
           {showByMonth && (
             <div className="mb-10">
-              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">Monthly Revenue {searchQuery && `(${filteredData.monthly.length} results)`}</h2>
+              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">{t("monthlyRevenue")} {searchQuery && `(${filteredData.monthly.length} results)`}</h2>
               <div className="grid grid-cols-1 gap-4 md:gap-6">
                 {filteredData.monthly.length > 0 ? filteredData.monthly.map((month, index) => (
                   <div key={index} className="bg-white rounded-xl shadow-sm p-5 md:p-6 border border-gray-200 hover:shadow-md hover:border-orange-300 transition-all">
@@ -425,7 +443,7 @@ export function Revenue() {
                       {month.totalPurchases} Purchases
                     </p>
                   </div>
-                )) : <div className="text-center text-gray-500 py-10">No monthly revenue data available</div>}
+                )) : <div className="text-center text-gray-500 py-10">{t("noMonthlyRevenue")}</div>}
               </div>
             </div>
           )}
@@ -433,7 +451,7 @@ export function Revenue() {
           {/* Yearly Revenue — Cards */}
           {showByYear && (
             <div className="mb-10">
-              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">Yearly Revenue {searchQuery && `(${filteredData.yearly.length} results)`}</h2>
+              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">{t("yearlyRevenue")} {searchQuery && `(${filteredData.yearly.length} results)`}</h2>
               <div className="grid grid-cols-1 gap-4 md:gap-6">
                 {filteredData.yearly.length > 0 ? filteredData.yearly.map((year, index) => (
                   <div key={index} className="bg-white rounded-xl shadow-sm p-5 md:p-6 border border-gray-200 hover:shadow-md hover:border-orange-300 transition-all">
@@ -461,7 +479,7 @@ export function Revenue() {
           {/* Recent Purchases — Cards */}
           {groupBy === "all" && (
             <div className="mb-10">
-              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">Recent Purchases</h2>
+              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">{t("recentPurchases")}</h2>
               <div className="space-y-4">
                 {paginatedPurchases.length > 0 ? paginatedPurchases.map((purchase, index) => (
                   <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:border-orange-300 hover:shadow-md transition-all">
@@ -506,7 +524,7 @@ export function Revenue() {
                       </div>
                     </div>
                   </div>
-                )) : <div className="text-center text-gray-500 py-10">No recent purchases found</div>}
+                )) : <div className="text-center text-gray-500 py-10">{t("noPurchases")}</div>}
               </div>
             </div>
 
@@ -548,281 +566,6 @@ export function Revenue() {
 
 
 
-      {/*   Line CHART VIEW     */}
-
-      {/* {viewMode === "chart" && ( */}
-      <>
-
-        {/* Revenue by Plan — Line Chart */}
-        {/* {showByPlan && plans.length > 0 && (
-      <div className="mb-10 max-w-7xl mx-auto">
-        <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">Revenue by Plan</h2>
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 md:p-8"> */}
-
-        {/* Summary row */}
-        {/* <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-            {[
-              { label: "Total Revenue",   value: `₹${plans.reduce((s, p) => s + (p.totalRevenue || 0), 0).toLocaleString()}`, color: "text-orange-600", bg: "bg-orange-50" },
-              { label: "Total Purchases", value: plans.reduce((s, p) => s + (p.totalPurchases || 0), 0),                       color: "text-blue-600",   bg: "bg-blue-50"   },
-              { label: "Active",          value: plans.reduce((s, p) => s + (p.activePurchases || 0), 0),                      color: "text-green-600",  bg: "bg-green-50"  },
-              { label: "Expired",         value: plans.reduce((s, p) => s + (p.expiredPurchases || 0), 0),                     color: "text-red-500",    bg: "bg-red-50"    },
-            ].map((s, i) => (
-              <div key={i} className={`${s.bg} rounded-xl p-4`}>
-                <p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">{s.label}</p>
-                <p className={`text-xl font-black mt-1 ${s.color}`}>{s.value}</p>
-              </div>
-            ))}
-          </div> */}
-
-        {/* <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider mb-4">Revenue & Purchases by Plan</p>
-          <ResponsiveContainer width="100%" height={320}>
-            <LineChart
-              data={plans.map(p => ({
-                name: p.planName,
-                Revenue: p.totalRevenue || 0,
-                Active: p.activePurchases || 0,
-                Expired: p.expiredPurchases || 0,
-                Purchases: p.totalPurchases || 0,
-              }))}
-              margin={{ top: 10, right: 20, left: 10, bottom: 10 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis
-                dataKey="name"
-                tick={{ fontSize: 11, fontWeight: 600, fill: "#9ca3af" }}
-                axisLine={false}
-                tickLine={false}
-              />
-              <YAxis
-                tick={{ fontSize: 11, fill: "#9ca3af" }}
-                axisLine={false}
-                tickLine={false}
-                tickFormatter={(v) => v >= 1000 ? `₹${(v / 1000).toFixed(0)}k` : `₹${v}`}
-              />
-              <Tooltip
-                contentStyle={{ borderRadius: "12px", border: "1px solid #e5e7eb", fontSize: "12px" }}
-                formatter={(value, name) => [
-                  name === "Revenue" ? `₹${value.toLocaleString()}` : value,
-                  name
-                ]}
-              />
-              <Legend
-                iconType="circle"
-                iconSize={8}
-                wrapperStyle={{ fontSize: "12px", fontWeight: 600, paddingTop: "16px" }}
-              />
-              <Line type="monotone" dataKey="Revenue"   stroke="#f97316" strokeWidth={2.5} dot={{ r: 5, fill: "#f97316"  }} activeDot={{ r: 7 }} />
-              <Line type="monotone" dataKey="Active"    stroke="#22c55e" strokeWidth={2}   dot={{ r: 4, fill: "#22c55e"  }} activeDot={{ r: 6 }} />
-              <Line type="monotone" dataKey="Expired"   stroke="#ef4444" strokeWidth={2}   dot={{ r: 4, fill: "#ef4444"  }} activeDot={{ r: 6 }} />
-              <Line type="monotone" dataKey="Purchases" stroke="#3b82f6" strokeWidth={2}   dot={{ r: 4, fill: "#3b82f6"  }} activeDot={{ r: 6 }} strokeDasharray="5 3" />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-    )} */}
-
-        {/* Monthly Revenue — Line Chart */}
-        {/* {showByMonth && monthly.length > 0 && (
-      <div className="mb-10 max-w-7xl mx-auto">
-        <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">Monthly Revenue</h2>
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 md:p-8"> */}
-
-        {/* Summary row */}
-        {/* <div className="grid grid-cols-2 gap-4 mb-8">
-            {[
-              { label: "Total Revenue",   value: `₹${monthly.reduce((s, m) => s + (m.totalRevenue || 0), 0).toLocaleString()}`, color: "text-orange-600", bg: "bg-orange-50" },
-              { label: "Total Purchases", value: monthly.reduce((s, m) => s + (m.totalPurchases || 0), 0),                       color: "text-blue-600",   bg: "bg-blue-50"   },
-            ].map((s, i) => (
-              <div key={i} className={`${s.bg} rounded-xl p-4`}>
-                <p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">{s.label}</p>
-                <p className={`text-xl font-black mt-1 ${s.color}`}>{s.value}</p>
-              </div>
-            ))}
-          </div> */}
-
-        {/* <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider mb-4">Revenue trend by Month</p>
-          <ResponsiveContainer width="100%" height={320}>
-            <LineChart
-              data={monthly.map(m => ({
-                name: m.monthName?.slice(0, 3),
-                Revenue: m.totalRevenue || 0,
-                Purchases: m.totalPurchases || 0,
-              }))}
-              margin={{ top: 10, right: 20, left: 10, bottom: 10 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis
-                dataKey="name"
-                tick={{ fontSize: 11, fontWeight: 600, fill: "#9ca3af" }}
-                axisLine={false}
-                tickLine={false}
-              />
-              <YAxis
-                tick={{ fontSize: 11, fill: "#9ca3af" }}
-                axisLine={false}
-                tickLine={false}
-                tickFormatter={(v) => v >= 1000 ? `₹${(v / 1000).toFixed(0)}k` : `₹${v}`}
-              />
-              <Tooltip
-                contentStyle={{ borderRadius: "12px", border: "1px solid #e5e7eb", fontSize: "12px" }}
-                formatter={(value, name) => [
-                  name === "Revenue" ? `₹${value.toLocaleString()}` : value,
-                  name
-                ]}
-              />
-              <Legend
-                iconType="circle"
-                iconSize={8}
-                wrapperStyle={{ fontSize: "12px", fontWeight: 600, paddingTop: "16px" }}
-              />
-              <Line type="monotone" dataKey="Revenue"   stroke="#f97316" strokeWidth={2.5} dot={{ r: 5, fill: "#f97316" }} activeDot={{ r: 7 }} />
-              <Line type="monotone" dataKey="Purchases" stroke="#3b82f6" strokeWidth={2}   dot={{ r: 4, fill: "#3b82f6" }} activeDot={{ r: 6 }} strokeDasharray="5 3" />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-    )} */}
-
-        {/* Yearly Revenue — Line Chart */}
-        {/* {showByYear && yearly.length > 0 && (
-      <div className="mb-10 max-w-7xl mx-auto">
-        <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">Yearly Revenue</h2>
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 md:p-8"> */}
-
-        {/* Summary row */}
-        {/* <div className="grid grid-cols-2 gap-4 mb-8">
-            {[
-              { label: "Total Revenue",   value: `₹${yearly.reduce((s, y) => s + (y.totalRevenue || 0), 0).toLocaleString()}`, color: "text-orange-600", bg: "bg-orange-50" },
-              { label: "Total Purchases", value: yearly.reduce((s, y) => s + (y.totalPurchases || 0), 0),                       color: "text-blue-600",   bg: "bg-blue-50"   },
-            ].map((s, i) => (
-              <div key={i} className={`${s.bg} rounded-xl p-4`}>
-                <p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">{s.label}</p>
-                <p className={`text-xl font-black mt-1 ${s.color}`}>{s.value}</p>
-              </div>
-            ))}
-          </div> */}
-
-        {/* <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider mb-4">Revenue trend by Year</p>
-          <ResponsiveContainer width="100%" height={320}>
-            <LineChart
-              data={yearly.map(y => ({
-                name: String(y.year),
-                Revenue: y.totalRevenue || 0,
-                Purchases: y.totalPurchases || 0,
-              }))}
-              margin={{ top: 10, right: 20, left: 10, bottom: 10 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis
-                dataKey="name"
-                tick={{ fontSize: 11, fontWeight: 600, fill: "#9ca3af" }}
-                axisLine={false}
-                tickLine={false}
-              />
-              <YAxis
-                tick={{ fontSize: 11, fill: "#9ca3af" }}
-                axisLine={false}
-                tickLine={false}
-                tickFormatter={(v) => v >= 1000 ? `₹${(v / 1000).toFixed(0)}k` : `₹${v}`}
-              />
-              <Tooltip
-                contentStyle={{ borderRadius: "12px", border: "1px solid #e5e7eb", fontSize: "12px" }}
-                formatter={(value, name) => [
-                  name === "Revenue" ? `₹${value.toLocaleString()}` : value,
-                  name
-                ]}
-              />
-              <Legend
-                iconType="circle"
-                iconSize={8}
-                wrapperStyle={{ fontSize: "12px", fontWeight: 600, paddingTop: "16px" }}
-              />
-              <Line type="monotone" dataKey="Revenue"   stroke="#f97316" strokeWidth={2.5} dot={{ r: 5, fill: "#f97316" }} activeDot={{ r: 7 }} />
-              <Line type="monotone" dataKey="Purchases" stroke="#3b82f6" strokeWidth={2}   dot={{ r: 4, fill: "#3b82f6" }} activeDot={{ r: 6 }} strokeDasharray="5 3" />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-    )} */}
-
-
-        {/* Recent Purchases — Table (same as before) */}
-        {/* {groupBy === "all" && (
-      <div className="mb-10 max-w-7xl mx-auto">
-        <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">Recent Purchases</h2>
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse">
-              <thead>
-                <tr className="bg-gray-50 border-b border-gray-200">
-                  <th className="text-left px-6 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">#</th>
-                  <th className="text-left px-6 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">Plan</th>
-                  <th className="text-left px-6 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">Purchase Date</th>
-                  <th className="text-left px-6 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">Expiry Date</th>
-                  <th className="text-left px-6 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
-                  <th className="text-right px-6 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">Amount</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
-                {purchases.length > 0 ? purchases.map((purchase, index) => (
-                  <tr key={index} className={`hover:bg-orange-50/30 transition-colors ${index % 2 === 0 ? "bg-white" : "bg-gray-50/40"}`}>
-                    <td className="px-6 py-4 text-sm text-gray-400 font-semibold">{index + 1}</td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2">
-                        <div className={`w-2 h-2 rounded-full flex-shrink-0 ${purchase.remainingDays > 0 ? "bg-green-500" : "bg-gray-400"}`} />
-                        <span className="text-sm font-bold text-gray-900">{purchase.planName}</span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-600 font-medium">{formatDate(purchase.purchaseDate)}</td>
-                    <td className="px-6 py-4 text-sm text-gray-600 font-medium">{formatDate(purchase.expiryDate)}</td>
-                    <td className="px-6 py-4">
-                      <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold ${
-                        purchase.remainingDays > 30 ? "bg-green-100 text-green-700" :
-                        purchase.remainingDays > 0  ? "bg-yellow-100 text-yellow-700" :
-                                                      "bg-red-100 text-red-600"
-                      }`}>
-                        <span className={`w-1.5 h-1.5 rounded-full ${
-                          purchase.remainingDays > 30 ? "bg-green-500" :
-                          purchase.remainingDays > 0  ? "bg-yellow-500" : "bg-red-500"
-                        }`} />
-                        {purchase.remainingDays > 0 ? `${purchase.remainingDays}d left` : "Expired"}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <span className="text-sm font-black text-green-600">
-                        ₹{purchase.price?.toLocaleString() || "0"}
-                      </span>
-                    </td>
-                  </tr>
-                )) : (
-                  <tr>
-                    <td colSpan={6} className="px-6 py-12 text-center text-gray-400 text-sm">
-                      No recent purchases found
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-              {purchases.length > 0 && (
-                <tfoot>
-                  <tr className="bg-gray-50 border-t-2 border-gray-200">
-                    <td colSpan={5} className="px-6 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">
-                      Total ({purchases.length} purchases)
-                    </td>
-                    <td className="px-6 py-3.5 text-right text-sm font-black text-green-600">
-                      ₹{purchases.reduce((sum, p) => sum + (p.price || 0), 0).toLocaleString()}
-                    </td>
-                  </tr>
-                </tfoot>
-              )}
-            </table>
-          </div>
-        </div>
-      </div>
-    )} */}
-
-      </>
-      {/* )} */}
-
 
       {/*    Pie      CHART VIEW    */}
 
@@ -832,16 +575,16 @@ export function Revenue() {
           {/* Revenue by Plan — Pie Chart */}
           {showByPlan && plans.length > 0 && (
             <div className="mb-8">
-              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">Revenue by Plan</h2>
+              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">{t("revenueByPlan")}</h2>
               <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 md:p-8">
 
                 {/* Summary row */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-8">
                   {[
-                    { label: "Total Revenue", value: `₹${plans.reduce((s, p) => s + (p.totalRevenue || 0), 0).toLocaleString()}`, color: "text-orange-600", bg: "bg-blue-50" },
-                    { label: "Total Purchases", value: plans.reduce((s, p) => s + (p.totalPurchases || 0), 0), color: "text-blue-600", bg: "bg-blue-50" },
-                    { label: "Active", value: plans.reduce((s, p) => s + (p.activePurchases || 0), 0), color: "text-green-600", bg: "bg-green-50" },
-                    { label: "Expired", value: plans.reduce((s, p) => s + (p.expiredPurchases || 0), 0), color: "text-red-500", bg: "bg-red-50" },
+                    { label: t("totalRevenue"), value: `₹${plans.reduce((s, p) => s + (p.totalRevenue || 0), 0).toLocaleString()}`, color: "text-orange-600", bg: "bg-blue-50" },
+                    { label: t("totalPurchases"), value: plans.reduce((s, p) => s + (p.totalPurchases || 0), 0), color: "text-blue-600", bg: "bg-blue-50" },
+                    { label: t("active"), value: plans.reduce((s, p) => s + (p.activePurchases || 0), 0), color: "text-green-600", bg: "bg-green-50" },
+                    { label: t("expired"), value: plans.reduce((s, p) => s + (p.expiredPurchases || 0), 0), color: "text-red-500", bg: "bg-red-50" },
                   ].map((s, i) => (
                     <div key={i} className={`stats-card ${s.bg} rounded-xl p-4`}>
                       <p className="text-[10px] md:text-xs text-gray-500 font-semibold uppercase tracking-wide">{s.label}</p>
@@ -855,7 +598,7 @@ export function Revenue() {
 
                   {/* Pie 1 — Revenue share */}
                   <div className='w-full h-[240px] md:h-[300px]'>
-                    <p className="text-[10px] md:text-xs text-gray-400 font-bold uppercase tracking-widest mb-2 text-center">Revenue Share by Plan</p>
+                    <p className="text-[10px] md:text-xs text-gray-400 font-bold uppercase tracking-widest mb-2 text-center">{t("revenueShareByPlan")}</p>
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
                         <Pie
@@ -886,7 +629,7 @@ export function Revenue() {
 
                   {/* Pie 2 — Active vs Expired */}
                   <div className='w-full h-[240px] md:h-[300px]'>
-                    <p className="text-[10px] md:text-xs text-gray-400 font-bold uppercase tracking-widest mb-2 text-center">Active vs Expired Purchases</p>
+                    <p className="text-[10px] md:text-xs text-gray-400 font-bold uppercase tracking-widest mb-2 text-center">{t("activeVsExpired")}</p>
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
                         <Pie
@@ -921,13 +664,14 @@ export function Revenue() {
                 <div className="mt-8 overflow-x-auto">
                   <table className="w-full border-collapse">
                     <thead>
+                      
                       <tr className="bg-gray-50 border-b border-gray-200">
-                        <th className="text-left px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">Plan</th>
-                        <th className="text-right px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">Revenue</th>
-                        <th className="text-right px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">Purchases</th>
-                        <th className="text-right px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">Active</th>
-                        <th className="text-right px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">Expired</th>
-                        <th className="text-right px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">Avg.</th>
+                        <th className="text-left px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">{t("plan")}</th>
+                        <th className="text-right px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">{t("revenue")}</th>
+                        <th className="text-right px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">{t("purchases")}</th>
+                        <th className="text-right px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">{t("active")}</th>
+                        <th className="text-right px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">{t("expired")}</th>
+                        <th className="text-right px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">{t("average")}</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-50">
@@ -958,14 +702,14 @@ export function Revenue() {
           {/* Monthly Revenue — Pie Chart */}
           {showByMonth && monthly.length > 0 && (
             <div className="mb-8">
-              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">Monthly Revenue</h2>
+              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">{t("monthlyRevenue")}</h2>
               <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 md:p-8">
 
                 {/* Summary row */}
                 <div className="grid grid-cols-2 gap-4 mb-8">
                   {[
-                    { label: "Total Revenue", value: `₹${monthly.reduce((s, m) => s + (m.totalRevenue || 0), 0).toLocaleString()}`, color: "text-orange-600", bg: "bg-blue-50" },
-                    { label: "Total Purchases", value: monthly.reduce((s, m) => s + (m.totalPurchases || 0), 0), color: "text-blue-600", bg: "bg-blue-50" },
+                    { label:  t("totalRevenue"), value: `₹${monthly.reduce((s, m) => s + (m.totalRevenue || 0), 0).toLocaleString()}`, color: "text-orange-600", bg: "bg-blue-50" },
+                    { label: t("totalPurchases"), value: monthly.reduce((s, m) => s + (m.totalPurchases || 0), 0), color: "text-blue-600", bg: "bg-blue-50" },
                   ].map((s, i) => (
                     <div key={i} className={`stats-card ${s.bg} rounded-xl p-4`}>
                       <p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">{s.label}</p>
@@ -976,7 +720,7 @@ export function Revenue() {
 
                 <div className='w-full h-[220px] md:h-[320px]'>
                   <p className="text-[10px] md:text-xs text-gray-400 font-bold uppercase tracking-widest mb-2 text-center">
-                    Revenue Share by Month
+                    {t("revenueShareByMonth")}
                   </p>
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
@@ -1021,10 +765,10 @@ export function Revenue() {
                   <table className="w-full border-collapse">
                     <thead>
                       <tr className="bg-gray-50 border-b border-gray-200">
-                        <th className="text-left px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">Month</th>
-                        <th className="text-right px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">Revenue</th>
-                        <th className="text-right px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">Purchases</th>
-                        <th className="text-right px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">Share</th>
+                        <th className="text-left px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">{t("month")}</th>
+                        <th className="text-right px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">{t("revenue")}</th>
+                        <th className="text-right px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">{t("purchases")}</th>
+                        <th className="text-right px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">{t("share")}</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-50">
@@ -1060,14 +804,14 @@ export function Revenue() {
           {/* Yearly Revenue — Pie Chart */}
           {showByYear && yearly.length > 0 && (
             <div className="mb-8">
-              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">Yearly Revenue</h2>
+              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">{t("yearlyRevenue")}</h2>
               <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 md:p-8">
 
                 {/* Summary row */}
                 <div className="grid grid-cols-2 gap-4 mb-8">
                   {[
-                    { label: "Total Revenue", value: `₹${yearly.reduce((s, y) => s + (y.totalRevenue || 0), 0).toLocaleString()}`, color: "text-orange-600", bg: "bg-blue-50" },
-                    { label: "Total Purchases", value: yearly.reduce((s, y) => s + (y.totalPurchases || 0), 0), color: "text-blue-600", bg: "bg-blue-50" },
+                    { label:  t("totalRevenue"), value: `₹${yearly.reduce((s, y) => s + (y.totalRevenue || 0), 0).toLocaleString()}`, color: "text-orange-600", bg: "bg-blue-50" },
+                    { label: t("totalPurchases"), value: yearly.reduce((s, y) => s + (y.totalPurchases || 0), 0), color: "text-blue-600", bg: "bg-blue-50" },
                   ].map((s, i) => (
                     <div key={i} className={`stats-card ${s.bg} rounded-xl p-4`}>
                       <p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">{s.label}</p>
@@ -1078,7 +822,7 @@ export function Revenue() {
 
                 <div className='w-full h-[220px] md:h-[300px]'>
                   <p className="text-[10px] md:text-xs text-gray-400 font-bold uppercase tracking-widest mb-2 text-center">
-                    Revenue Share by Year
+                    {t("revenueShareByYear")}
                   </p>
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
@@ -1121,10 +865,10 @@ export function Revenue() {
                   <table className="w-full border-collapse">
                     <thead>
                       <tr className="bg-gray-50 border-b border-gray-200">
-                        <th className="text-left px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">Year</th>
-                        <th className="text-right px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">Revenue</th>
-                        <th className="text-right px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">Purchases</th>
-                        <th className="text-right px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">Share</th>
+                        <th className="text-left px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">{t("year")}</th>
+                        <th className="text-right px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">{t("revenue")}</th>
+                        <th className="text-right px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">{t("purchases")}</th>
+                        <th className="text-right px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">{t("share")}</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-50">
@@ -1160,18 +904,18 @@ export function Revenue() {
           {/* Recent Purchases — Table */}
           {groupBy === "all" && (
             <div className="mb-10">
-              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">Recent Purchases</h2>
+              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">{t("recentPurchases")}</h2>
               <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
                 <div className="overflow-x-auto">
                   <table className="w-full border-collapse">
                     <thead>
                       <tr className="bg-gray-50 border-b border-gray-200">
                         <th className="text-left px-6 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">#</th>
-                        <th className="text-left px-6 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">Plan</th>
-                        <th className="text-left px-6 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">Purchase Date</th>
-                        <th className="text-left px-6 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">Expiry Date</th>
-                        <th className="text-left px-6 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
-                        <th className="text-right px-6 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">Amount</th>
+                        <th className="text-left px-6 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">{t("plan")}</th>
+                        <th className="text-left px-6 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">{t("purchaseDate")}</th>
+                        <th className="text-left px-6 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">{t("expiresOn")}</th>
+                        <th className="text-left px-6 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">{t("status")}</th>
+                        <th className="text-right px-6 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">{t("amount")}</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-50">
@@ -1215,7 +959,7 @@ export function Revenue() {
                       <tfoot>
                         <tr className="bg-gray-50 border-t-2 border-gray-200">
                           <td colSpan={5} className="px-6 py-3.5 text-xs font-bold text-gray-500 uppercase tracking-wider">
-                            Total ({purchases.length} purchases)
+                            Total ({purchases.length} {t("purchases")})
                           </td>
                           <td className="px-6 py-3.5 text-right text-sm font-black text-green-600">
                             ₹{purchases.reduce((sum, p) => sum + (p.price || 0), 0).toLocaleString()}

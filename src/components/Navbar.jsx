@@ -19,6 +19,8 @@ import axios from "axios";
 import { FiEdit2 } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
 import { useDarkMode } from "./useDarkMode";
+import { useTranslation } from "react-i18next";
+import { t } from "i18next";
 
 
 
@@ -70,7 +72,7 @@ function ToastItem({ id, type, message, duration = 4000, onRemove }) {
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium text-gray-900 leading-snug">{message}</p>
         <p className="text-xs text-gray-500 mt-0.5">
-          {type === "success" ? "Action completed successfully." : "Something went wrong."}
+          {type === "success" ? t("toast.success") : t("toast.error")}
         </p>
       </div>
       <button onClick={dismiss}
@@ -160,9 +162,14 @@ export function Navbar({ toggleSidebar, isCollapsed }) {
   // Sync form with user data when modal opens
   useEffect(() => {
     if (isProfileModalOpen && user) {
+        let mobile = user.mobileNo || "";
+
+        //remove the country code
+        mobile = mobile.replace(/^\+91/, "").slice(-10);
+
       setEditForm({
         userName: user.userName || user.name || "",
-        mobileNo: user.mobileNo || "",
+        mobileNo: mobile,
         email: user.email || "",
         address: user.address || "",
       });
@@ -261,7 +268,7 @@ export function Navbar({ toggleSidebar, isCollapsed }) {
       setNewProfilePic(null);
       setPreviewUrl(null);
 
-      showToast({ type: "success", message: "Profile Updated Successfully!" });
+      showToast({ type: "success", message: t("toast.profileUpdated") });
       setIsProfileModalOpen(false);
 
     } catch (error) {
@@ -273,6 +280,8 @@ export function Navbar({ toggleSidebar, isCollapsed }) {
   };
 
   const [isSaving, setIsSaving] = useState(false);
+
+  const {t, i18n} = useTranslation();
 
 
   return (
@@ -305,7 +314,7 @@ export function Navbar({ toggleSidebar, isCollapsed }) {
                 </div>
                 <div className="hidden md:block">
                   <p className="text-sm font-medium text-gray-800 dark:text-gray-200">{displayName}</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Admin</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">{t("navbar.admin")}</p>
                 </div>
               </div>
 
@@ -318,7 +327,7 @@ export function Navbar({ toggleSidebar, isCollapsed }) {
                     ? "linear-gradient(135deg, #1e1b4b, #3730a3)"
                     : "linear-gradient(135deg, #fed7aa, #f97316)",
                 }}
-                title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+                title={isDark ? t("navbar.lightMode") : t("navbar.darkMode")}
               >
                 {/* Track icons */}
                 <span className="absolute left-1.5 top-1/2 -translate-y-1/2 text-[10px]">
@@ -338,10 +347,19 @@ export function Navbar({ toggleSidebar, isCollapsed }) {
                 </span>
               </button>
 
+             <select
+  onChange={(e) => i18n.changeLanguage(e.target.value)}
+  className="border px-2 py-1 rounded"
+>
+  <option value="en">English</option>
+  <option value="hi">Hindi</option>
+  <option value="mr">Marathi</option>
+</select>
+
               {/* Logout */}
               <button onClick={() => setShowLogoutConfirm(true)} className="flex items-center gap-2 text-sm font-medium text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/30 dark:hover:text-red-300 transition-colors focus:outline-none cursor-pointer">
                 <CiLogout className="h-5 w-5" />
-                <span className="hidden sm:inline">Logout</span>
+                <span className="hidden sm:inline">{t("navbar.logout")}</span>
               </button>
             </div>
           </div>
@@ -360,17 +378,17 @@ export function Navbar({ toggleSidebar, isCollapsed }) {
             <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-6 py-5 border-b border-orange-200">
               <h3 className="text-xl font-bold text-gray-900 flex items-center gap-3 selected-card-title">
                 <FiLogOut className="w-6 h-6 text-orange-600" />
-                Confirm Logout
+                {t("logoutModal.title")}
               </h3>
             </div>
 
             {/* Body */}
             <div className="p-6 space-y-4">
               <p className="text-gray-700 text-center">
-                Are you sure you want to logout?
+                {t("logoutModal.message")}
               </p>
               <p className="text-sm text-gray-500 text-center">
-                You'll need to sign in again to access your account.
+                {t("logoutModal.subMessage")}
               </p>
             </div>
 
@@ -380,13 +398,13 @@ export function Navbar({ toggleSidebar, isCollapsed }) {
                 onClick={() => setShowLogoutConfirm(false)}
                 className="flex-1 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-xl transition-all cursor-pointer"
               >
-                No, Cancel
+                {t("logoutModal.cancel")}
               </button>
 
               <button
                 onClick={() => {
                   setShowLogoutConfirm(false);
-                  showToast({ type: "success", message: "Logout successfully!" });
+                  showToast({ type: "success", message: t("toast.logoutSuccess") });
 
                   setTimeout(() => {
                     dispatch(logout());
@@ -397,7 +415,7 @@ export function Navbar({ toggleSidebar, isCollapsed }) {
                 }}
                 className="flex-1 py-3 bg-red-600 hover:bg-red-700 text-white font-medium rounded-xl shadow-md transition-all cursor-pointer"
               >
-                Yes, Logout
+                {t("logoutModal.confirm")}
               </button>
             </div>
           </div>
@@ -410,7 +428,7 @@ export function Navbar({ toggleSidebar, isCollapsed }) {
           <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full max-h-[92vh] flex flex-col overflow-hidden transform transition-all">
 
             <div className="bg-gradient-to-r from-orange-500 to-orange-400 px-6 py-5 text-white flex justify-between items-center shrink-0">
-              <h2 className="text-xl sm:text-2xl font-bold tracking-tight">Profile Details</h2>
+              <h2 className="text-xl sm:text-2xl font-bold tracking-tight">{t("profileModal.title")}</h2>
               <button onClick={() => { setIsProfileModalOpen(false); setIsEditing(false); }} className="w-10 h-10 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 transition-colors text-white text-3xl font-light cursor-pointer">×</button>
             </div>
 
@@ -463,15 +481,15 @@ export function Navbar({ toggleSidebar, isCollapsed }) {
               <div className="bg-gray-50/50 rounded-2xl p-4 sm:p-6 border border-gray-200/60 shadow-sm space-y-4">
                 <div className="flex items-center gap-3 mb-2">
                   <div className="p-2 bg-indigo-100 rounded-lg"><CiCircleInfo className="w-5 h-5 text-indigo-600" /></div>
-                  <h4 className="text-lg font-bold text-gray-900">Personal Information</h4>
+                  <h4 className="text-lg font-bold text-gray-900"><h4>{t("profileModal.personalInfo")}</h4></h4>
                 </div>
 
                 <div className="space-y-3">
                   {[
-                    { label: "Name", key: "userName", icon: <FiUser />, color: "bg-blue-100 text-blue-600" },
-                    { label: "Phone Number", key: "mobileNo", icon: <IoCallOutline />, color: "bg-green-100 text-green-600" },
-                    { label: "Email Address", key: "email", icon: <MdOutlineEmail />, color: "bg-orange-100 text-orange-600" },
-                    { label: "Address", key: "address", icon: <CiLocationOn />, color: "bg-rose-100 text-rose-600" }
+                    { label: t("profileModal.name"), key: "userName", icon: <FiUser />, color: "bg-blue-100 text-blue-600" },
+                    { label: t("profileModal.phone"), key: "mobileNo", icon: <IoCallOutline />, color: "bg-green-100 text-green-600" },
+                    { label: t("profileModal.email"), key: "email", icon: <MdOutlineEmail />, color: "bg-orange-100 text-orange-600" },
+                    { label: t("profileModal.address"), key: "address", icon: <CiLocationOn />, color: "bg-rose-100 text-rose-600" }
                   ].map((item, idx) => (
                     <div key={idx} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white rounded-xl border border-gray-100 shadow-sm transition-all gap-2">
                       <div className="flex items-center gap-3">
@@ -491,7 +509,7 @@ export function Navbar({ toggleSidebar, isCollapsed }) {
                         />
                       ) : (
                         <span className="text-sm font-bold text-gray-800 break-words sm:text-right pl-10 sm:pl-0">
-                          {user?.[item.key] || "Not available"}
+                          {user?.[item.key] || t("profileModal.notAvailable")}
                         </span>
                       )}
                     </div>
@@ -504,20 +522,20 @@ export function Navbar({ toggleSidebar, isCollapsed }) {
               {isEditing ? (
                 <>
                   <button onClick={handleSave} disabled={isSaving} className="w-full sm:w-auto flex-1 py-3.5 px-6 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-md transition-all active:scale-95 cursor-pointer flex items-center justify-center gap-2">
-                    {isSaving ? "Saving..." : "Save Changes"}
+                    {isSaving ? t("profileModal.saveChanges") : t("profileModal.saveChanges")}
                   </button>
                   <button onClick={() => setIsEditing(false)} className="w-full sm:w-auto flex-1 py-3.5 px-6 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold rounded-xl transition-all active:scale-95 cursor-pointer">
-                    Cancel
+                    {t("profileModal.cancel")}
                   </button>
                 </>
               ) : (
                 <>
                   <div className="flex flex-row items-center justify-center gap-2 sm:gap-4 w-full mt-1">
                     <button onClick={() => setIsEditing(true)} className="flex-1 max-w-[160px] py-2.5 px-3 bg-gradient-to-r from-orange-600 to-orange-500 text-white text-sm font-bold rounded-lg shadow-md transition-all active:scale-95 flex items-center justify-center gap-1.5 cursor-pointer">
-                      <FiEdit className="w-4 h-4 flex-shrink-0" /><span className="whitespace-nowrap">Edit Profile</span>
+                      <FiEdit className="w-4 h-4 flex-shrink-0" /><span className="whitespace-nowrap">{t("profileModal.editProfile")}</span>
                     </button>
                     <button onClick={() => setIsProfileModalOpen(false)} className="flex-1 max-w-[120px] py-2.5 px-3 bg-gray-100 text-gray-800 text-sm font-semibold rounded-lg border border-gray-200 transition-all active:scale-95 flex items-center justify-center gap-1.5 cursor-pointer">
-                      <FiXCircle className="w-4 h-4 flex-shrink-0" /> Close
+                      <FiXCircle className="w-4 h-4 flex-shrink-0" /> {t("profileModal.close")}
                     </button>
                   </div>
                 </>
