@@ -10,9 +10,11 @@ import { CiClock2 } from "react-icons/ci";
 import { fetchRecentActivities } from "../store/dashboardSlice";
 import { FiChevronDown } from "react-icons/fi";
 import { MdCurrencyRupee } from "react-icons/md";
+import { useTranslation } from "react-i18next";
+
 
 // Activity style per type 
-function getActivityStyle(type = "") {
+function getActivityStyle(type = "", t) {
   switch (type) {
     case "plan_created":
       return {
@@ -20,7 +22,7 @@ function getActivityStyle(type = "") {
         iconBg: "bg-orange-100", iconColor: "text-orange-600",
         borderColor: "border-orange-400",
         badgeBg: "bg-orange-100", badgeText: "text-orange-700",
-        label: "Plan Created",
+        label: t('activityDetails.types.planCreated'),
       };
     case "plan_updated":
       return {
@@ -28,7 +30,7 @@ function getActivityStyle(type = "") {
         iconBg: "bg-blue-100", iconColor: "text-blue-600",
         borderColor: "border-blue-400",
         badgeBg: "bg-blue-100", badgeText: "text-blue-700",
-        label: "Plan Updated",
+        label: t('activityDetails.types.planUpdated'),
       };
     case "subscription_purchased":
       return {
@@ -36,7 +38,7 @@ function getActivityStyle(type = "") {
         iconBg: "bg-green-100", iconColor: "text-green-600",
         borderColor: "border-green-400",
         badgeBg: "bg-green-100", badgeText: "text-green-700",
-        label: "Purchased",
+        label: t('activityDetails.types.subscriptionPurchased'),
       };
     default:
       return {
@@ -44,19 +46,23 @@ function getActivityStyle(type = "") {
         iconBg: "bg-amber-100", iconColor: "text-amber-600",
         borderColor: "border-amber-400",
         badgeBg: "bg-amber-100", badgeText: "text-amber-700",
-        label: "Activity",
+        label: t('activityDetails.types.default'),
       };
   }
 }
 
-const FILTERS = [
-  { label: "All", value: "all" },
-  { label: "Created", value: "plan_created" },
-  { label: "Updated", value: "plan_updated" },
-  { label: "Purchase", value: "subscription_purchased" },
-];
+
 
 export function ActivityDetails() {
+
+    const {t} = useTranslation();
+
+    const FILTERS = [
+  { label: t('activityDetails.filters.all'), value: "all" },
+  { label: t('activityDetails.filters.created'), value: "plan_created" },
+  { label: t('activityDetails.filters.updated'), value: "plan_updated" },
+  { label: t('activityDetails.filters.purchase'), value: "subscription_purchased" },
+];
 
   const dispatch = useDispatch();
 
@@ -72,6 +78,8 @@ export function ActivityDetails() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
   const [expanded, setExpanded] = useState(null);
+
+
 
   // Filter + Search 
   const filtered = allActivities.filter((a) => {
@@ -102,7 +110,7 @@ export function ActivityDetails() {
     return (
       <div className="flex items-center justify-center h-[60vh] bg-gray-50">
         <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-orange-500"></div>
-        <span className="ml-4 text-lg text-gray-600 font-medium">Loading Activities...</span>
+        <span className="ml-4 text-lg text-gray-600 font-medium">{t('activityDetails.loading')}</span>
       </div>
     );
   }
@@ -115,23 +123,24 @@ export function ActivityDetails() {
           onClick={() => navigate(-1)}
           className="mb-2 flex items-center gap-2 text-orange-600 font-bold hover:gap-4 transition-all cursor-pointer"
         >
-          ← Back to Dashboard
+          ← {t('activityDetails.backToDashboard')}
         </button>
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
           <div>
-              <h2 className="text-xl md:text-2xl font-bold text-gray-900">Recent Activity</h2>
-              <p className="text-sm text-gray-400 mt-1">Complete log of all recent actions</p>
+              <h2 className="text-xl md:text-2xl font-bold text-gray-900">{t('activityDetails.title')}</h2>
+              <p className="text-sm text-gray-400 mt-1">{t('activityDetails.subtitle')}</p>
           </div>
         </div>
       </div>
 
       {/* ── Stats Row ── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-8">
+       
         {[
-          { label: "Total", value: total, bg: "bg-white border border-gray-200", color: "text-gray-800", icon: <FiActivity className="w-5 h-5 text-gray-400" /> },
-          { label: "Created", value: created, bg: "border border-orange-100", color: "text-orange-600", icon: <GrAddCircle className="w-5 h-5 text-orange-400" /> },
-          { label: "Updated", value: updated, bg: "bg-blue-50 border border-blue-100", color: "text-blue-600", icon: <PiNotePencilDuotone className="w-5 h-5 text-blue-400" /> },
-          { label: "Purchase", value: purchase, bg: "bg-green-50 border border-green-100", color: "text-green-600", icon: <MdOutlineLocalGroceryStore className="w-5 h-5 text-green-400" /> },
+          { label: t('activityDetails.stats.total'), value: total, bg: "bg-white border border-gray-200", color: "text-gray-800", icon: <FiActivity className="w-5 h-5 text-gray-400" /> },
+          { label: t('activityDetails.stats.created'), value: created, bg: "border border-orange-100", color: "text-orange-600", icon: <GrAddCircle className="w-5 h-5 text-orange-400" /> },
+          { label: t('activityDetails.stats.updated'), value: updated, bg: "bg-blue-50 border border-blue-100", color: "text-blue-600", icon: <PiNotePencilDuotone className="w-5 h-5 text-blue-400" /> },
+          { label: t('activityDetails.stats.purchase'), value: purchase, bg: "bg-green-50 border border-green-100", color: "text-green-600", icon: <MdOutlineLocalGroceryStore className="w-5 h-5 text-green-400" /> },
         ].map((s, i) => (
           <div key={i} className={`${s.bg} rounded-2xl p-4 flex items-center justify-between shadow-sm`}>
             <div>
@@ -154,7 +163,7 @@ export function ActivityDetails() {
           </svg>
           <input
             type="text"
-            placeholder="Search by plan, user, message..."
+            placeholder={t('activityDetails.searchPlaceholder')}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full pl-9 pr-4 py-2.5 text-sm border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-orange-100 focus:border-orange-300 transition-all"
@@ -184,9 +193,9 @@ export function ActivityDetails() {
         {/* Table header */}
         <div className="px-6 py-3.5 border-b border-gray-100 bg-gray-50 grid grid-cols-12 gap-4">
           <div className="col-span-1" />
-          <div className="col-span-5 text-xs font-bold text-gray-400 uppercase tracking-wider">Activity</div>
-          <div className="col-span-3 text-xs font-bold text-gray-400 uppercase tracking-wider hidden md:block">Type</div>
-          <div className="col-span-3 text-xs font-bold text-gray-400 uppercase tracking-wider hidden md:block">Time</div>
+          <div className="col-span-5 text-xs font-bold text-gray-400 uppercase tracking-wider">{t('activityDetails.activity')}</div>
+          <div className="col-span-3 text-xs font-bold text-gray-400 uppercase tracking-wider hidden md:block">{t('activityDetails.type')}</div>
+          <div className="col-span-3 text-xs font-bold text-gray-400 uppercase tracking-wider hidden md:block">{t('activityDetails.time')}</div>
         </div>
         {isLoading ? (
           <div className="text-center py-16">
@@ -194,12 +203,12 @@ export function ActivityDetails() {
           </div>
         ) : filtered.length === 0 ? (
           <div className="text-center text-gray-400 py-16 text-sm">
-            No activities found.
+            {t('activityDetails.noActivitiesFound')}
           </div>
         ) : (
           <div className="divide-y divide-gray-50">
             {filtered.map((activity, i) => {
-              const s = getActivityStyle(activity.type);
+              const s = getActivityStyle(activity.type, t);
               const isOpen = expanded === i;
 
               return (
@@ -220,7 +229,7 @@ export function ActivityDetails() {
                     {/* Short message */}
                     <div className="col-span-8 md:col-span-5 min-w-0 flex-1">
                       <p className="text-sm md:text-base font-bold text-gray-900 truncate">
-                        {activity.shortMessage || "Activity"}
+                        {activity.shortMessage || t('activityDetails.activityFallback')}
                       </p>
                       <p className="text-xs text-gray-500 line-clamp-1">
                         {activity.message}
@@ -270,7 +279,7 @@ export function ActivityDetails() {
                               day: "numeric", month: "short", year: "numeric",
                               hour: "2-digit", minute: "2-digit"
                             })
-                            : "N/A"}
+                            : t('lenderDetails.na')}
                         </span>
                       </div>
 
@@ -279,8 +288,8 @@ export function ActivityDetails() {
 
                         {/* Full message */}
                         <div className="sm:col-span-2">
-                          <p className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">Description</p>
-                          <p className="text-sm text-gray-700 leading-relaxed">{activity.message || "No details available."}</p>
+                          <p className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">{t('activityDetails.details.description')}</p>
+                          <p className="text-sm text-gray-700 leading-relaxed">{activity.message || t('activityDetails.details.noDetailsAvailable')}</p>
                         </div>
 
                         {/* Plan details — always shown if available */}
@@ -290,7 +299,7 @@ export function ActivityDetails() {
                               <BsBoxSeam className="w-4 h-4 text-orange-600" />
                             </div>
                             <div>
-                              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Plan</p>
+                              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">{t('activityDetails.details.plan')}</p>
                               <p className="text-sm font-bold text-gray-900">{activity.planName}</p>
                             </div>
                           </div>
@@ -303,7 +312,7 @@ export function ActivityDetails() {
                               <MdCurrencyRupee className="w-4 h-4 text-green-600" />
                             </div>
                             <div>
-                              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Price</p>
+                              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">{t('activityDetails.details.price')}</p>
                               <p className="text-sm font-bold text-gray-900">₹{activity.priceMonthly}/month</p>
                             </div>
                           </div>
@@ -316,7 +325,7 @@ export function ActivityDetails() {
                               <CiClock2 className="w-4 h-4 text-blue-600" />
                             </div>
                             <div>
-                              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Duration</p>
+                              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">{t('activityDetails.details.duration')}</p>
                               <p className="text-sm font-bold text-gray-900">{activity.duration}</p>
                             </div>
                           </div>
@@ -329,7 +338,7 @@ export function ActivityDetails() {
                               <FiUser className="w-4 h-4 text-purple-600" />
                             </div>
                             <div>
-                              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Lender</p>
+                              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">{t('activityDetails.details.lender')}</p>
                               <p className="text-sm font-bold text-gray-900">{activity.userName}</p>
                               {activity.userEmail && (
                                 <p className="text-xs text-gray-400">{activity.userEmail}</p>
@@ -345,7 +354,7 @@ export function ActivityDetails() {
                               <FiCreditCard className="w-4 h-4 text-teal-600" />
                             </div>
                             <div className="min-w-0">
-                              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Payment ID</p>
+                              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">{t('activityDetails.details.paymentId')}</p>
                               <p className="text-xs font-bold text-gray-700 truncate">{activity.paymentId}</p>
                             </div>
                           </div>
@@ -365,14 +374,14 @@ export function ActivityDetails() {
         {filtered.length > 0 && (
           <div className="px-6 py-3.5 border-t border-gray-100 bg-gray-50 flex items-center justify-between">
             <p className="text-xs text-gray-400 font-medium">
-              Showing {filtered.length} of {total} activities
+              {t('activityDetails.showing', { count: filtered.length, total: total })}
             </p>
             {search || filter !== "all" ? (
               <button
                 onClick={() => { setSearch(""); setFilter("all"); }}
                 className="text-xs font-bold text-orange-500 hover:text-orange-600 cursor-pointer"
               >
-                Clear filters
+                {t('activityDetails.clearFilters')}
               </button>
             ) : null}
           </div>

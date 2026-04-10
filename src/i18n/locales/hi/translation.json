@@ -244,7 +244,229 @@
   "purchased": "खरीदा गया",
   "expires": "समाप्ति",
   "remaining": "शेष",
-  "joined": "जॉइन किया"
+  "joined": "जॉइन किया",
+
+
+  
+ 
+  "planDetails": {
+    "title": "प्लान विवरण",
+    "backToPlans": "प्लान्स पर वापस जाएं",
+    "loading": "प्लान विवरण लोड हो रहा है...",
+    "error": "एरर",
+    "notFound": "प्लान नहीं मिला",
+
+    "cards": "कार्ड्स",
+    "table": "टेबल",
+
+    "active": "सक्रिय",
+    "inactive": "निष्क्रिय",
+    "enabled": "सक्षम",
+    "disabled": "अक्षम",
+    "month": "महीने",
+    "na": "N/A",
+    "notSet": "सेट नहीं है",
+    "notConfigured": "कॉन्फ़िगर नहीं किया गया",
+    "noDescription": "इस प्लान के लिए कोई विवरण नहीं दिया गया है।",
+    "completePlanOverview": "प्लान का पूरा अवलोकन",
+
+    "planInformation": "प्लान की जानकारी",
+    "planFeatures": "प्लान फीचर्स",
+    "description": "विवरण",
+    "planName": "प्लान का नाम",
+    "duration": "अवधि",
+    "monthlyPrice": "मासिक मूल्य",
+    "createdAt": "बनाया गया",
+    "lastUpdated": "आखिरी अपडेट",
+    "razorpayPlanId": "रेजरपे प्लान आईडी",
+
+    "field": "फील्ड",
+    "value": "वैल्यू",
+    "feature": "फीचर",
+    "status": "स्थिति",
+    "details": "विवरण",
+    "planDescription": "प्लान विवरण",
+
+    "stats": {
+      "monthlyPrice": "मासिक मूल्य",
+      "duration": "अवधि",
+      "status": "स्थिति",
+      "razorpayId": "रेजरपे आईडी"
+    },
+
+    "features": {
+      "unlimitedLoans": "असीमित लोन",
+      "unlimitedLoansDesc": "असीमित लोन बनाएं",
+      "advancedAnalytics": "एडवांस्ड एनालिटिक्स",
+      "advancedAnalyticsDesc": "विस्तृत एनालिटिक्स डैशबोर्ड",
+      "prioritySupport": "प्राथमिकता सहायता",
+      "prioritySupportDesc": "24/7 प्राथमिकता सहायता"
+    }
+  },
+
+
+
+  
+
+  "lenderDetails": {
+    "title": "ऋणदाता विवरण",
+    "backToLenders": "ऋणदाताओं के पास वापस जाएं",
+    "loading": "ऋणदाता विवरण लोड हो रहा है...",
+    "notFound": "ऋणदाता विवरण नहीं मिला।",
+    "error": "त्रुटि",
+
+    "cards": "कार्ड्स",
+    "table": "तालिका",
+
+    "active": "सक्रिय",
+    "inactive": "निष्क्रिय",
+    "enabled": "सक्षम",
+    "disabled": "अक्षम",
+
+    "na": "एन/ए",
+    "noPlan": "कोई योजना नहीं",
+    "addressNotProvided": "पता प्रदान नहीं किया गया",
+    "noFeaturesAvailable": "कोई सुविधाएँ उपलब्ध नहीं",
+
+    "personalInformation": "व्यक्तिगत जानकारी",
+    "accountStatus": "खाता स्थिति",
+    "subscriptionPlan": "सदस्यता योजना",
+    "planInformation": "योजना जानकारी",
+    "purchaseDetails": "खरीदी विवरण",
+    "planFeatures": "योजना सुविधाएँ",
+
+    "fullName": "पूरा नाम",
+    "emailAddress": "ईमेल पता",
+    "mobileNumber": "मोबाइल नंबर",
+    "aadhaarNumber": "आधार नंबर",
+    "address": "पता",
+
+    "status": "स्थिति",
+    "accountCreated": "खाता बनाया गया",
+    "lastUpdated": "अंतिम अपडेट",
+
+    "planName": "योजना का नाम",
+    "duration": "अवधि",
+    "price": "मूल्य",
+    "purchaseDate": "खरीदी तिथि",
+    "expiryDate": "समाप्ति तिथि",
+    "planStatus": "योजना स्थिति",
+    "remaining": "बचा हुआ",
+    "remainingDays": "बचे हुए दिन",
+
+    "field": "क्षेत्र",
+    "value": "मूल्य",
+    "feature": "विशेषता",
+    "description": "विवरण",
+
+      "features": {
+    "unlimitedLoans": "असीमित ऋण",
+    "unlimitedLoansDesc": "असीमित ऋण बनाएं",
+
+    "advancedAnalytics": "उन्नत विश्लेषिकी",
+    "advancedAnalyticsDesc": "विस्तृत विश्लेषिकी डैशबोर्ड तक पहुंच",
+
+    "prioritySupport": "प्राथमिकता समर्थन",
+    "prioritySupportDesc": "24/7 प्राथमिक सहायता",
+
+    "defaultDesc": "योजना में शामिल विशेषता"
+  }
+  },
+
+
+
+  "activityDetails": {
+  "title": "हाल की गतिविधियाँ",
+  "subtitle": "सभी हाल की कार्रवाइयों का पूरा लॉग",
+  "backToDashboard": "डैशबोर्ड पर वापस जाएं",
+  "loading": "गतिविधियाँ लोड हो रही हैं...",
+
+  "searchPlaceholder": "प्लान, यूजर या मैसेज से सर्च करें...",
+
+  "stats": {
+    "total": "कुल",
+    "created": "बनाया गया",
+    "updated": "अपडेट किया गया",
+    "purchase": "खरीदारी"
+  },
+
+  "activity": "गतिविधि",
+  "type": "प्रकार",
+  "time": "समय",
+
+  "noActivitiesFound": "कोई गतिविधि नहीं मिली।",
+  "showing": "{{count}} में से {{total}} गतिविधियाँ दिखा रहे हैं",
+  "clearFilters": "फिल्टर साफ करें",
+
+  "types": {
+    "planCreated": "प्लान बनाया गया",
+    "planUpdated": "प्लान अपडेट किया गया",
+    "subscriptionPurchased": "खरीदा गया",
+    "default": "गतिविधि"
+  },
+
+ "details": {
+  "description": "विवरण",
+  "plan": "प्लान",
+  "price": "कीमत",
+  "duration": "अवधि",
+  "lender": "लेंडर",
+  "paymentId": "पेमेंट आईडी",
+  "noDetailsAvailable": "कोई विवरण उपलब्ध नहीं है।"
+},
+  "filters": {
+  "all": "सभी",
+  "created": "बनाया गया",
+  "updated": "अपडेट किया गया",
+  "purchase": "खरीदारी"
+},
+"activityFallback": "गतिविधि"
+},
+
+
+"changePassword": {
+  "title": "सुरक्षा सेटिंग्स",
+  "subtitle": "अपने एडमिन क्रेडेंशियल्स और सुरक्षा प्राथमिकताओं को प्रबंधित करें",
+
+  "secureYourAccount": "अपना खाता सुरक्षित करें",
+  "updatePassword": "पासवर्ड अपडेट करें",
+
+  "currentPassword": "वर्तमान पासवर्ड",
+  "newPassword": "नया पासवर्ड",
+  "confirmNewPassword": "नए पासवर्ड की पुष्टि करें",
+
+  "cancel": "रद्द करें",
+  "updatePasswordButton": "पासवर्ड अपडेट करें",
+  "changingPassword": "पासवर्ड बदल रहा है...",
+
+  "requirements": "आवश्यकताएँ",
+  "requirement1": "कम से कम 6 अक्षर लंबा होना चाहिए",
+  "requirement2": "अपरकेस और लोअरकेस अक्षरों का मिश्रण",
+  "requirement3": "संख्याएँ और प्रतीक शामिल करें",
+
+  "needHelp": "मदद चाहिए?",
+  "needHelpDesc": "यदि आपको पासवर्ड बदलने में समस्या हो रही है, तो कृपया सिस्टम एडमिनिस्ट्रेटर से संपर्क करें या हमारे हेल्प सेंटर पर जाएँ।",
+  "contactSupport": "सपोर्ट से संपर्क करें →",
+
+  "placeholder": {
+    "currentPassword": "••••••••••••",
+    "newPassword": "नया पासवर्ड",
+    "confirmNewPassword": "नए पासवर्ड की पुष्टि"
+  },
+
+  "toast": {
+    "currentPasswordRequired": "वर्तमान पासवर्ड आवश्यक है!",
+    "newPasswordRequired": "नया पासवर्ड आवश्यक है!",
+    "confirmPasswordRequired": "पुष्टि पासवर्ड आवश्यक है!",
+    "passwordsDoNotMatch": "नया पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते!",
+    "passwordTooShort": "पासवर्ड कम से कम 6 अक्षर का होना चाहिए!",
+    "passwordSameAsCurrent": "नया पासवर्ड वर्तमान पासवर्ड जैसा नहीं हो सकता!",
+    "passwordChangedSuccess": "पासवर्ड सफलतापूर्वक बदल दिया गया!",
+    "passwordChangeFailed": "पासवर्ड बदलने में विफल। कृपया अपना वर्तमान पासवर्ड जांचें।",
+    "successSubtitle": "आपका पासवर्ड अपडेट कर दिया गया है।",
+    "errorSubtitle": "कृपया पुनः प्रयास करें।"
+  }
+}
 
 
 }

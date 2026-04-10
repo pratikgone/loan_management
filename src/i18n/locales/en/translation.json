@@ -246,9 +246,228 @@
   "purchased": "Purchased",
   "expires": "Expires",
   "remaining": "Remaining",
-  "joined": "Joined"
+  "joined": "Joined",
 
 
+  
+ 
+  "planDetails": {
+    "title": "Plan Details",
+    "backToPlans": "Back to Plans",
+    "loading": "Loading Plan Details...",
+    "error": "Error",
+    "notFound": "Plan not found",
+
+    "cards": "Cards",
+    "table": "Table",
+
+    "active": "Active",
+    "inactive": "Inactive",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "month": "month",
+    "na": "N/A",
+    "notSet": "Not Set",
+    "notConfigured": "Not Configured",
+    "noDescription": "No description provided for this plan.",
+    "completePlanOverview": "Complete plan overview",
+
+    "planInformation": "Plan Information",
+    "planFeatures": "Plan Features",
+    "description": "Description",
+    "planName": "Plan Name",
+    "duration": "Duration",
+    "monthlyPrice": "Monthly Price",
+    "createdAt": "Created At",
+    "lastUpdated": "Last Updated",
+    "razorpayPlanId": "Razorpay Plan ID",
+
+    "field": "Field",
+    "value": "Value",
+    "feature": "Feature",
+    "status": "Status",
+    "details": "Details",
+    "planDescription": "Plan Description",
+
+    "stats": {
+      "monthlyPrice": "Monthly Price",
+      "duration": "Duration",
+      "status": "Status",
+      "razorpayId": "Razorpay ID"
+    },
+
+    "features": {
+      "unlimitedLoans": "Unlimited Loans",
+      "unlimitedLoansDesc": "Create unlimited loans",
+      "advancedAnalytics": "Advanced Analytics",
+      "advancedAnalyticsDesc": "Detailed analytics dashboard",
+      "prioritySupport": "Priority Support",
+      "prioritySupportDesc": "24/7 priority assistance"
+    }
+  },
+
+
+  
+
+  "lenderDetails": {
+    "title": "Lender Details",
+    "backToLenders": "Back to Lenders",
+    "loading": "Loading Lender Details...",
+    "notFound": "Lender details not found.",
+    "error": "Error",
+
+    "cards": "Cards",
+    "table": "Table",
+
+    "active": "Active",
+    "inactive": "Inactive",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+
+    "na": "N/A",
+    "noPlan": "No Plan",
+    "addressNotProvided": "Address not provided",
+    "noFeaturesAvailable": "No features available",
+
+    "personalInformation": "Personal Information",
+    "accountStatus": "Account Status",
+    "subscriptionPlan": "Subscription Plan",
+    "planInformation": "Plan Information",
+    "purchaseDetails": "Purchase Details",
+    "planFeatures": "Plan Features",
+
+    "fullName": "Full Name",
+    "emailAddress": "Email Address",
+    "mobileNumber": "Mobile Number",
+    "aadhaarNumber": "Aadhaar Number",
+    "address": "Address",
+
+    "status": "Status",
+    "accountCreated": "Account Created",
+    "lastUpdated": "Last Updated",
+
+    "planName": "Plan Name",
+    "duration": "Duration",
+    "price": "Price",
+    "purchaseDate": "Purchase Date",
+    "expiryDate": "Expiry Date",
+    "planStatus": "Plan Status",
+    "remaining": "Remaining",
+    "remainingDays": "Remaining Days",
+
+    "field": "Field",
+    "value": "Value",
+    "feature": "Feature",
+    "description": "Description",
+
+     "features": {
+    "unlimitedLoans": "Unlimited Loans",
+    "unlimitedLoansDesc": "Create unlimited loans",
+
+    "advancedAnalytics": "Advanced Analytics",
+    "advancedAnalyticsDesc": "Access detailed analytics dashboard",
+
+    "prioritySupport": "Priority Support",
+    "prioritySupportDesc": "24/7 priority assistance",
+
+    "defaultDesc": "Feature included in plan"
+  }
+
+  },
+
+  "activityDetails": {
+  "title": "Recent Activity",
+  "subtitle": "Complete log of all recent actions",
+  "backToDashboard": "Back to Dashboard",
+  "loading": "Loading Activities...",
+
+  "searchPlaceholder": "Search by plan, user, message...",
+
+  "stats": {
+    "total": "Total",
+    "created": "Created",
+    "updated": "Updated",
+    "purchase": "Purchase"
+  },
+
+  "activity": "Activity",
+  "type": "Type",
+  "time": "Time",
+
+  "noActivitiesFound": "No activities found.",
+  "showing": "Showing {{count}} of {{total}} activities",
+  "clearFilters": "Clear filters",
+
+  "types": {
+    "planCreated": "Plan Created",
+    "planUpdated": "Plan Updated",
+    "subscriptionPurchased": "Purchased",
+    "default": "Activity"
+  },
+
+ "details": {
+  "description": "Description",
+  "plan": "Plan",
+  "price": "Price",
+  "duration": "Duration",
+  "lender": "Lender",
+  "paymentId": "Payment ID",
+  "noDetailsAvailable": "No details available."
+},
+
+  "filters": {
+  "all": "All",
+  "created": "Created",
+  "updated": "Updated",
+  "purchase": "Purchase"
+},
+"activityFallback": "Activity"
+},
+ 
+
+"changePassword": {
+  "title": "Security Settings",
+  "subtitle": "Manage your administrative credentials and security preferences",
+
+  "secureYourAccount": "Secure Your Account",
+  "updatePassword": "Update Password",
+
+  "currentPassword": "Current Password",
+  "newPassword": "New Password",
+  "confirmNewPassword": "Confirm New Password",
+
+  "cancel": "Cancel",
+  "updatePasswordButton": "Update Password",
+  "changingPassword": "Changing Password...",
+
+  "requirements": "Requirements",
+  "requirement1": "At least 6 characters long",
+  "requirement2": "Mix uppercase & lowercase letters",
+  "requirement3": "Include numbers and symbols",
+
+  "needHelp": "Need Help?",
+  "needHelpDesc": "If you're having trouble changing your password, please contact the system administrator or visit our help center.",
+  "contactSupport": "Contact Support →",
+
+  "placeholder": {
+    "currentPassword": "••••••••••••",
+    "newPassword": "New password",
+    "confirmNewPassword": "Confirm password"
+  },
+
+  "toast": {
+    "currentPasswordRequired": "Current password is required!",
+    "newPasswordRequired": "New password is required!",
+    "confirmPasswordRequired": "Confirm password is required!",
+    "passwordsDoNotMatch": "New password and confirm password do not match!",
+    "passwordTooShort": "Password must be at least 6 characters long!",
+    "passwordSameAsCurrent": "New password cannot be the same as current password!",
+    "passwordChangedSuccess": "Password changed successfully!",
+    "passwordChangeFailed": "Failed to change password. Please check your current password.",
+    "successSubtitle": "Your password has been updated.",
+    "errorSubtitle": "Please try again."
+  }
+}
 
 }
 

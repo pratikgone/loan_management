@@ -11,6 +11,7 @@ import { LuEyeOff } from "react-icons/lu";
 import { useDispatch, useSelector } from "react-redux";
 import { changePassword } from "../store/authSlice";
 import { AiOutlineCloseCircle } from "react-icons/ai";
+import { useTranslation } from "react-i18next";
 
 
 // ─── Toast Icons ─────────────────────────────────────────────
@@ -33,11 +34,11 @@ const ToastIcons = {
 
 const toastStyles = {
   success: { icon: "bg-green-100 text-green-700", bar: "bg-green-500" },
-  error:   { icon: "bg-red-100   text-red-700",   bar: "bg-red-500"   },
+  error: { icon: "bg-red-100   text-red-700", bar: "bg-red-500" },
 };
 
 // ─── Toast Item ───────────────────────────────────────────────
-function ToastItem({ id, type, message, duration = 4000, onRemove }) {
+function ToastItem({ id, type, message, duration = 4000, onRemove, t }) {
   const [removing, setRemoving] = useState(false);
   const s = toastStyles[type] || toastStyles.error;
 
@@ -47,8 +48,8 @@ function ToastItem({ id, type, message, duration = 4000, onRemove }) {
   }, [id, onRemove]);
 
   useEffect(() => {
-    const t = setTimeout(dismiss, duration);
-    return () => clearTimeout(t);
+    const timer = setTimeout(dismiss, duration);
+    return () => clearTimeout(timer);
   }, [dismiss, duration]);
 
   return (
@@ -62,7 +63,7 @@ function ToastItem({ id, type, message, duration = 4000, onRemove }) {
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium text-gray-900 leading-snug">{message}</p>
         <p className="text-xs text-gray-500 mt-0.5">
-          {type === "success" ? "Your password has been updated." : "Please try again."}
+{type === "success" ? t('changePassword.toast.successSubtitle') : t('changePassword.toast.errorSubtitle')}
         </p>
       </div>
       <button onClick={dismiss}
@@ -82,12 +83,12 @@ function ToastItem({ id, type, message, duration = 4000, onRemove }) {
 }
 
 // ─── Toast Container ──────────────────────────────────────────
-function ToastContainer({ toasts, onRemove }) {
+function ToastContainer({ toasts, onRemove, t }) {
   return (
     <div className="fixed top-5 right-5 z-[200] flex flex-col gap-2.5 pointer-events-none">
-      {toasts.map((t) => (
-        <div key={t.id} className="pointer-events-auto">
-          <ToastItem {...t} onRemove={onRemove} />
+{toasts.map((toastItem) => (
+        <div key={toastItem.id} className="pointer-events-auto">
+          <ToastItem {...toastItem} onRemove={onRemove} t={t} />
         </div>
       ))}
     </div>
@@ -117,6 +118,8 @@ export function ChangePassword() {
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
+  const { t } = useTranslation();
+
   const [form, setForm] = useState({
     currentPassword: "",
     newPassword: "",
@@ -126,239 +129,236 @@ export function ChangePassword() {
   const dispatch = useDispatch();
   const { isLoading, error, successMessage } = useSelector((state) => state.auth);
 
-  const {toasts, showToast, removeToast} = useToast();
+  const { toasts, showToast, removeToast } = useToast();
 
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-
-    //admin not write all fields
-    if (!form.currentPassword.trim()) {
-      showToast({ type: "error", message: "Current password is required!" });
-      return;
-    }
-    if (!form.newPassword.trim()) {
-      showToast({ type: "error", message: "New password is required!" });
-      return;
-    }
-    if (!form.confirmNewPassword.trim()) {
-      showToast({ type: "error", message: "Confirm password is required!" });
-      return;
-    }
-
-    // Frontend validation
-    if (form.newPassword !== form.confirmNewPassword) {
-      showToast({ type: "error", message: "New password and confirm password do not match!" });
-      return;
-    }
-
-    if (form.newPassword.length < 6) {
-      showToast({ type: "error", message: "Password must be at least 6 characters long!" });
-      return;
-    }
-
-    //new password and current password cannot be same as
-    if (form.currentPassword === form.newPassword) {
-      showToast({ type: "error", message: "New password cannot be the same as current password!" });
-      return;
-    }
-
-    try {
-      await dispatch(changePassword({
-        currentPassword: form.currentPassword,
-        newPassword: form.newPassword,
-        confirmNewPassword: form.confirmNewPassword,
-      })).unwrap();
-      showToast({ type: "success", message: "Password changed successfully!" });
-      setForm({ currentPassword: "", newPassword: "", confirmNewPassword: "" });
-    } catch (error) {
-      showToast({ type: "error", message: error || "Failed to change password. Please check your current password." });
-    }
+  if (!form.currentPassword.trim()) {
+    showToast({ type: "error", message: t('changePassword.toast.currentPasswordRequired') });
+    return;
+  }
+  if (!form.newPassword.trim()) {
+    showToast({ type: "error", message: t('changePassword.toast.newPasswordRequired') });
+    return;
+  }
+  if (!form.confirmNewPassword.trim()) {
+    showToast({ type: "error", message: t('changePassword.toast.confirmPasswordRequired') });
+    return;
   }
 
- return (
-    <>
-    <div className="p-4 sm:p-6">
-      {/* Toast */}
-      <ToastContainer toasts={toasts} onRemove={removeToast}/>
+  if (form.newPassword !== form.confirmNewPassword) {
+    showToast({ type: "error", message: t('changePassword.toast.passwordsDoNotMatch') }); // ← Sahi key
+    return;
+  }
 
-      {/* Heading */}
-      <div className="mb-10 flex flex-col items-center">
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Security Settings</h1>
-        <p className="mt-2 text-sm md:text-base text-gray-500">
-          Manage your administrative credentials and security preferences.
-        </p>
-      </div>
+  if (form.newPassword.length < 6) {
+    showToast({ type: "error", message: t('changePassword.toast.passwordTooShort') });
+    return;
+  }
+
+  if (form.currentPassword === form.newPassword) {
+    showToast({ type: "error", message: t('changePassword.toast.passwordSameAsCurrent') });
+    return;
+  }
+
+  try {
+    await dispatch(changePassword({
+      currentPassword: form.currentPassword,
+      newPassword: form.newPassword,
+      confirmNewPassword: form.confirmNewPassword,
+    })).unwrap();
+
+    showToast({ type: "success", message: t('changePassword.toast.passwordChangedSuccess') });
+    setForm({ currentPassword: "", newPassword: "", confirmNewPassword: "" });
+
+  } catch (error) {
+    showToast({ type: "error", message: t('changePassword.toast.passwordChangeFailed') });
+  }
+};
+
+  return (
+    <>
+      <div className="p-4 sm:p-6">
+        {/* Toast */}
+        <ToastContainer toasts={toasts} onRemove={removeToast} t={t} />
+
+        {/* Heading */}
+        <div className="mb-10 flex flex-col items-center">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{t('changePassword.title')}</h1>
+          <p className="mt-2 text-sm md:text-base text-gray-500">
+            {t('changePassword.subtitle')}
+          </p>
+        </div>
 
         <div className="mb-10">
-        <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
-          Secure Your Account
-        </h2>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+          <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
+            {t('changePassword.secureYourAccount')}
+          </h2>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
 
-        {/* Main Form */}
-        <div className="lg:col-span-2">
-          <div className="bg-white rounded-2xl border border-orange-100 shadow-sm overflow-hidden">
+            {/* Main Form */}
+            <div className="lg:col-span-2">
+              <div className="bg-white rounded-2xl border border-orange-100 shadow-sm overflow-hidden">
 
-            {/* Card Header */}
-            <div className="px-6 py-5 border-b border-orange-100 bg-orange-50/50 flex items-center gap-3">
-              <div className="bg-white p-2 rounded-xl shadow-sm">
-                <LuShieldCheck className="w-5 h-5 text-orange-500" />
-              </div>
-              <h2 className="text-base font-bold text-gray-900">Update Password</h2>
-            </div>
+                {/* Card Header */}
+                <div className="px-6 py-5 border-b border-orange-100 bg-orange-50/50 flex items-center gap-3">
+                  <div className="bg-white p-2 rounded-xl shadow-sm">
+                    <LuShieldCheck className="w-5 h-5 text-orange-500" />
+                  </div>
+                  <h2 className="text-base font-bold text-gray-900">{t('changePassword.updatePassword')}</h2>
+                </div>
 
-            <form onSubmit={handleSubmit}>
-              <div className="p-6 md:p-8 space-y-6">
+                <form onSubmit={handleSubmit}>
+                  <div className="p-6 md:p-8 space-y-6">
 
-                {/* Current Password */}
-                <div>
-                  <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
-                    Current Password
-                  </label>
-                  <div className="relative flex items-center border border-gray-200 rounded-xl bg-gray-50 focus-within:border-orange-400 focus-within:ring-2 focus-within:ring-orange-100 transition-all">
-                    <div className="pl-4 text-gray-400">
-                      <LuKey size={20} />
+                    {/* Current Password */}
+                    <div>
+                      <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                        {t('changePassword.currentPassword')}
+                      </label>
+                      <div className="relative flex items-center border border-gray-200 rounded-xl bg-gray-50 focus-within:border-orange-400 focus-within:ring-2 focus-within:ring-orange-100 transition-all">
+                        <div className="pl-4 text-gray-400">
+                          <LuKey size={20} />
+                        </div>
+                        <input
+                          type={showCurrent ? "text" : "password"}
+                          value={form.currentPassword}
+                          onChange={(e) => setForm({ ...form, currentPassword: e.target.value })}
+                          placeholder={t('changePassword.currentPassword')}
+                          className="w-full px-4 py-4 outline-none text-gray-700 bg-transparent"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowCurrent(!showCurrent)}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-orange-500 transition-colors cursor-pointer"
+                        >
+                          {showCurrent ? <LuEye size={20} /> : <LuEyeOff size={20} />}
+                        </button>
+                      </div>
                     </div>
-                    <input
-                      type={showCurrent ? "text" : "password"}
-                      value={form.currentPassword}
-                      onChange={(e) => setForm({ ...form, currentPassword: e.target.value })}
-                      placeholder="••••••••••••"
-                      className="w-full px-4 py-4 outline-none text-gray-700 bg-transparent"
-                    />
+
+                    <hr className="border-gray-100" />
+
+                    {/* New + Confirm */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                          {t('changePassword.newPassword')}
+                        </label>
+                        <div className="relative flex items-center border border-gray-200 rounded-xl bg-gray-50 focus-within:border-orange-400 focus-within:ring-2 focus-within:ring-orange-100 transition-all">
+                          <input
+                            type={showNew ? "text" : "password"}
+                            value={form.newPassword}
+                            onChange={(e) => setForm({ ...form, newPassword: e.target.value })}
+                            placeholder={t('changePassword.newPassword')}
+                            className="w-full px-4 py-4 outline-none text-gray-700 bg-transparent rounded-xl"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowNew(!showNew)}
+                            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-orange-500 transition-colors cursor-pointer"
+                          >
+                            {showNew ? <LuEye size={20} /> : <LuEyeOff size={20} />}
+                          </button>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                          {t('changePassword.confirmNewPassword')}
+                        </label>
+                        <div className="relative flex items-center border border-gray-200 rounded-xl bg-gray-50 focus-within:border-orange-400 focus-within:ring-2 focus-within:ring-orange-100 transition-all">
+                          <input
+                            type={showConfirm ? "text" : "password"}
+                            value={form.confirmNewPassword}
+                            onChange={(e) => setForm({ ...form, confirmNewPassword: e.target.value })}
+                            placeholder={t('changePassword.placeholder.confirmNewPassword')}
+                            className="w-full px-4 py-4 outline-none text-gray-700 bg-transparent rounded-xl"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowConfirm(!showConfirm)}
+                            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-orange-500 transition-colors cursor-pointer"
+                          >
+                            {showConfirm ? <LuEye size={20} /> : <LuEyeOff size={20} />}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Footer Buttons */}
+                  <div className="px-6 py-5 bg-orange-50/50 border-t border-orange-100 flex flex-col sm:flex-row gap-3 justify-end">
                     <button
                       type="button"
-                      onClick={() => setShowCurrent(!showCurrent)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-orange-500 transition-colors cursor-pointer"
+                      className="px-6 py-3 text-gray-600 font-semibold hover:bg-gray-100 rounded-xl transition-all cursor-pointer"
                     >
-                      {showCurrent ? <LuEye size={20} /> : <LuEyeOff size={20} />}
+                      {t('changePassword.cancel')}
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={isLoading}
+                      className={`px-10 py-3 font-semibold rounded-xl transition-all cursor-pointer text-white ${isLoading
+                          ? 'bg-orange-300 cursor-not-allowed'
+                          : 'bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 shadow-md'
+                        }`}
+                    >
+                      {isLoading ? t('changePassword.changingPassword') : t('changePassword.updatePasswordButton')}
                     </button>
                   </div>
-                </div>
+                </form>
+              </div>
+            </div>
 
-                <hr className="border-gray-100" />
+            {/* Sidebar */}
+            <div className="space-y-6">
 
-                {/* New + Confirm */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
-                      New Password
-                    </label>
-                    <div className="relative flex items-center border border-gray-200 rounded-xl bg-gray-50 focus-within:border-orange-400 focus-within:ring-2 focus-within:ring-orange-100 transition-all">
-                      <input
-                        type={showNew ? "text" : "password"}
-                        value={form.newPassword}
-                        onChange={(e) => setForm({ ...form, newPassword: e.target.value })}
-                        placeholder="New password"
-                        className="w-full px-4 py-4 outline-none text-gray-700 bg-transparent rounded-xl"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowNew(!showNew)}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-orange-500 transition-colors cursor-pointer"
-                      >
-                        {showNew ? <LuEye size={20} /> : <LuEyeOff size={20} />}
-                      </button>
-                    </div>
+              {/* Requirements Card */}
+              <div className="rounded-2xl border border-orange-100 shadow-sm p-6">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="bg-white p-2 rounded-xl shadow-sm">
+                    <LuInfo className="w-5 h-5 text-orange-500" />
                   </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
-                      Confirm New Password
-                    </label>
-                    <div className="relative flex items-center border border-gray-200 rounded-xl bg-gray-50 focus-within:border-orange-400 focus-within:ring-2 focus-within:ring-orange-100 transition-all">
-                      <input
-                        type={showConfirm ? "text" : "password"}
-                        value={form.confirmNewPassword}
-                        onChange={(e) => setForm({ ...form, confirmNewPassword: e.target.value })}
-                        placeholder="Confirm password"
-                        className="w-full px-4 py-4 outline-none text-gray-700 bg-transparent rounded-xl"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowConfirm(!showConfirm)}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-orange-500 transition-colors cursor-pointer"
-                      >
-                        {showConfirm ? <LuEye size={20} /> : <LuEyeOff size={20} />}
-                      </button>
-                    </div>
-                  </div>
+                  <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">{t('changePassword.requirements')}</h3>
                 </div>
+                <ul className="space-y-3">
+                  {[
+                    t('changePassword.requirement1'),
+                    t('changePassword.requirement2'),
+                    t('changePassword.requirement3'),
+                  ].map((tip, i) => (
+                    <li key={i} className="flex items-start gap-3 text-sm text-gray-600">
+                      <GoDotFill className="mt-1 text-orange-400 flex-shrink-0" />
+                      {tip}
+                    </li>
+                  ))}
+                </ul>
               </div>
 
-              {/* Footer Buttons */}
-              <div className="px-6 py-5 bg-orange-50/50 border-t border-orange-100 flex flex-col sm:flex-row gap-3 justify-end">
-                <button
-                  type="button"
-                  className="px-6 py-3 text-gray-600 font-semibold hover:bg-gray-100 rounded-xl transition-all cursor-pointer"
+              {/* Need Help Card */}
+              <div className="bg-white rounded-2xl border border-orange-100 shadow-sm p-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="p-2 rounded-xl">
+                    <LuShieldCheck className="w-5 h-5 text-orange-500" />
+                  </div>
+                  <h3 className="text-sm font-bold text-gray-900">{t('changePassword.needHelp')}</h3>
+                </div>
+                <p className="text-xs text-gray-500 leading-relaxed mb-4">
+                  {t('changePassword.needHelpDesc')}
+                </p>
+                <a
+                  href="/support"
+                  className="text-sm font-semibold text-orange-500 hover:text-orange-600 transition-colors"
                 >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className={`px-10 py-3 font-semibold rounded-xl transition-all cursor-pointer text-white ${
-                    isLoading
-                      ? 'bg-orange-300 cursor-not-allowed'
-                      : 'bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 shadow-md'
-                  }`}
-                >
-                  {isLoading ? 'Changing Password...' : 'Update Password'}
-                </button>
+                  {t('changePassword.contactSupport')}
+                </a>
               </div>
-            </form>
+
+            </div>
           </div>
         </div>
-
-        {/* Sidebar */}
-        <div className="space-y-6">
-
-          {/* Requirements Card */}
-          <div className="rounded-2xl border border-orange-100 shadow-sm p-6">
-            <div className="flex items-center gap-3 mb-5">
-              <div className="bg-white p-2 rounded-xl shadow-sm">
-                <LuInfo className="w-5 h-5 text-orange-500" />
-              </div>
-              <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Requirements</h3>
-            </div>
-            <ul className="space-y-3">
-              {[
-                'At least 6 characters long',
-                'Mix uppercase & lowercase letters',
-                'Include numbers and symbols',
-              ].map((tip, i) => (
-                <li key={i} className="flex items-start gap-3 text-sm text-gray-600">
-                  <GoDotFill className="mt-1 text-orange-400 flex-shrink-0" />
-                  {tip}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Need Help Card */}
-          <div className="bg-white rounded-2xl border border-orange-100 shadow-sm p-6">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="p-2 rounded-xl">
-                <LuShieldCheck className="w-5 h-5 text-orange-500" />
-              </div>
-              <h3 className="text-sm font-bold text-gray-900">Need Help?</h3>
-            </div>
-            <p className="text-xs text-gray-500 leading-relaxed mb-4">
-              If you're having trouble changing your password, please contact the system administrator or visit our help center.
-            </p>
-            <a
-              href="/support"
-              className="text-sm font-semibold text-orange-500 hover:text-orange-600 transition-colors"
-            >
-              Contact Support →
-            </a>
-          </div>
-
-        </div>
-      </div>
-      </div>
       </div>
     </>
   );

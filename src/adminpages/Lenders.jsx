@@ -340,10 +340,15 @@ export function Lenders() {
                                     <span className="text-gray-500">
                                         {t("joined")}: {lender.createdAt ? new Date(lender.createdAt).toLocaleDateString() : "N/A"}
                                     </span>
+                                    <div className="flex items-center gap-3">
+                                    <button onClick={() => navigate(`/lenders/${lender?._id}/borrowers`)} className="text-blue-600 font-bold hover:underline cursor-pointer">
+                                        Borrowers
+                                    </button>
                                     <button className="text-orange-600 font-bold hover:underline cursor-pointer"
                                         onClick={() => navigate(`/lenders/${lender._id}/details`, { state: { lender } })}>
                                         {t("viewDetails")}
                                     </button>
+                                    </div>
                                 </div>
 
                             </div>

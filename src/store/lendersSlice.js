@@ -61,6 +61,29 @@ export const fetchLenderDetails = createAsyncThunk(
   }
 );
 
+
+//fetched borrowers lender id wise
+
+export const fetchBorrowersByLender = createAsyncThunk(
+  "lenders/fetchBorrowersByLender",
+  async ({ lenderId, page = 1, search = "", status = "" }, { getState, rejectWithValue }) => {
+    try {
+      const token = getState().auth.token || localStorage.getItem("token");
+      const params = new URLSearchParams({ page, limit: 10 });
+      if (search) params.append("search", search);
+      if (status) params.append("status", status);
+
+      const response = await axios.get(
+        `${BASE_URL}/admin/lenders/${lenderId}/borrowers?${params}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || "Failed to fetch borrowers");
+    }
+  }
+);
+
 const initialState = {
   lenders: [],
   selectedLender: null,
@@ -68,6 +91,10 @@ const initialState = {
   isLoadingDetails: false,  
   error: null,
   lastFetched: null,
+
+  lenderBorrowers: null,
+  borrowersLoading: false,
+  borrowersError: null,
 };
 
 const lendersSlice = createSlice({
@@ -110,7 +137,22 @@ const lendersSlice = createSlice({
         state.isLoadingDetails = false;
         state.error = action.payload;
         state.selectedLender = null;  
-      });
+      })
+
+      //fetched borrowers by lender wise
+      .addCase(fetchBorrowersByLender.pending, (state) => {
+        state.borrowersLoading = true;
+        state.borrowersError = null;
+      })
+      .addCase(fetchBorrowersByLender.fulfilled, (state, action) => {
+        state.borrowersLoading = false;
+        state.lenderBorrowers = action.payload;
+      })
+      .addCase(fetchBorrowersByLender.rejected, (state, action) => {
+        state.borrowersLoading = false;
+        state.borrowersError = action.payload;
+      })
+      
   },
 });
 

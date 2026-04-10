@@ -20,6 +20,7 @@ import ScrollToTop from './layouts/ScrollToTop'
 import { ActivityDetails } from './adminpages/ActivityDetails'
 import { Home } from './pages/Home'          // ← new
 import PublicLayout from './layouts/PublicLayout'  // ← new
+import { LenderBorrowers } from './adminpages/LenderBorrowers'
 
 function App() {
   return (
@@ -55,6 +56,7 @@ function App() {
             <Route path="/admin/security" element={<PrivacySecurity />} />
             <Route path="/password" element={<ChangePassword />} />
             <Route path="/activityDetails" element={<ActivityDetails />} />
+            <Route path='/lenders/:id/borrowers' element={<LenderBorrowers />}/>
           </Route>
         </Route>
 
