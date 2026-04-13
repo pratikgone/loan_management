@@ -113,6 +113,32 @@ export const fetchBorrowerDetails = createAsyncThunk(
   }
 );
 
+// impersonate lender
+export const impersonateLender = createAsyncThunk(
+  "lenders/impersonateLender",
+  async(lenderId, {getState, rejectWithValue}) => {
+    try{
+       const token = getState().auth.token || localStorage.getItem("token");
+      if (!token) return rejectWithValue("No authentication token");
+
+       const res = await axios.post(
+        `${BASE_URL}/admin/lenders/${lenderId}/impersonate`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+        if (!res.data?.success) throw new Error("Impersonation failed");
+
+        return res.data.data;
+
+    }catch(error) {
+
+      return rejectWithValue(error.response?.data?.message || error.message || "Failed to impersonate");
+
+    }
+  }
+)
+
 const initialState = {
   lenders: [],
   selectedLender: null,
@@ -130,6 +156,11 @@ const initialState = {
   selectedBorrower: null,
   borrowerDetailsLoading: false,
   borrowerDetailsError: null,
+
+  //impersonate states
+  impersonation: null, // { impersonateToken, lender, adminId, adminName }
+  impersonateLoading: false,
+  impersonateError: null,
 };
 
 const lendersSlice = createSlice({
@@ -139,7 +170,13 @@ const lendersSlice = createSlice({
     resetLenders: () => initialState,
     clearSelectedLender: (state) => {
       state.selectedLender = null;
-    }
+    },
+    
+    //clear impersonation
+     clearImpersonation: (state) => {
+    state.impersonation = null;
+    state.impersonateError = null;
+  }
   },
   extraReducers: (builder) => {
     builder
@@ -202,9 +239,23 @@ const lendersSlice = createSlice({
         state.borrowerDetailsError = action.payload;
       })
 
+      //impersonate Lender
+      .addCase(impersonateLender.pending, (state) => {
+        state.impersonateLoading = true;
+        state.impersonateError = null;
+      })
+      .addCase(impersonateLender.fulfilled, (state, action) => {
+        state.impersonateLoading = false;
+        state.impersonation = action.payload;
+      })
+      .addCase(impersonateLender.rejected, (state, action) => {
+        state.impersonateLoading = false;
+        state.impersonateError = action.payload;
+      })
+
       
   },
 });
 
-export const { resetLenders, clearSelectedLender } = lendersSlice.actions;
+export const { resetLenders, clearSelectedLender, clearImpersonation } = lendersSlice.actions;
 export default lendersSlice.reducer;

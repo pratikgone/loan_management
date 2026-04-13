@@ -280,9 +280,9 @@
     "lastUpdated": "आखिरी अपडेट",
     "razorpayPlanId": "रेजरपे प्लान आईडी",
 
-    "field": "फील्ड",
-    "value": "वैल्यू",
-    "feature": "फीचर",
+    "field":"क्षेत्र",
+    "value":"मूल्य",
+    "feature":"विशेषता",
     "status": "स्थिति",
     "details": "विवरण",
     "planDescription": "प्लान विवरण",
@@ -354,8 +354,8 @@
     "remaining": "बचा हुआ",
     "remainingDays": "बचे हुए दिन",
 
-    "field": "क्षेत्र",
-    "value": "मूल्य",
+    "field": "फ़ील्ड",
+"value": "मान",
     "feature": "विशेषता",
     "description": "विवरण",
 
@@ -466,6 +466,90 @@
     "successSubtitle": "आपका पासवर्ड अपडेट कर दिया गया है।",
     "errorSubtitle": "कृपया पुनः प्रयास करें।"
   }
+},
+
+"borrowersPage": {
+  "title": "उधारकर्ता",
+  "backToLenders": "ऋणदाताओं पर वापस जाएं",
+  "loading": "उधारकर्ताओं को लोड किया जा रहा है...",
+  "noBorrowers": "इस ऋणदाता के लिए कोई उधारकर्ता नहीं मिला।",
+  "searchPlaceholder": "उधारकर्ता नाम या आधार से खोजें",
+  "allStatus": "सभी स्थिति",
+  "pending": "लंबित",
+  "partPaid": "आंशिक भुगतान",
+  "paid": "भुगतान किया गया",
+  "overdue": "बकाया",
+
+  "summary": {
+    "uniqueBorrowers": "अद्वितीय उधारकर्ता",
+    "totalLoans": "कुल ऋण",
+    "activeLoans": "सक्रिय ऋण",
+    "overdueLoans": "बकाया ऋण"
+  },
+
+  "stats": {
+    "totalLoans": "कुल ऋण",
+    "totalAmount": "कुल राशि",
+    "remaining": "शेष"
+  },
+
+  "labels": {
+    "loansBy": "द्वारा दिए गए ऋण",
+    "active": "सक्रिय",
+    "overdue": "बकाया",
+    "moreLoans": "+{{count}} और ऋण"
+  }
+},
+
+
+"borrowerDetails": {
+  "title": "उधारकर्ता विवरण",
+  "backToBorrowers": "उधारकर्ताओं पर वापस जाएं",
+  "goBack": "वापस जाएं",
+  "loading": "उधारकर्ता विवरण लोड हो रहा है...",
+  "notFound": "उधारकर्ता डेटा नहीं मिला।",
+
+  "card": "कार्ड",
+  "table": "टेबल",
+
+  "loansFromLender": "ऋणदाता से लिए गए ऋण",
+
+  "hasOverdue": "बकाया ऋण है",
+  "activeBorrower": "सक्रिय उधारकर्ता",
+
+  "totalLoans": "कुल ऋण",
+  "totalAmount": "कुल राशि",
+  "totalPaid": "कुल भुगतान",
+  "remaining": "शेष राशि",
+
+  "loanHistory": "ऋण इतिहास",
+  "loans": "ऋण",
+
+  "index": "#",
+  "amount": "राशि",
+  "endDate": "समाप्ति तिथि",
+  "status": "स्थिति",
+
+  "paid": "भुगतान किया",
+  "ends": "समाप्त होता है",
+
+  "field":"क्षेत्र",
+  "value":"मूल्य",
+
+  "noLoans": "कोई ऋण नहीं मिला।",
+
+  "personalInfo": "व्यक्तिगत जानकारी",
+  "loanSummary": "ऋण सारांश",
+
+  "fullName": "पूरा नाम",
+  "mobile": "मोबाइल",
+  "email": "ईमेल",
+  "aadhaar": "आधार",
+  "lender": "ऋणदाता",
+
+  "overdue": "बकाया",
+  "active": "सक्र्रिय",
+  "inactive": "निष्क्रिय"
 }
 
 

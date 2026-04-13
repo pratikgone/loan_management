@@ -126,6 +126,13 @@ const getInitialAuthState = () => {
         token,
         isLoading: false,
         error: null,
+
+        //impersonate state
+        isImpersonating: false,
+        originalToken: null,
+        originalUser: null,
+        adminId: null,
+        adminName: null,
     };
 };
 
@@ -140,8 +147,43 @@ const authSlice = createSlice({
             localStorage.removeItem("user");
         },
          clearError: (state) => {
-    state.error = null;
-  }
+         state.error = null;
+        },
+       startImpersonation: (state, action) => {
+  state.originalToken = state.token;
+  state.originalUser = state.user;
+
+  state.token = action.payload.impersonateToken;
+  state.user = action.payload.lender;
+
+  state.isImpersonating = true;
+  state.adminId = action.payload.adminId;
+  state.adminName = action.payload.adminName;
+
+  localStorage.setItem("token", action.payload.impersonateToken);
+  localStorage.setItem("impersonating", "true");
+  localStorage.setItem("originalToken", state.originalToken);
+  localStorage.setItem("originalUser", JSON.stringify(state.originalUser));
+  localStorage.setItem("isImpersonating", "true");
+},
+       stopImpersonation: (state) => {
+  state.token = state.originalToken;
+  state.user = state.originalUser;
+
+  state.isImpersonating = false;
+  state.adminId = null;
+  state.adminName = null;
+
+  state.originalToken = null;
+  state.originalUser = null;
+
+  localStorage.setItem("token", state.token);
+
+  localStorage.removeItem("impersonating");
+  localStorage.removeItem("originalToken");
+  localStorage.removeItem("originalUser");
+  localStorage.removeItem("isImpersonating");
+},
     },
     extraReducers: (builder) => {
         //login
@@ -213,5 +255,5 @@ const authSlice = createSlice({
     }
 })
 
-export const { logout, clearError } = authSlice.actions;
+export const { logout, clearError, startImpersonation, stopImpersonation } = authSlice.actions;
 export default authSlice.reducer;

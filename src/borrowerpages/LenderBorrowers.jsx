@@ -5,11 +5,14 @@ import { fetchBorrowersByLender } from "../store/lendersSlice";
 import { IoIosSearch } from "react-icons/io";
 import { FiDollarSign } from "react-icons/fi";
 import { FiUsers } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 
 export function LenderBorrowers() {
   const { id: lenderId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const {t} = useTranslation();
 
   const { lenderBorrowers, borrowersLoading, borrowersError } = useSelector(s => s.lenders);
 
@@ -28,7 +31,7 @@ export function LenderBorrowers() {
   if (borrowersLoading) return (
      <div className="flex items-center justify-center h-[60vh] bg-gray-50">
         <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-orange-500 border-solid"></div>
-        <span className="ml-4 text-lg text-gray-600 font-medium">Loading borrowers...</span>
+        <span className="ml-4 text-lg text-gray-600 font-medium">{t("borrowersPage.loading")}</span>
       </div>
   );
 
@@ -38,15 +41,15 @@ export function LenderBorrowers() {
       {/* Back */}
       <button onClick={() => navigate(-1)}
         className="mb-4 flex items-center gap-2 text-orange-600 font-bold hover:gap-4 transition-all cursor-pointer">
-        ← Back to Lenders
+        ← {t("borrowersPage.backToLenders")}
       </button>
 
       {/* Page title + lender info */}
       <div className="mb-6">
-        <h2 className="text-xl md:text-2xl font-bold text-gray-900">Borrowers</h2>
+        <h2 className="text-xl md:text-2xl font-bold text-gray-900">{t("borrowersPage.title")}</h2>
         {lender && (
           <p className="text-sm text-gray-500 mt-1">
-            Loans given by <span className="font-bold text-orange-600">{lender.userName}</span>
+            {t("borrowersPage.labels.loansBy")}  <span className="font-bold text-orange-600">{lender.userName}</span>
           </p>
         )}
       </div>
@@ -55,10 +58,10 @@ export function LenderBorrowers() {
       {summary && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
           {[
-            { label: "Unique Borrowers", value: summary.totalUniqueBorrowers,  color: "text-gray-900",   bg: "bg-white",       border: "border-fuchsia-100" },
-            { label: "Total Loans", value: summary.totalLoans, color: "text-blue-600", bg: "bg-blue-50", border: "border-blue-100" },
-            { label: "Active Loans", value: summary.activeLoans, color: "text-green-600", bg: "bg-green-50", border: "border-green-100" },
-            { label: "Overdue Loans", value: summary.overdueLoans, color: "text-red-500", bg: "bg-red-50", border: "border-red-100" },
+            { label:  t("borrowersPage.summary.uniqueBorrowers"), value: summary.totalUniqueBorrowers,  color: "text-gray-900",   bg: "bg-white",       border: "border-fuchsia-100" },
+            { label: t("borrowersPage.summary.totalLoans"), value: summary.totalLoans, color: "text-blue-600", bg: "bg-blue-50", border: "border-blue-100" },
+            { label: t("borrowersPage.summary.activeLoans"), value: summary.activeLoans, color: "text-green-600", bg: "bg-green-50", border: "border-green-100" },
+            { label: t("borrowersPage.summary.overdueLoans"), value: summary.overdueLoans, color: "text-red-500", bg: "bg-red-50", border: "border-red-100" },
           ].map((s, i) => (
             <div key={i} className={`${s.bg} rounded-2xl p-5 border border-gray-200`}>
               <p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">{s.label}</p>
@@ -75,7 +78,7 @@ export function LenderBorrowers() {
             type="text"
             value={search}
             onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
-            placeholder="Search by borrower name or Aadhaar"
+            placeholder={t("borrowersPage.searchPlaceholder")}
             className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400 text-sm"
           />
      
@@ -83,11 +86,11 @@ export function LenderBorrowers() {
           value={statusFilter}
           onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
           className="px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm text-gray-700 outline-none cursor-pointer">
-          <option value="">All Status</option>
-          <option value="pending">Pending</option>
-          <option value="part paid">Part Paid</option>
-          <option value="paid">Paid</option>
-          <option value="overdue">Overdue</option>
+          <option value="">{t("borrowersPage.allStatus")}</option>
+          <option value="pending">{t("borrowersPage.pending")}</option>
+          <option value="part paid">{t("borrowersPage.partPaid")}</option>
+          <option value="paid">{t("borrowersPage.paid")}</option>
+          <option value="overdue">{t("borrowersPage.overdue")}</option>
         </select>
      
       </div>
@@ -98,7 +101,7 @@ export function LenderBorrowers() {
       ) : borrowers.length === 0 ? (
         <div className="text-center py-20 bg-white rounded-2xl border border-gray-100 shadow-sm">
           <FiUsers className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-          <p className="text-gray-500 font-medium">No borrowers found for this lender.</p>
+          <p className="text-gray-500 font-medium">{t("borrowersPage.noBorrowers")}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -125,12 +128,12 @@ export function LenderBorrowers() {
                 <div className="flex flex-col items-end gap-1">
                   {borrower.hasOverdueLoan && (
                     <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-100 text-red-600 border border-red-200">
-                      Overdue
+                      {t("borrowersPage.labels.overdue")}
                     </span>
                   )}
                   {borrower.hasActiveLoan && !borrower.hasOverdueLoan && (
                     <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-green-100 text-green-700 border border-green-200">
-                      Active
+                      {t("borrowersPage.labels.active")}
                     </span>
                   )}
                 </div>
@@ -139,9 +142,9 @@ export function LenderBorrowers() {
               {/* Stats */}
               <div className="grid grid-cols-3 gap-3 bg-fuchsia-50 rounded-xl p-3 mb-4">
                 {[
-                  { label: "Total Loans", value: borrower.totalLoansCount, color: "text-gray-900" },
-                  { label: "Total Amount", value: `₹${borrower.totalLoanAmount?.toLocaleString()}`, color: "text-orange-600" },
-                  { label: "Remaining", value: `₹${borrower.totalRemainingAmount?.toLocaleString()}`, color: "text-red-500" },
+                  { label:  t("borrowersPage.stats.totalLoans"), value: borrower.totalLoansCount, color: "text-gray-900" },
+                  { label: t("borrowersPage.stats.totalAmount"), value: `₹${borrower.totalLoanAmount?.toLocaleString()}`, color: "text-orange-600" },
+                  { label: t("borrowersPage.stats.remaining"), value: `₹${borrower.totalRemainingAmount?.toLocaleString()}`, color: "text-red-500" },
                 ].map((s, i) => (
                   <div key={i} className="text-center border border-gray-100">
                     <p className="text-[9px] text-gray-400 font-bold uppercase tracking-wide">{s.label}</p>
@@ -169,7 +172,7 @@ export function LenderBorrowers() {
                 ))}
                 {borrower.loans.length > 3 && (
                   <p className="text-xs text-gray-400 text-center pt-1">
-                    +{borrower.loans.length - 3} more loans
+                    {t("borrowersPage.labels.moreLoans", { count: borrower.loans.length - 3 })}
                   </p>
                 )}
               </div>

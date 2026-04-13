@@ -467,6 +467,90 @@
     "successSubtitle": "Your password has been updated.",
     "errorSubtitle": "Please try again."
   }
+},
+
+"borrowersPage": {
+  "title": "Borrowers",
+  "backToLenders": "Back to Lenders",
+  "loading": "Loading borrowers...",
+  "noBorrowers": "No borrowers found for this lender.",
+  "searchPlaceholder": "Search by borrower name or Aadhaar",
+  "allStatus": "All Status",
+  "pending": "Pending",
+  "partPaid": "Part Paid",
+  "paid": "Paid",
+  "overdue": "Overdue",
+
+  "summary": {
+    "uniqueBorrowers": "Unique Borrowers",
+    "totalLoans": "Total Loans",
+    "activeLoans": "Active Loans",
+    "overdueLoans": "Overdue Loans"
+  },
+
+  "stats": {
+    "totalLoans": "Total Loans",
+    "totalAmount": "Total Amount",
+    "remaining": "Remaining"
+  },
+
+  "labels": {
+    "loansBy": "Loans given by",
+    "active": "Active",
+    "overdue": "Overdue",
+    "moreLoans": "+{{count}} more loans"
+  }
+},
+
+
+"borrowerDetails": {
+  "title": "Borrower Details",
+  "backToBorrowers": "Back to Borrowers",
+  "goBack": "Go Back",
+  "loading": "Loading borrower details...",
+  "notFound": "Borrower data not found.",
+
+  "card": "Card",
+  "table": "Table",
+
+  "loansFromLender": "Loans from lender",
+
+  "hasOverdue": "Has Overdue Loan",
+  "activeBorrower": "Active Borrower",
+
+  "totalLoans": "Total Loans",
+  "totalAmount": "Total Amount",
+  "totalPaid": "Total Paid",
+  "remaining": "Remaining",
+
+  "loanHistory": "Loan History",
+  "loans": "loans",
+
+  "index": "#",
+  "amount": "Amount",
+  "endDate": "End Date",
+  "status": "Status",
+
+  "paid": "Paid",
+  "ends": "Ends",
+
+  "field": "Field",
+"value": "Value",
+
+  "noLoans": "No loans found.",
+
+  "personalInfo": "Personal Information",
+  "loanSummary": "Loan Summary",
+
+  "fullName": "Full Name",
+  "mobile": "Mobile",
+  "email": "Email",
+  "aadhaar": "Aadhaar",
+  "lender": "Lender",
+
+  "overdue": "Overdue",
+  "active": "Active",
+  "inactive": "Inactive"
 }
 
 }

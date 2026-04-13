@@ -5,11 +5,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { FiFilter } from "react-icons/fi";
 import { IoIosSearch } from "react-icons/io";
 import { FiCheck } from "react-icons/fi";
-import { fetchLendersWithPlans } from "../store/lendersSlice";
+import { fetchLendersWithPlans, impersonateLender } from "../store/lendersSlice";
+import { startImpersonation } from "../store/authSlice";
 import { useNavigate } from "react-router-dom";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { BsBoxSeam } from "react-icons/bs";
 import { useTranslation } from "react-i18next";
+
 
 export function Lenders() {
 
@@ -27,7 +29,7 @@ export function Lenders() {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 4;
 
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
 
 
@@ -41,7 +43,21 @@ export function Lenders() {
     const navigate = useNavigate();
 
     const dispatch = useDispatch();
-    const { lenders, isLoading, error, lastFetched } = useSelector((state) => state.lenders)
+    const { lenders, isLoading, error, lastFetched, impersonateLoading, impersonation } = useSelector((state) => state.lenders)
+
+    const [impersonatingId, setImpersonatingId] = useState(null);
+
+ const handleImpersonate = async (lenderId) => {
+  setImpersonatingId(lenderId);
+  const result = await dispatch(impersonateLender(lenderId));
+
+  if (impersonateLender.fulfilled.match(result)) {
+    dispatch(startImpersonation(result.payload));
+    // Hard redirect — fresh token ke saath
+    window.location.href = "/lender/dashboard";
+  }
+  setImpersonatingId(null);
+};
 
     useEffect(() => {
         const FIVE_MIN = 5 * 60 * 1000;
@@ -100,8 +116,8 @@ export function Lenders() {
 
     return (
         <div className="p-4 sm:p-6">
-             
-           
+
+
             <div className="flex items-center justify-between">
                 <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">{t("lendersWithPlans")}</h1>
             </div>
@@ -213,7 +229,7 @@ export function Lenders() {
             )}
 
 
-         
+
             {/* Stats White Card  */}
             <div className="mb-8 bg-white rounded-2xl border border-orange-100 shadow-sm p-6 w-full">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 divide-y sm:divide-y-0 sm:divide-x divide-gray-100">
@@ -243,8 +259,8 @@ export function Lenders() {
                     </div>
                 </div>
             </div>
-             
-             
+
+
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6 w-full">
                 {currentLenders.length > 0 ? (
                     currentLenders.map((lender) => {
@@ -341,13 +357,33 @@ export function Lenders() {
                                         {t("joined")}: {lender.createdAt ? new Date(lender.createdAt).toLocaleDateString() : "N/A"}
                                     </span>
                                     <div className="flex items-center gap-3">
-                                    <button onClick={() => navigate(`/lenders/${lender?._id}/borrowers`)} className="text-blue-600 font-bold hover:underline cursor-pointer">
-                                        Borrowers
-                                    </button>
-                                    <button className="text-orange-600 font-bold hover:underline cursor-pointer"
-                                        onClick={() => navigate(`/lenders/${lender._id}/details`, { state: { lender } })}>
-                                        {t("viewDetails")}
-                                    </button>
+                                        {/* Impersonate Button */}
+                                        <button
+                                            onClick={() => handleImpersonate(lender._id)}
+                                            disabled={impersonatingId === lender._id}
+                                            className="flex items-center gap-1.5 text-xs font-bold px-2.5 py-1.5
+                                            bg-purple-100 text-purple-700 hover:bg-purple-200
+                                            border border-purple-200 rounded-lg transition-all cursor-pointer
+                                            disabled:opacity-60 disabled:cursor-not-allowed">
+                                            {impersonatingId === lender._id ? (
+                                                <>
+                                                    <div className="w-3 h-3 border-2 border-purple-600 border-t-transparent
+                                            rounded-full animate-spin" />
+                                                    Logging in...
+                                                </>
+                                            ) : (
+                                                <>
+                                                     Impersonate
+                                                </>
+                                            )}
+                                        </button>
+                                        <button onClick={() => navigate(`/lenders/${lender?._id}/borrowers`)} className="text-blue-600 font-bold hover:underline cursor-pointer">
+                                            Borrowers
+                                        </button>
+                                        <button className="text-orange-600 font-bold hover:underline cursor-pointer"
+                                            onClick={() => navigate(`/lenders/${lender._id}/details`, { state: { lender } })}>
+                                            {t("viewDetails")}
+                                        </button>
                                     </div>
                                 </div>
 
@@ -356,7 +392,7 @@ export function Lenders() {
                     })
                 ) : (
                     <div className="col-span-full text-center text-gray-500 py-10">
-                       {t("noLendersFound", { searchQuery })}
+                        {t("noLendersFound", { searchQuery })}
                     </div>
                 )}
             </div>
@@ -376,8 +412,8 @@ export function Lenders() {
                             key={i}
                             onClick={() => setCurrentPage(i + 1)}
                             className={`px-4 py-2 rounded-lg ${currentPage === i + 1
-                                    ? "bg-orange-600 text-white"
-                                    : "bg-gray-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                                ? "bg-orange-600 text-white"
+                                : "bg-gray-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
                                 }`}
                         >
                             {i + 1}
@@ -394,6 +430,6 @@ export function Lenders() {
 
                 </div>
             )}
-            </div>
+        </div>
     );
 }

@@ -2,10 +2,23 @@ import { useState, useEffect } from "react";
 import { Navbar } from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import { Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { ImpersonationBanner } from "../components/ImpersonationBanner";
+import LenderNavbar from "../lenderpages/LenderNavbar";
+import LenderSidebar from "../lenderpages/LenderSidebar";
 
 export default function AdminLayout({ children }) {
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
+ 
+
+  const {isImpersonating} = useSelector((state) => state.auth);
+
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const { user } = useSelector(s => s.auth);
+
+  const isLender = user?.roleId === 1;
+
+
 
   useEffect(() => {
     const handleResize = () => {
@@ -32,18 +45,41 @@ export default function AdminLayout({ children }) {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
 
-      <Sidebar
-        isMobileOpen={isMobileOpen}
-        setIsMobileOpen={setIsMobileOpen}
-        isCollapsed={isCollapsed}
-      />
+      {/* impersonation banner */}
+      <ImpersonationBanner />
+
+       {/* Role wise Sidebar */}
+      {isLender ? (
+        <LenderSidebar
+          isMobileOpen={isMobileOpen}
+          setIsMobileOpen={setIsMobileOpen}
+          isCollapsed={isCollapsed}
+        />
+      ) : (
+        <Sidebar
+          isMobileOpen={isMobileOpen}
+          setIsMobileOpen={setIsMobileOpen}
+          isCollapsed={isCollapsed}
+        />
+      )}
 
       {/* CONTENT AREA */}
       <div
         className={`
         ${isCollapsed ? "lg:ml-20" : "lg:ml-72"}`}
       >
-        <Navbar toggleSidebar={toggleSidebar} isCollapsed={isCollapsed} />
+        {/* Role wise Navbar */}
+      {isLender ? (
+        <LenderNavbar
+          toggleSidebar={toggleSidebar}
+          isCollapsed={isCollapsed}
+        />
+      ) : (
+        <Navbar
+          toggleSidebar={toggleSidebar}
+          isCollapsed={isCollapsed}
+        />
+      )}
 
         <main className="p-6 pt-20 min-h-[calc(100vh-80px)] bg-gray-50 dark:bg-gray-900">
           {children}

@@ -58,6 +58,41 @@ export const fetchRecentActivities = createAsyncThunk(
 );
 
 
+//lender dashboard stats
+// Lender dashboard stats
+export const fetchLenderStats = createAsyncThunk(
+  'dashboard/fetchLenderStats',
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token') || getState().auth.token;
+      const res = await axios.get(`${BASE_URL}/lender/loans/statistics`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      return res.data.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || 'Failed');
+    }
+  }
+);
+
+
+// Lender recent activities
+export const fetchLenderActivities = createAsyncThunk(
+  'dashboard/fetchLenderActivities',
+  async (limit = 5, { getState, rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token') || getState().auth.token;
+      const res = await axios.get(
+        `${BASE_URL}/lender/loans/recent-activities?limit=${limit}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      return res.data.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || 'Failed');
+    }
+  }
+);
+
 
 
 const initialState = {
@@ -66,7 +101,11 @@ const initialState = {
   allActivities: [], //10
   isLoading: false,
   error: null,
-  lastFetched: null
+  lastFetched: null,
+
+  //lenders states
+  lenderStats: null,
+lenderActivities: [],
 };
 
 const dashboardSlice = createSlice({
@@ -110,7 +149,18 @@ const dashboardSlice = createSlice({
       .addCase(fetchRecentActivities.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
-      });
+      })
+
+      //lenders adcases
+      .addCase(fetchLenderStats.fulfilled, (state, action) => {
+  state.isLoading = false;
+  state.lenderStats = action.payload;
+  state.lastFetched = Date.now();
+})
+.addCase(fetchLenderActivities.fulfilled, (state, action) => {
+  state.isLoading = false;
+  state.lenderActivities = action.payload;
+})
   }
 });
 

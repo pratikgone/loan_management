@@ -22,6 +22,9 @@ import { Home } from './pages/Home'          // ← new
 import PublicLayout from './layouts/PublicLayout'  // ← new
 import { LenderBorrowers } from './borrowerpages/LenderBorrowers'
 import { BorrowerDetails } from './borrowerpages/BorrowerDetails'
+import LenderDashboard from './lenderpages/LenderDashboard'
+import LenderLoans from './lenderpages/LenderLoans'
+import LenderBorrowersList from './lenderpages/LenderBorrowerList'
 
 
 function App() {
@@ -49,6 +52,7 @@ function App() {
         <Route element={<PrivateRoute />}>
           <Route element={<AdminLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
+          
             <Route path="/plans" element={<Plan />} />
             <Route path="/lenders" element={<Lenders />} />
             <Route path="/lenders/:id/details" element={<LenderDetails />} />
@@ -60,6 +64,10 @@ function App() {
             <Route path="/activityDetails" element={<ActivityDetails />} />
             <Route path='/lenders/:id/borrowers' element={<LenderBorrowers />}/>
             <Route path='/lenders/:id/borrowers/:borrowerId/details' element={<BorrowerDetails/>} />
+
+             <Route path="/lender/dashboard" element={<LenderDashboard />} />
+             <Route path="/lender/borrowers" element={<LenderBorrowersList />} />
+             <Route path="/lender/loans" element={<LenderLoans />} />
           </Route>
         </Route>
 

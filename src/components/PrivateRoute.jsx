@@ -6,10 +6,11 @@ import { Navigate, Outlet } from "react-router-dom";
 
 const PrivateRoute =()=>{
 
-    const {token} = useSelector((State) => State.auth);
+    const {token, user} = useSelector((State) => State.auth);
 
     // if admin not token then return login page
-  return token ? <Outlet /> : <Navigate to="/" replace />;
+  if (!token) return <Navigate to="/" replace />;
+   return <Outlet />;
 }
 
 export default PrivateRoute;
