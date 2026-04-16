@@ -149,40 +149,93 @@ const authSlice = createSlice({
          clearError: (state) => {
          state.error = null;
         },
-       startImpersonation: (state, action) => {
-  state.originalToken = state.token;
-  state.originalUser = state.user;
+   
+// authSlice.js
+startImpersonation: (state, action) => {
+  const payload = action.payload;           
+  const data = payload.data || payload;     
 
-  state.token = action.payload.impersonateToken;
-  state.user = action.payload.lender;
+  // Original admin state save karo
+//   if (!state.originalToken) {
+//     state.originalToken = state.token;
+//     state.originalUser = state.user ? { ...state.user } : null;
+//   }
+if (!state.originalToken) {
+  state.originalToken = state.token;
+  state.originalUser = state.user ? { ...state.user } : null;
+
+  localStorage.setItem("originalToken", state.token || "");
+  localStorage.setItem("originalUser", JSON.stringify(state.user || {}));
+}
+
+  //  token with user set 
+  state.token = data.impersonateToken || data.token;
+  state.user = data.lender || data.user || data;   // lender object
 
   state.isImpersonating = true;
-  state.adminId = action.payload.adminId;
-  state.adminName = action.payload.adminName;
+  state.impersonatedLenderId = data.lender?._id || null;
 
-  localStorage.setItem("token", action.payload.impersonateToken);
-  localStorage.setItem("impersonating", "true");
-  localStorage.setItem("originalToken", state.originalToken);
-  localStorage.setItem("originalUser", JSON.stringify(state.originalUser));
+  // LocalStorage save 
+  if (state.token) localStorage.setItem("token", state.token);
+  if (state.user) localStorage.setItem("user", JSON.stringify(state.user));
   localStorage.setItem("isImpersonating", "true");
+
+  console.log(" Final Impersonation State - User:", state.user);
 },
-       stopImpersonation: (state) => {
-  state.token = state.originalToken;
-  state.user = state.originalUser;
+//    stopImpersonation: (state) => {
+//   // Original Admin ka data restore karo
+//   if (state.originalToken && state.originalUser) {
+//     state.token = state.originalToken;
+//     state.user = state.originalUser;
+//   }
+
+//   // Impersonation 
+//   state.isImpersonating = false;
+//   state.impersonatedLenderId = null;
+
+//   
+//   // state.originalToken = null;     
+//   // state.originalUser = null;      
+
+//   // LocalStorage update
+//   if (state.token) {
+//     localStorage.setItem("token", state.token);
+//   }
+//   if (state.user) {
+//     localStorage.setItem("user", JSON.stringify(state.user));
+//   }
+
+//   localStorage.removeItem("isImpersonating");
+
+//   console.log("✅ Impersonation Stopped - Back to Admin");
+// },
+stopImpersonation: (state) => {
+  // Original Admin data restore 
+  if (state.originalToken && state.originalUser) {
+    state.token = state.originalToken;
+    state.user = state.originalUser;
+  }
 
   state.isImpersonating = false;
-  state.adminId = null;
-  state.adminName = null;
+  state.impersonatedLenderId = null;
 
+  // Clear temporary impersonation data
   state.originalToken = null;
   state.originalUser = null;
 
-  localStorage.setItem("token", state.token);
+  // LocalStorage update
+  if (state.token) {
+    localStorage.setItem("token", state.token);
+  }
+  if (state.user) {
+    localStorage.setItem("user", JSON.stringify(state.user));
+  }
 
-  localStorage.removeItem("impersonating");
+  localStorage.removeItem("isImpersonating");
   localStorage.removeItem("originalToken");
   localStorage.removeItem("originalUser");
-  localStorage.removeItem("isImpersonating");
+
+  console.log(" Impersonation Stopped - Back to Admin. Clean state restored.");
 },
     },
     extraReducers: (builder) => {

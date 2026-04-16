@@ -318,28 +318,28 @@ export default function Sidebar({
       </aside>
       {showLogoutConfirm && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-sm w-full overflow-hidden border border-orange-100">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-sm w-full overflow-hidden border border-white/70 dark:border-gray-700">
 
             {/* Header */}
-            <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-6 py-5 border-b border-orange-200">
-              <h3 className="text-xl font-bold text-gray-900 flex items-center gap-3 selected-card-title">
-                <FiLogOut className="w-6 h-6 text-orange-600" />
+          <div className="bg-orange-500 px-6 py-5 border-b border-orange-200">
+              <h3 className="text-xl font-bold !text-white flex items-center gap-3">
+                <FiLogOut className="w-6 h-6 text-white" />
                 {t("sidebar.confirmLogout")}
               </h3>
             </div>
 
             {/* Body */}
             <div className="p-6 space-y-4">
-              <p className="text-gray-700 text-center">
+              <p className="text-gray-800 dark:text-gray-200 text-center font-medium">
                 {t("sidebar.logoutQuestion")}
               </p>
-              <p className="text-sm text-gray-500 text-center">
+              <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
                 {t("sidebar.logoutNote")}
               </p>
             </div>
 
             {/* Buttons */}
-            <div className="flex items-center gap-4 px-6 py-5 border-t border-gray-200 bg-gray-50">
+            <div className="flex items-center gap-4 px-6 py-5 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
               <button
                 onClick={() => setShowLogoutConfirm(false)}
                 className="flex-1 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-xl transition-all cursor-pointer"

@@ -116,28 +116,21 @@ export const fetchBorrowerDetails = createAsyncThunk(
 // impersonate lender
 export const impersonateLender = createAsyncThunk(
   "lenders/impersonateLender",
-  async(lenderId, {getState, rejectWithValue}) => {
-    try{
-       const token = getState().auth.token || localStorage.getItem("token");
-      if (!token) return rejectWithValue("No authentication token");
-
-       const res = await axios.post(
-        `${BASE_URL}/admin/lenders/${lenderId}/impersonate`,
+  async (lenderId, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `https://loan-backend-cv1k.onrender.com/api/admin/lenders/${lenderId}/impersonate`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-        if (!res.data?.success) throw new Error("Impersonation failed");
-
-        return res.data.data;
-
-    }catch(error) {
-
-      return rejectWithValue(error.response?.data?.message || error.message || "Failed to impersonate");
-
+      return response.data; // { token, user, lender } 
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || "Impersonation failed");
     }
   }
-)
+);
 
 const initialState = {
   lenders: [],

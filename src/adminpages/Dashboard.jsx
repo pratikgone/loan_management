@@ -1,336 +1,363 @@
-
-
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { PiNotePencilDuotone } from "react-icons/pi";
-import { MdOutlineLocalGroceryStore } from "react-icons/md";
-import { GrAddCircle } from "react-icons/gr";
-import { FiActivity } from "react-icons/fi";
+import { FiActivity, FiCheckCircle, FiDollarSign, FiShoppingCart, FiAlertCircle, FiFileText } from "react-icons/fi";
+import { HiMiniArrowTrendingDown } from "react-icons/hi2";
 import { fetchRecentActivities, fetchRevenue } from "../store/dashboardSlice";
-import { FiUsers } from "react-icons/fi";
-import { HiMiniArrowTrendingUp } from "react-icons/hi2";
-import { FiCheckCircle } from "react-icons/fi";
-import { FiDollarSign } from "react-icons/fi";
-import { FiShoppingCart } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
 
 export default function Dashboard() {
-
-
   const dispatch = useDispatch();
-  const { revenue, dashboardActivities, isLoading, error, lastFetched } = useSelector(state => state.dashboard);
-
-  // User data from auth slice (login ke time save hua hai)
-  const { user } = useSelector(state => state.auth);
+  const { revenue, dashboardActivities, isLoading, error, lastFetched } = useSelector(
+    (state) => state.dashboard
+  );
+  const { user } = useSelector((state) => state.auth);
 
   const navigate = useNavigate();
-
-    const { t } = useTranslation();
+  const { t } = useTranslation();
 
   useEffect(() => {
-
-    // Optional: only refetch if data is older than ~5 minutes
     const FIVE_MIN = 5 * 60 * 1000;
-    const shouldRefetch = !lastFetched || (Date.now() - lastFetched > FIVE_MIN);
-
+    const shouldRefetch = !lastFetched || Date.now() - lastFetched > FIVE_MIN;
     if (shouldRefetch) {
       dispatch(fetchRevenue());
       dispatch(fetchRecentActivities(5));
     }
-
   }, [dispatch, lastFetched]);
 
-  // Real user data
   const displayName = user?.userName || user?.name || "User";
   const profilePic = user?.profileImage || user?.profilePicture || null;
   const userInitials = displayName
-    ? displayName.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2)
+    ? displayName.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)
     : "U";
 
-  if (isLoading && !revenue) {           // show spinner only on first load
+  if (isLoading && !revenue) {
     return (
-      <div className="flex items-center justify-center h-[60vh] bg-gray-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-orange-500 border-solid"></div>
-        <span className="ml-4 text-lg text-gray-600 font-medium">{t("dashboard.loading")}</span>
+      <div className="flex items-center justify-center h-[65vh] bg-gray-50 dark:bg-gray-900">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-orange-500" />
+        <span className="ml-4 text-lg font-medium text-gray-600 dark:text-gray-300">{t("dashboard.loading")}</span>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 text-red-700 p-6 rounded-xl text-center">
+      <div className="max-w-md mx-auto mt-10 bg-red-50 border border-red-200 text-red-700 dark:bg-red-900/30 dark:border-red-700 dark:text-red-300 p-6 rounded-2xl text-center">
         {error}
       </div>
     );
   }
 
-  //Real data API use data in cards 
-  const stats = revenue ?
-    [
-      {
-        title: t("dashboard.stats.totalRevenue"),
-        value: `₹ ${revenue.totalRevenue.toLocaleString()}`,
-        icon: (
-          <FiDollarSign className="w-6 h-6 md:w-7 md:h-7 text-orange-500" />
+  const stats = revenue
+    ? [
+        {
+          title: t("dashboard.stats.totalRevenue"),
+          value: `₹ ${revenue.totalRevenue.toLocaleString()}`,
+          change: "+14.8%",
+          trend: "up",
+          iconBg: "bg-orange-50",
+          iconColor: "text-orange-500",
+          barColor: "bg-orange-400",
+          icon: <FiDollarSign className="w-5 h-5" />,
+        },
+        {
+          title: t("dashboard.stats.totalPurchases"),
+          value: revenue.totalPurchases.toLocaleString(),
+          change: "+9.3%",
+          trend: "up",
+          iconBg: "bg-green-50",
+          iconColor: "text-green-600",
+          barColor: "bg-green-400",
+          icon: <FiShoppingCart className="w-5 h-5" />,
+        },
+        {
+          title: t("dashboard.stats.avgPerPurchase"),
+          value: `₹ ${revenue.averageRevenuePerPurchase.toLocaleString()}`,
+          change: "-3.2%",
+          trend: "down",
+          iconBg: "bg-red-50",
+          iconColor: "text-red-500",
+          barColor: "bg-red-400",
+          icon: <HiMiniArrowTrendingDown className="w-5 h-5" />,
+        },
+        {
+          title: t("dashboard.stats.activePlans"),
+          value: revenue.activePlansCount.toLocaleString(),
+          change: "+22%",
+          trend: "up",
+          iconBg: "bg-blue-50",
+          iconColor: "text-blue-500",
+          barColor: "bg-blue-400",
+          icon: <FiCheckCircle className="w-5 h-5" />,
+        },
+      ]
+    : [];
 
-        ),
-        bg: "bg-orange-50",
-      },
-      {
-        title: t("dashboard.stats.totalPurchases"),
-        value: revenue.totalPurchases.toLocaleString(),
-        icon: (
-          <FiShoppingCart className="w-6 h-6 md:w-7 md:h-7 text-orange-500" />
-        ),
-        bg: "bg-orange-50",
-      },
-      {
-        title: t("dashboard.stats.avgPerPurchase"),
-        value: `₹ ${revenue.averageRevenuePerPurchase.toLocaleString()}`,
-        icon: (
-          <HiMiniArrowTrendingUp className="w-6 h-6 md:w-7 md:h-7 text-orange-500" />
-
-        ),
-        bg: "bg-orange-50",
-      },
-      {
-        title: t("dashboard.stats.activePlans"),
-        value: revenue.activePlansCount.toLocaleString(),
-        icon: (
-          <FiCheckCircle className="w-6 h-6 md:w-7 md:h-7 text-orange-500" />
-
-        ),
-        bg: "bg-orange-50",
-      }
-    ] : [
-      // fallback fake data if API fails
-      // ...stats array
+  const activityIconMap = (activity, i) => {
+    const icons = [
+      { bg: "bg-orange-50", color: "text-orange-500", icon: <FiActivity className="w-4 h-4" /> },
+      { bg: "bg-green-50",  color: "text-green-600",  icon: <FiDollarSign className="w-4 h-4" /> },
+      { bg: "bg-blue-50",   color: "text-blue-500",   icon: <FiFileText className="w-4 h-4" /> },
+      { bg: "bg-red-50",    color: "text-red-500",    icon: <FiAlertCircle className="w-4 h-4" /> },
     ];
+    return icons[i % icons.length];
+  };
 
-    
+  return (
+   <div
+  className="min-h-screen pb-12 
+  bg-gradient-to-br from-orange-50 via-white to-green-50 
+  dark:from-gray-900 dark:via-gray-950 dark:to-gray-900"
+>
+      <div className="p-5 sm:p-6 lg:p-8 w-full">
 
+        {/* ── Header ── */}
+        <div className="flex justify-between items-start mb-8">
+          <div>
+            <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">
+              {t("dashboard.title")}
+            </h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Welcome back 👋 Here's what's happening today</p>
+          </div>
+          <span
+           className="text-xs text-gray-400 px-3 py-1.5 rounded-full mt-1 
+bg-white/70 border border-gray-200 
+dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 backdrop-blur"
+          >
+            Last updated · Today
+          </span>
+        </div>
 
- return (
-  <>
-<div className="p-4 sm:p-6 transition-colors duration-300">
+        {/*  Hero Banner  */}
+        <div
+          className="relative rounded-3xl overflow-hidden mb-10 p-8"
+          style={{ background: "linear-gradient(130deg, #f97316, #fb923c, #fbbf24)" }}
+        >
+          {/* Glass overlay */}
+          <div
+           className="absolute inset-0 bg-white/10 dark:bg-black/20 backdrop-blur-sm"
+          />
+          {/* Decorative orbs */}
+          <div
+            className="absolute rounded-full"
+            style={{ width: 200, height: 200, background: "rgba(255,255,255,0.1)", top: -70, right: 80 }}
+          />
+          <div
+            className="absolute rounded-full"
+            style={{ width: 110, height: 110, background: "rgba(255,255,255,0.07)", bottom: -30, right: 24 }}
+          />
 
-      {/* ── Dashboard Overview ── */}
-      <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
-        {t("dashboard.title")}
-      </h2>
+          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div>
+              <h2 className="text-white text-2xl font-semibold">
+                Welcome back, <span className="font-bold">{displayName}</span>
+              </h2>
+              <p className="text-orange-100 text-sm mt-2 max-w-md leading-relaxed">
+                {t("dashboard.manageText")}
+              </p>
+              <div className="flex gap-2 mt-4 flex-wrap">
+                {revenue && (
+                  <>
+                    <span
+                      className="text-xs text-white px-3 py-1 rounded-full"
+                      style={{ background: "rgba(255,255,255,0.2)", border: "0.5px solid rgba(255,255,255,0.3)" }}
+                    >
+                      {revenue.activePlansCount} active plans
+                    </span>
+                    <span
+                      className="text-xs text-white px-3 py-1 rounded-full"
+                      style={{ background: "rgba(255,255,255,0.2)", border: "0.5px solid rgba(255,255,255,0.3)" }}
+                    >
+                      +14.8% this month
+                    </span>
+                  </>
+                )}
+              </div>
+            </div>
 
-      {/* ── Welcome Hero Card ── */}
-      <div className="mb-8">
-        <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-orange-500 via-orange-400 to-orange-300 shadow-xl">
-          {/* Decorative circles */}
-          <div className="absolute -top-8 -right-8 w-40 h-40 bg-white/10 rounded-full" />
-          <div className="absolute -bottom-6 right-16 w-24 h-24 bg-white/10 rounded-full" />
-          <div className="absolute top-4 right-32 w-10 h-10 bg-white/10 rounded-full" />
-
-          <div className="relative px-6 py-8 md:px-10 md:py-10 pr-28 md:pr-36 lg:pr-40">
-            {/* Profile */}
-            <div className="absolute top-6 right-6 md:top-8 md:right-8">
+            <div className="flex-shrink-0">
               {profilePic ? (
-                <img src={profilePic} alt="Profile"
-                  className="w-20 h-20 md:w-24 md:h-24 rounded-full object-cover border-4 border-white/30 shadow-lg ring-2 ring-white/20"
-                  onError={(e) => { e.target.src = ""; }} />
+                <img
+                  src={profilePic}
+                  className="w-16 h-16 rounded-2xl object-cover"
+                  style={{ border: "1.5px solid rgba(255,255,255,0.35)" }}
+                  alt={displayName}
+                />
               ) : (
-                <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white font-black text-2xl md:text-3xl shadow-lg border-4 border-white/30">
+                <div
+                  className="w-16 h-16 rounded-2xl flex items-center justify-center text-white text-xl font-semibold"
+                  style={{
+                    background: "rgba(255,255,255,0.2)",
+                    border: "1.5px solid rgba(255,255,255,0.35)",
+                    backdropFilter: "blur(8px)",
+                  }}
+                >
                   {userInitials}
                 </div>
               )}
             </div>
-
-            <span className="inline-block px-3 py-1 bg-white/20 text-white text-xs font-semibold rounded-full mb-3 backdrop-blur-sm">
-              {t("dashboard.adminPanel")}
-            </span>
-            <p className="text-white/80 text-sm md:text-base">{t("dashboard.welcome")},</p>
-            <h2 className="text-2xl md:text-3xl font-black text-white tracking-tight mt-0.5">
-              {displayName}
-            </h2>
-            <p className="mt-2 text-white/70 text-sm md:text-base">
-              {t("dashboard.manageText")}
-            </p>
           </div>
         </div>
-      </div>
 
-      {/* ── Quick Actions ── */}
-      <div className="mb-8">
-        <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-5">
-          {t("dashboard.quickActions")}
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
-          {/* Add Plan */}
-          <div onClick={() => navigate("/plans", { state: { openModal: true } })}
-            className="group relative overflow-hidden bg-gradient-to-br from-emerald-400 to-emerald-600
-              rounded-2xl shadow-md p-6 md:p-8 cursor-pointer
-              hover:shadow-xl hover:scale-[1.02] transition-all duration-300
-              flex items-center justify-between">
-            <div className="absolute -right-4 -bottom-4 w-20 h-20 bg-white/10 rounded-full" />
-            <div>
-              <h3 className="text-lg md:text-xl font-black text-white mb-1">{t("dashboard.addPlan")}</h3>
-              <p className="text-white/70 text-sm">{t("dashboard.addPlanDesc")}</p>
-            </div>
-            <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
-              <GrAddCircle className="w-6 h-6 md:w-7 md:h-7 text-white group-hover:scale-110 transition-transform" />
-            </div>
-          </div>
-
-          {/* Lender List */}
-          <div onClick={() => navigate("/lenders")}
-            className="group relative overflow-hidden bg-gradient-to-br from-rose-400 to-rose-600
-              rounded-2xl shadow-md p-6 md:p-8 cursor-pointer
-              hover:shadow-xl hover:scale-[1.02] transition-all duration-300
-              flex items-center justify-between">
-            <div className="absolute -right-4 -bottom-4 w-20 h-20 bg-white/10 rounded-full" />
-            <div>
-              <h3 className="text-lg md:text-xl font-black text-white mb-1">{t("dashboard.lenderList")}</h3>
-              <p className="text-white/70 text-sm">{t("dashboard.lenderList")}</p>
-            </div>
-            <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
-              <FiUsers className="w-6 h-6 md:w-7 md:h-7 text-white group-hover:scale-110 transition-transform" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Revenue Overview ── */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-5">
-          <h2 className="text-xl md:text-2xl font-bold text-gray-900">
+        {/* ── Stats ── */}
+        <div className="mb-10">
+          <p className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">
             {t("dashboard.revenueOverview")}
-          </h2>
-          <button onClick={() => navigate("/revenue")}
-            className="text-sm font-semibold text-orange-600
-              hover:text-orange-700
-              transition-colors flex items-center gap-1 cursor-pointer">
-            {t("dashboard.viewDetails")} →
-          </button>
-        </div>
+          </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-          {stats.map((stat, index) => (
-            <div key={index}
-              className="group bg-white
-                rounded-2xl border border-gray-100
-                shadow-sm hover:shadow-lg 
-                transition-all duration-300 overflow-hidden">
-              <div className="p-5">
-                {/* Top colored bar */}
-                <div className="h-1 w-8 bg-orange-400 rounded-full mb-4" />
-                <div className="flex items-center justify-between">
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide truncate">
-                      {stat.title}
-                    </p>
-                    <p className="text-2xl font-black text-gray-900 mt-1">
-                      {stat.value}
-                    </p>
-                  </div>
-                  <div className="p-3 bg-orange-50 rounded-xl flex-shrink-0 ml-3
-                    group-hover:bg-orange-100 transition-colors">
-                    <div className="text-orange-500">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {stats.map((stat, index) => (
+              <div
+                key={index}
+               className="relative rounded-2xl p-5 overflow-hidden transition-all duration-300 hover:-translate-y-1
+bg-white shadow-md border border-orange-100 
+dark:bg-gray-800 dark:border-gray-700 dark:shadow-black/20
+backdrop-blur-xl"
+              >
+                {/* Inner glass sheen */}
+                <div
+                  className="absolute inset-0 rounded-2xl pointer-events-none"
+                  style={{ background: "linear-gradient(135deg, rgba(255,255,255,0.45) 0%, transparent 60%)" }}
+                />
+
+                <div className="relative">
+                  {/* Icon + trend */}
+                  <div className="flex items-center justify-between mb-3">
+                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${stat.iconBg} ${stat.iconColor}`}>
                       {stat.icon}
                     </div>
+                    <span
+                      className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                        stat.trend === "up"
+                          ? "bg-emerald-100 text-emerald-700"
+                          : "bg-red-100 text-red-600"
+                      }`}
+                    >
+                      {stat.change}
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-gray-400 dark:text-gray-500">{stat.title}</p>
+                  <p className="text-xl font-semibold text-gray-900 dark:text-white">{stat.value}</p>
+
+                  {/* Mini sparkline */}
+                  <div className="flex items-end gap-0.5 h-6 mt-3">
+                    {[40, 55, 45, 70, 60, 80, 100].map((h, i) => (
+                      <div
+                        key={i}
+                        className={`flex-1 rounded-sm opacity-60 ${stat.barColor}`}
+                        style={{ height: `${h}%` }}
+                      />
+                    ))}
                   </div>
                 </div>
               </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Quick Actions ── */}
+        <div className="mb-10">
+          <p className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">
+            Quick Actions
+          </p>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            <div
+              onClick={() => navigate("/plans", { state: { openModal: true } })}
+              className="relative cursor-pointer rounded-2xl p-6 overflow-hidden transition-all duration-300 hover:-translate-y-1"
+              style={{
+                background: "linear-gradient(135deg, #10b981, #14b8a6)",
+                boxShadow: "0 4px 20px rgba(16,185,129,0.2)",
+              }}
+            >
+              <div
+                className="absolute rounded-full pointer-events-none"
+                style={{ width: 100, height: 100, background: "rgba(255,255,255,0.1)", top: -30, right: -20 }}
+              />
+              <div
+                className="absolute rounded-full pointer-events-none"
+                style={{ width: 60, height: 60, background: "rgba(255,255,255,0.07)", bottom: -10, right: 30 }}
+              />
+              <div
+                className="absolute top-4 right-4 w-7 h-7 rounded-full flex items-center justify-center text-white text-sm"
+                style={{ background: "rgba(255,255,255,0.2)" }}
+              >
+                ↗
+              </div>
+              <h3 className="text-base font-semibold text-white relative z-10">{t("dashboard.addPlan")}</h3>
+              <p className="text-sm mt-1 relative z-10" style={{ color: "rgba(255,255,255,0.8)" }}>
+                {t("dashboard.addPlanDesc")}
+              </p>
             </div>
-          ))}
-        </div>
-      </div>
 
-      {/* ── Recent Activity ── */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-5">
-          <h2 className="text-xl md:text-2xl font-bold text-gray-900">
+            <div
+              onClick={() => navigate("/lenders")}
+              className="relative cursor-pointer rounded-2xl p-6 overflow-hidden transition-all duration-300 hover:-translate-y-1"
+              style={{
+                background: "linear-gradient(135deg, #f97316, #ef4444)",
+                boxShadow: "0 4px 20px rgba(249,115,22,0.2)",
+              }}
+            >
+              <div
+                className="absolute rounded-full pointer-events-none"
+                style={{ width: 100, height: 100, background: "rgba(255,255,255,0.1)", top: -30, right: -20 }}
+              />
+              <div
+                className="absolute rounded-full pointer-events-none"
+                style={{ width: 60, height: 60, background: "rgba(255,255,255,0.07)", bottom: -10, right: 30 }}
+              />
+              <div
+                className="absolute top-4 right-4 w-7 h-7 rounded-full flex items-center justify-center text-white text-sm"
+                style={{ background: "rgba(255,255,255,0.2)" }}
+              >
+                ↗
+              </div>
+              <h3 className="text-base font-semibold text-white relative z-10">{t("dashboard.lenderList")}</h3>
+              <p className="text-sm mt-1 relative z-10" style={{ color: "rgba(255,255,255,0.8)" }}>
+                Manage all lenders and their activity
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Recent Activity ── */}
+        <div>
+          <p className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">
             {t("dashboard.recentActivity")}
-          </h2>
-          <button onClick={() => navigate("/activityDetails")}
-            className="text-sm font-semibold text-orange-600
-              hover:text-orange-700
-              transition-colors cursor-pointer">
-            {t("dashboard.seeAll")} →
-          </button>
-        </div>
+          </p>
 
-        <div className="bg-white
-          rounded-2xl border border-gray-100
-          shadow-sm overflow-hidden">
-
-          {dashboardActivities.length > 0 ? (
-            <div className="divide-y divide-gray-50">
-              {dashboardActivities.map((activity, i) => {
-                const type = activity.type?.toLowerCase() || "";
-
-                let iconComponent = <FiActivity className="w-4 h-4" />;
-                let iconBg    = "bg-amber-100";
-                let iconColor = "text-amber-600";
-                let borderColor = "border-gray-300";
-                let dotColor  = "bg-amber-400";
-
-                if (type.includes("updated") || type.includes("edit")) {
-                  iconComponent = <PiNotePencilDuotone className="w-4 h-4" />;
-                  iconBg    = "bg-blue-100";
-                  iconColor = "text-blue-600";
-                  borderColor = "border-blue-300";
-                  dotColor  = "bg-blue-400";
-                } else if (type.includes("purchase") || type.includes("subscribed") || type.includes("payment")) {
-                  iconComponent = <MdOutlineLocalGroceryStore className="w-4 h-4" />;
-                  iconBg    = "bg-green-100";
-                  iconColor = "text-green-600";
-                  borderColor = "border-green-300";
-                  dotColor  = "bg-green-400";
-                } else if (type.includes("created") || type.includes("create") || type.includes("added")) {
-                  iconComponent = <GrAddCircle className="w-4 h-4" />;
-                  iconBg    = "bg-orange-100";
-                  iconColor = "text-orange-600";
-                  borderColor = "border-orange-300";
-                  dotColor  = "bg-orange-400";
-                }
-
+          <div
+  className="rounded-2xl overflow-hidden 
+  bg-white/60 border border-white/70 
+  dark:bg-gray-800 dark:border-gray-700 backdrop-blur-xl"
+>
+            {dashboardActivities.length > 0 ? (
+              dashboardActivities.map((activity, i) => {
+                const { bg, color, icon } = activityIconMap(activity, i);
                 return (
-                  <div key={activity._id || i}
-                    className={`flex items-start gap-4 px-5 py-4
-                      hover:bg-gray-50
-                      transition-colors border-l-4 ${borderColor}`}>
-
-                    {/* Icon */}
-                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${iconBg} ${iconColor}`}>
-                      {iconComponent}
+                  <div
+                    key={i}
+                   className="flex items-start gap-3 px-5 py-4 border-b border-gray-200 dark:border-gray-700 transition-colors hover:bg-white/50 dark:hover:bg-gray-700"
+                  >
+                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${bg} ${color}`}>
+                      {icon}
                     </div>
-
-                    {/* Content */}
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between gap-2">
-                        <p className="text-sm font-bold text-gray-900 truncate">
-                          {activity.shortMessage || t("dashboard.activity")}
-                        </p>
-                        <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${dotColor}`} />
-                      </div>
-                      <p className="text-xs text-gray-600 mt-0.5 line-clamp-1">
-                        {activity.message || t("dashboard.noDescription")}
-                      </p>
-                      <p className="text-[10px] text-gray-400 mt-1 font-medium">
-                        {activity.relativeTime || new Date(activity.createdAt).toLocaleString()}
-                      </p>
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">{activity.shortMessage}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">{activity.message}</p>
                     </div>
+                    <span className="text-xs text-gray-400 flex-shrink-0 mt-0.5">{activity.relativeTime}</span>
                   </div>
                 );
-              })}
-            </div>
-          ) : (
-            <div className="text-center text-gray-400 py-16 text-sm">
-              {t("dashboard.noActivity")}
-            </div>
-          )}
+              })
+            ) : (
+              <div className="py-14 text-center text-gray-400 text-sm">{t("dashboard.noActivity")}</div>
+            )}
+          </div>
         </div>
-      </div>
 
+      </div>
     </div>
-  </>
-);
+  );
 }

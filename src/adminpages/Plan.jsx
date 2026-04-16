@@ -10,6 +10,7 @@ import { FiEdit } from "react-icons/fi";
 import { IoIosSearch } from "react-icons/io";
 import { FiFilter } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
+import { BsBoxSeam } from "react-icons/bs";
 
 
 
@@ -384,23 +385,18 @@ export function Plan() {
 
 
   return (
-    <div className="relative p-4 md:p-6 transition-colors duration-300">
-      
+    <div className="min-h-screen pb-12 bg-gradient-to-br from-orange-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
+       <div className="p-5 sm:p-6 lg:p-8">
   
-      <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
-        {t("planManagement")}
-      </h2>
-      <div className="flex flex-col sm:flex-row justify-between items-center mb-8 items-start sm:items-center gap-4 ">
-        <h1 className="text-xl md:text-2xl font-bold text-gray-900">{t("allPlans")}</h1>
-
-
-
-        {/* Top Right + Add Plan Button */}
-        <button
-          onClick={openAddModal}
-          className="w-full sm:w-auto bg-emerald-300 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg font-medium flex items-center gap-2 shadow-md hover:shadow-lg transition-all cursor-pointer"
-        >
-          <FaPlus className="w-3 h-3" />
+     {/* Header */}
+      <div className="flex justify-between items-start mb-8">
+        <div>
+          <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">{t("planManagement")}</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Create and manage subscription plans</p>
+        </div>
+        <button onClick={openAddModal}
+          className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-sm font-medium rounded-xl shadow-md hover:shadow-orange-200 transition-all cursor-pointer active:scale-95">
+          <span className="text-lg leading-none">+</span>
           {t("createPlan")}
         </button>
       </div>
@@ -420,14 +416,7 @@ export function Plan() {
           className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400 text-sm"
         />
 
-        <div className="h-6 w-[1px] bg-gray-200 hidden sm:block"></div>
-        <button
-          onClick={() => setIsFilterOpen(true)}
-          className="flex items-center gap-2 text-orange-500 hover:text-orange-600 transition-colors flex-shrink-0 px-1"
-        >
-
-          <FiFilter className="w-5 h-5 cursor-pointer" />
-        </button>
+       
       </div>
 
       {/* popup message including add,update,delete,edit*/}
@@ -443,10 +432,10 @@ export function Plan() {
           />
 
           {/* Modal Container */}
-          <div className="relative bg-white rounded-3xl shadow-2xl max-w-3xl w-full flex flex-col max-h-[92vh] overflow-hidden animate-in zoom-in-95 duration-200">
+          <div className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-white/70 dark:border-gray-700 max-w-3xl w-full flex flex-col max-h-[92vh] overflow-hidden animate-in zoom-in-95 duration-200">
 
             {/* 1. Modal Header (Fixed) */}
-            <div className="bg-gradient-to-r from-orange-600 to-orange-500 px-6 py-5 text-white flex justify-between items-center shrink-0">
+            <div className="bg-orange-500 px-6 py-5 text-white flex justify-between items-center shrink-0">
               <h2 className="text-xl md:text-2xl font-bold tracking-tight">
                 {isEditMode ? t("editPlan") : t("createNewPlan")}
               </h2>
@@ -462,7 +451,7 @@ export function Plan() {
             <form onSubmit={handleSubmit} className="flex flex-col overflow-hidden">
               <div className="p-6 md:p-8 overflow-y-auto space-y-6 custom-scrollbar bg-white">
 
-                {/* Laptop par 2 columns, Mobile par 1 column */}
+                {/* Laptop 2 columns, Mobile par 1 column */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                   {/* Plan Name */}
@@ -607,7 +596,7 @@ export function Plan() {
                 <button
                   type="submit"
                   disabled={isCreating || isUpdating}
-                  className="px-6 py-2.5 bg-red-600 hover:bg-red-700 text-white 
+                  className="px-6 py-2.5 bg-orange-500 hover:bg-orange-600 text-white 
   font-medium rounded-lg transition-all shadow-md cursor-pointer
   flex items-center justify-center gap-2"
                 >
@@ -636,10 +625,10 @@ export function Plan() {
       {/* delete confirmation modal */}
       {deleteConfirm && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-orange-100">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full overflow-hidden  border border-white/70 dark:border-gray-700">
             {/* Header */}
-            <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-6 py-5 border-b border-orange-200">
-              <h3 className="text-xl font-bold text-gray-900 flex items-center gap-3">
+            <div className="bg-red-500 text-white px-6 py-5 border-b border-orange-200">
+              <h3 className="text-xl font-bold text-white flex items-center gap-3">
                 <span className="text-red-600 text-2xl">!</span>
                 {t("confirmDelete")}
               </h3>
@@ -647,14 +636,14 @@ export function Plan() {
 
             {/* Body */}
             <div className="p-6 space-y-4">
-              <p className="text-gray-700">
+              <p className="text-gray-700 dark:text-gray-300">
                 {t("deleteConfirmText")} <br />
                 <span className="font-medium text-red-600">{t("deleteWarning")}</span>
               </p>
             </div>
 
             {/* Footer Buttons */}
-            <div className="flex items-center justify-end gap-3 px-6 py-5 border-t border-gray-200 bg-gray-50">
+            <div className="flex items-center justify-end gap-3 px-6 py-5 border-t border-gray-200 bg-gray-50 dark:bg-gray-700/50">
               <button
                 onClick={() => setDeleteConfirm(null)}
                 className="px-6 py-2.5 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-lg transition-all cursor-pointer"
@@ -679,157 +668,95 @@ export function Plan() {
       )}
 
       {/* Plans List */}
-      <div className="mt-12">
-        { error ? (
-          <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-6 rounded-xl max-w-3xl mx-auto">
-            <p className="font-medium">{t("errorLoadingPlans")}</p>
-            <p className="mt-1">{error}</p>
-          </div>
-        ) : plans.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-2xl border border-orange-100 shadow-sm">
-            <p className="text-xl text-gray-500 font-medium">{t("noPlans")}</p>
-            <p className="text-gray-400 mt-2">{t("createFirstPlan")}</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-            {currentPlans.map((plan) => (
-              <div
-                key={plan._id}
-                className="group bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden hover:shadow-2xl hover:border-orange-200/70 transition-all duration-300 transform hover:-translate-y-1 flex flex-col"
-              >
-                {/* Card Header */}
-                <div className="bg-gradient-to-r from-orange-50 via-orange-100 to-orange-50 px-6 py-5 text-gray-900 border-b border-orange-200/50">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-xl font-bold tracking-tight group-hover:text-orange-700 transition-colors plan-card-title">
-                      {plan.planName}
-                    </h3>
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide ${plan.isActive
-                        ? "bg-green-100 text-green-800 border border-green-200"
-                        : "bg-red-100 text-red-800 border border-red-200"
-                        }`}
-                    >
-                      {plan.isActive ? t("active") : t("inactive")}
-                    </span>
+        {error ? (
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 p-6 rounded-2xl">{error}</div>
+      ) : plans.length === 0 ? (
+        <div className="text-center py-20 bg-white/60 backdrop-blur-xl rounded-2xl border border-white/70 dark:bg-gray-800 dark:border-gray-700">
+          <p className="text-gray-500 font-medium">{t("noPlans")}</p>
+          <p className="text-gray-400 text-sm mt-1">{t("createFirstPlan")}</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+          {currentPlans.map((plan) => (
+            <div key={plan._id}
+              className="bg-white dark:bg-gray-800 rounded-2xl shadow-md border border-orange-100 dark:border-gray-700 overflow-hidden hover:-translate-y-1 transition-all duration-300 flex flex-col group">
+
+              {/* Top accent bar */}
+              <div className={`h-1 w-full ${plan.isActive ? "bg-gradient-to-r from-orange-400 to-amber-400" : "bg-gradient-to-r from-gray-300 to-gray-400"}`} />
+
+              <div className="p-5 flex-1">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="w-10 h-10 rounded-xl bg-orange-50 dark:bg-orange-900/30 flex items-center justify-center flex-shrink-0">
+                    <BsBoxSeam className="w-5 h-5 text-orange-600" />
                   </div>
-                  <p className="text-sm text-gray-600 mt-2 line-clamp-2 plan-card-desc">
-                    {plan.description || t("noDescription")}
-                  </p>
+                  <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full border ${plan.isActive ? "bg-green-50 text-green-700 border-green-200" : "bg-gray-50 text-gray-500 border-gray-200"}`}>
+                    {plan.isActive ? t("active") : t("inactive")}
+                  </span>
                 </div>
 
-                {/* Card Body */}
-                <div className="p-6 space-y-6 flex-grow cursor-pointer" onClick={() => handleViewPlan(plan._id)}>
-                  <div className="grid grid-cols-2 gap-6 text-sm">
-                    <div className="space-y-1">
-                      <p className="text-gray-500 font-medium">{t("duration")}</p>
-                      <p className="font-semibold text-gray-900">{plan.duration}</p>
-                    </div>
-                    <div className="space-y-1">
-                      <p className="text-gray-500 font-medium">{t("monthlyPrice")}</p>
-                      <p className="font-semibold text-orange-600 text-lg">
-                        ₹{plan.priceMonthly?.toLocaleString() || "0"}
-                      </p>
-                    </div>
+                <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-1 plan-card-title">{plan.planName}</h3>
+                <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 plan-card-desc mb-4">{plan.description || t("noDescription")}</p>
+
+                <div className="grid grid-cols-2 gap-3 mb-4 cursor-pointer" onClick={() => handleViewPlan(plan._id)}>
+                  <div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-3">
+                    <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wide">{t("duration")}</p>
+                    <p className="text-sm font-semibold text-gray-900 dark:text-white mt-0.5">{plan.duration}</p>
                   </div>
-
-                  {plan.planFeatures && Object.keys(plan.planFeatures).length > 0 && (
-                    <div className="pt-2 border-t border-gray-100">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        {Object.entries(plan.planFeatures).map(([key, value]) => {
-                          if (key === "prioritySupport" && !value) return null;
-                          return (
-                            <div
-                              key={key}
-                              className={`flex items-center justify-between px-3 py-1.5 rounded-md border text-xs font-medium transition-all duration-200 ${value
-                                ? "border-green-200 bg-green-50/60 hover:bg-green-100"
-                                : "border-gray-200 bg-gray-50/60 hover:bg-gray-100"
-                                }`}
-                            >
-                              <span className="capitalize truncate max-w-[130px]">
-                                {key.replace(/([A-Z])/g, " $1").trim()}
-                              </span>
-                              {value ? (
-                                <IoCheckmarkCircleOutline className="text-green-600 w-4 h-4 flex-shrink-0" />
-                              ) : (
-                                <AiOutlineCloseCircle className="text-red-500 w-4 h-4 flex-shrink-0" />
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
+                  <div className="bg-orange-50/60 dark:bg-orange-900/20 rounded-xl p-3">
+                    <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wide">{t("monthlyPrice")}</p>
+                    <p className="text-sm font-bold text-orange-600 mt-0.5">₹{plan.priceMonthly?.toLocaleString() || "0"}</p>
+                  </div>
                 </div>
 
-                {/* Edit & Delete Buttons */}
-                <div className="p-4 bg-gray-50 border-t border-gray-300 flex flex-row justify-center gap-3">
-                  <button
-                    onClick={() => handleEdit(plan._id)}
-                    className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-all shadow-sm hover:shadow-md flex items-center gap-2 cursor-pointer"
-                  >
-                    <FiEdit className="h-4 w-4" />
-                    {t("edit")}
-                  </button>
-
-                  <button
-                    onClick={() => handleDelete(plan._id)}
-                    disabled={deletingPlanId === plan._id}
-                    className={`px-5 py-2 text-white text-sm font-medium rounded-lg transition-all shadow-sm hover:shadow-md flex items-center gap-2 cursor-pointer ${deletingPlanId === plan._id
-                      ? "bg-red-400 cursor-not-allowed"
-                      : "bg-red-600 hover:bg-red-700"
-                      }`}
-                  >
-                    {deletingPlanId === plan._id ? (
-                      <>
-                        <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-white"></div>
-                        {t("deleting")}
-                      </>
-                    ) : (
-                      <>
-                        <MdDeleteOutline className="h-4 w-4" />
-                        {t("delete")}
-                      </>
-                    )}
-                  </button>
-                </div>
-
+                {/* Features */}
+                {plan.planFeatures && (
+                  <div className="space-y-1.5">
+                    {Object.entries(plan.planFeatures).map(([key, val]) => (
+                      val !== false && (
+                        <div key={key} className={`flex items-center justify-between px-3 py-1.5 rounded-lg text-xs font-medium ${val ? "bg-green-50 dark:bg-green-900/20 text-green-700" : "bg-gray-50 dark:bg-gray-700/50 text-gray-400"}`}>
+                          <span className="capitalize">{key.replace(/([A-Z])/g, " $1").trim()}</span>
+                          {val ? <IoCheckmarkCircleOutline className="w-4 h-4 flex-shrink-0" /> : <AiOutlineCloseCircle className="w-4 h-4 flex-shrink-0" />}
+                        </div>
+                      )
+                    ))}
+                  </div>
+                )}
               </div>
-            ))}
-          </div>
-        )}
-      </div>
+
+              {/* Actions */}
+              <div className="px-5 py-3 bg-gray-50 dark:bg-gray-700/50 border-t border-gray-100 dark:border-gray-700 flex gap-2">
+                <button onClick={() => handleEdit(plan._id)}
+                  className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 font-medium text-xs rounded-xl hover:bg-blue-100 transition-all cursor-pointer border border-blue-100">
+                  <FiEdit className="w-3.5 h-3.5" /> {t("edit")}
+                </button>
+                <button onClick={() => handleDelete(plan._id)} disabled={deletingPlanId === plan._id}
+                  className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-red-50 dark:bg-red-900/20 text-red-600 font-medium text-xs rounded-xl hover:bg-red-100 transition-all cursor-pointer border border-red-100 disabled:opacity-60">
+                  {deletingPlanId === plan._id ? <div className="w-3 h-3 border-2 border-red-500 border-t-transparent rounded-full animate-spin" /> : <MdDeleteOutline className="w-3.5 h-3.5" />}
+                  {deletingPlanId === plan._id ? t("deleting") : t("delete")}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/*  Pagination — after plans list*/}
-      {plans.length > 0 && (
-        <div className="flex justify-center items-center gap-2 mt-10 flex-wrap">
-          <button
-            onClick={() => setCurrentPage((prev) => prev - 1)}
-            disabled={currentPage === 1}
-            className="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50 cursor-pointer hover:bg-gray-300 transition"
-          >
-            {t("prev")}
-          </button>
-
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-2 mt-8 flex-wrap">
+          <button onClick={() => setCurrentPage(p => p-1)} disabled={currentPage === 1}
+            className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl disabled:opacity-40 cursor-pointer hover:border-orange-300 transition-all text-sm text-gray-600 dark:text-gray-300">← {t("prev")}</button>
           {Array.from({ length: totalPages }, (_, i) => (
-            <button
-              key={i}
-              onClick={() => setCurrentPage(i + 1)}
-              className={`px-4 py-2 rounded-lg ${currentPage === i + 1 ? "bg-orange-600 text-white" : "bg-gray-100 hover:bg-gray-200"
-                }`}
-            >
+            <button key={i} onClick={() => setCurrentPage(i + 1)}
+              className={`w-9 h-9 rounded-xl text-sm font-semibold transition-all ${currentPage === i+1 ? "bg-orange-500 text-white" : "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-orange-300"}`}>
               {i + 1}
             </button>
           ))}
-
-          <button
-            onClick={() => setCurrentPage((prev) => prev + 1)}
-            disabled={currentPage === totalPages}
-            className="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50 cursor-pointer hover:bg-gray-300 transition"
-          >
-            {t("next")}
-          </button>
+          <button onClick={() => setCurrentPage(p => p+1)} disabled={currentPage === totalPages}
+            className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl disabled:opacity-40 cursor-pointer hover:border-orange-300 transition-all text-sm text-gray-600 dark:text-gray-300">{t("next")} →</button>
         </div>
       )}
+    </div>
     </div>
   );
 }

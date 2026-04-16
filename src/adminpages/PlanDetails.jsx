@@ -52,8 +52,8 @@ export function PlanDetails() {
     }
 
   return (
-  <div className="p-4 md:p-6">
-
+  <div className="min-h-screen pb-12 bg-gradient-to-br from-orange-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
+  <div className="p-5 sm:p-6 lg:p-8">
     
 
       {/* Back Button + Title + Toggle */}
@@ -407,6 +407,7 @@ export function PlanDetails() {
 
   </div>
 )}
+ </div>
  </div>
 );
 }

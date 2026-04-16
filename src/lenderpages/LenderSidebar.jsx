@@ -10,10 +10,10 @@ const lenderMenuItems = [
   { label: "Dashboard", path: "/lender/dashboard", icon: <MdOutlineDashboardCustomize /> },
   { label: "Borrowers",  path: "/lender/borrowers",  icon: <FiUsers /> },
   { label: "My Loans",   path: "/lender/loans",      icon: <FiFileText /> },
-  { label: "Settings",   path: "/password",          icon: <CiSettings /> },
+  { label: "Settings",   path: "/lender/password",          icon: <CiSettings /> },
 ];
 
-export default function LenderSidebar({ isMobileOpen, setIsMobileOpen, isCollapsed }) {
+export function LenderSidebar({ isMobileOpen, setIsMobileOpen, isCollapsed }) {
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -152,3 +152,5 @@ export default function LenderSidebar({ isMobileOpen, setIsMobileOpen, isCollaps
     </>
   );
 }
+
+export default LenderSidebar;

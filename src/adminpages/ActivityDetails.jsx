@@ -11,6 +11,7 @@ import { fetchRecentActivities } from "../store/dashboardSlice";
 import { FiChevronDown } from "react-icons/fi";
 import { MdCurrencyRupee } from "react-icons/md";
 import { useTranslation } from "react-i18next";
+import { IoIosSearch } from "react-icons/io";
 
 
 // Activity style per type 
@@ -116,79 +117,68 @@ export function ActivityDetails() {
   }
 
   return (
-    <div className="p-4 md:p-6">
-      {/* Back + Title */}
-      <div className="mb-6 md:mb-8">
-        <button
-          onClick={() => navigate(-1)}
-          className="mb-2 flex items-center gap-2 text-orange-600 font-bold hover:gap-4 transition-all cursor-pointer"
-        >
-          ← {t('activityDetails.backToDashboard')}
-        </button>
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-          <div>
-              <h2 className="text-xl md:text-2xl font-bold text-gray-900">{t('activityDetails.title')}</h2>
-              <p className="text-sm text-gray-400 mt-1">{t('activityDetails.subtitle')}</p>
-          </div>
+   <div className="min-h-screen pb-12 bg-gradient-to-br from-orange-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
+    <div className="p-5 sm:p-6 lg:p-8">
+
+      <button onClick={() => navigate(-1)}
+        className="mb-6 flex items-center gap-2 text-orange-500 hover:text-orange-600 font-medium text-sm transition-all hover:gap-3 cursor-pointer">
+        ← {t('activityDetails.backToDashboard')}
+      </button>
+
+      <div className="flex justify-between items-start mb-8">
+        <div>
+          <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">{t('activityDetails.title')}</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{t('activityDetails.subtitle')}</p>
         </div>
+        <span className="text-xs text-gray-400 px-3 py-1.5 rounded-full bg-white/70 border border-gray-200 dark:bg-gray-800 dark:border-gray-700 backdrop-blur">
+          {total} activities
+        </span>
       </div>
 
-      {/* ── Stats Row ── */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-8">
-       
+        {/* Search + Filter bar */}
+     <div className="mb-6 flex items-center gap-3 bg-white rounded-xl border border-orange-100 shadow-sm p-3 max-w-4xl mx-auto">
+  
+  <IoIosSearch className="w-4 h-4 text-gray-500 flex-shrink-0" />
+
+  <input
+    type="text"
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+    placeholder={t("activityDetails.searchPlaceholder")}
+    className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400 text-sm"
+  />
+
+</div>
+
+      {/* Stats — same cards as dashboard */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {[
-          { label: t('activityDetails.stats.total'), value: total, bg: "bg-white border border-gray-200", color: "text-gray-800", icon: <FiActivity className="w-5 h-5 text-gray-400" /> },
-          { label: t('activityDetails.stats.created'), value: created, bg: "border border-orange-100", color: "text-orange-600", icon: <GrAddCircle className="w-5 h-5 text-orange-400" /> },
-          { label: t('activityDetails.stats.updated'), value: updated, bg: "bg-blue-50 border border-blue-100", color: "text-blue-600", icon: <PiNotePencilDuotone className="w-5 h-5 text-blue-400" /> },
-          { label: t('activityDetails.stats.purchase'), value: purchase, bg: "bg-green-50 border border-green-100", color: "text-green-600", icon: <MdOutlineLocalGroceryStore className="w-5 h-5 text-green-400" /> },
+          { label: t('activityDetails.stats.total'), value: total, color: "text-gray-700", bar: "bg-gray-400", icon: <FiActivity className="w-5 h-5" />, bg: "bg-gray-50" },
+          { label: t('activityDetails.stats.created'), value: created, color: "text-orange-600", bar: "bg-orange-400", icon: <GrAddCircle className="w-5 h-5" />, bg: "bg-orange-50" },
+          { label: t('activityDetails.stats.updated'), value: updated, color: "text-blue-600", bar: "bg-blue-400", icon: <PiNotePencilDuotone className="w-5 h-5" />, bg: "bg-blue-50" },
+          { label: t('activityDetails.stats.purchase'), value: purchase, color: "text-green-600", bar: "bg-green-400", icon: <MdOutlineLocalGroceryStore className="w-5 h-5" />, bg: "bg-green-50" },
         ].map((s, i) => (
-          <div key={i} className={`${s.bg} rounded-2xl p-4 flex items-center justify-between shadow-sm`}>
-            <div>
-              <p className="text-[10px] md:text-xs text-gray-500 font-bold uppercase tracking-wide">{s.label}</p>
-              <p className={`text-2xl font-black mt-0.5 ${s.color}`}>{s.value}</p>
+          <div key={i} className="relative rounded-2xl p-5 overflow-hidden transition-all duration-300 hover:-translate-y-1 bg-white shadow-md border border-orange-100 dark:bg-gray-800 dark:border-gray-700">
+            <div className="absolute inset-0 rounded-2xl pointer-events-none" style={{ background: "linear-gradient(135deg,rgba(255,255,255,0.45) 0%,transparent 60%)" }} />
+            <div className="relative flex items-center justify-between mb-3">
+              <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${s.bg} ${s.color}`}>{s.icon}</div>
             </div>
-            <div className="bg-white p-2 rounded-xl shadow-sm">{s.icon}</div>
+            <p className="text-xs text-gray-400 dark:text-gray-500 relative">{s.label}</p>
+            <p className={`text-2xl font-semibold relative ${s.color}`}>{s.value}</p>
+            <div className="flex items-end gap-0.5 h-5 mt-3 relative">
+              {[40,70,50,90,60,100,75].map((h, j) => (
+                <div key={j} className={`flex-1 rounded-sm opacity-50 ${s.bar}`} style={{ height: `${h}%` }} />
+              ))}
+            </div>
           </div>
         ))}
       </div>
 
-      {/*  Search + Filter  */}
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-3 md:p-4 mb-6 flex flex-col lg:flex-row gap-4 items-stretch lg:items-center">
-        {/* Search */}
-        <div className="relative flex-1 w-full">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-            strokeLinecap="round" strokeLinejoin="round"
-            className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-            <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
-          </svg>
-          <input
-            type="text"
-            placeholder={t('activityDetails.searchPlaceholder')}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2.5 text-sm border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-orange-100 focus:border-orange-300 transition-all"
-          />
-        </div>
+    
 
-        {/* Filter Pills */}
-        <div className="flex items-center gap-2 flex-wrap grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
-          {FILTERS.map((f) => (
-            <button
-              key={f.value}
-              onClick={() => setFilter(f.value)}
-              className={`px-3 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer border ${filter === f.value
-                  ? "bg-orange-500 text-white border-orange-500 shadow-sm"
-                  : "bg-white text-gray-500 border-gray-200 hover:border-orange-300 hover:text-orange-600"
-                }`}
-            >
-              {f.label}
-            </button>
-          ))}
-        </div>
-      </div>
 
       {/* ── Activity List ── */}
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+      <div className="bg-white/60 dark:bg-gray-800 backdrop-blur-xl rounded-2xl border border-white/70 dark:border-gray-700 overflow-hidden">
 
         {/* Table header */}
         <div className="px-6 py-3.5 border-b border-gray-100 bg-gray-50 grid grid-cols-12 gap-4">
@@ -388,6 +378,7 @@ export function ActivityDetails() {
         )}
       </div>
 
+    </div>
     </div>
 
   );

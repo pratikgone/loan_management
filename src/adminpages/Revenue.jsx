@@ -1,3 +1,5 @@
+
+
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchRevenue } from '../store/revenueSlice';
@@ -23,12 +25,16 @@ import {
 } from "recharts";
 import { exportRevenuePDF } from '../utils/exportRevenuePDF';
 import { useTranslation } from 'react-i18next';
+import { useDarkMode } from '../components/useDarkMode';
 
 export function Revenue() {
   const dispatch = useDispatch();
   const { revenueData, isLoading, error } = useSelector((state) => state.revenue);
 
   const [selectedCard, setSelectedCard] = useState(null);
+
+    const { isDark } = useDarkMode();
+    
 
   //filter modal
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
@@ -198,62 +204,82 @@ export function Revenue() {
   }
 
   return (
-    <div className="p-4 md:p-6 lg:p-8">
+    <div   className="min-h-screen pb-12 
+  bg-gradient-to-br from-orange-50 via-white to-green-50 
+  dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
+    <div className="p-5 sm:p-6 lg:p-8 w-full">
 
       {/* Title + Toggle */}
-      <div className="flex items-center w-full sm:w-auto gap-1 justify-between gap-4 mb-6">
-        <h2 className="text-xl md:text-2xl mb-6 font-bold text-gray-900">{t("revenueReport")}</h2>
+     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
 
-        <div className='flex items-center gap-3'>
-          <button  onClick={() =>
+  {/* LEFT SIDE (Title) */}
+  <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white tracking-tight">
+    {t("revenueReport")}
+  </h2>
+
+  {/* RIGHT SIDE (Buttons) */}
+  <div className="flex items-center gap-3 flex-wrap">
+
+    {/* Export PDF */}
+    <button
+      onClick={() =>
         exportRevenuePDF({ summary, plans, monthly, yearly, purchases, groupBy })
-      } className='flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600
-        text-white text-sm font-semibold rounded-xl shadow-sm
-        transition-all cursor-pointer active:scale-95'>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+      }
+      className="flex items-center gap-2 px-4 py-2 
+      bg-orange-500 hover:bg-orange-600
+      text-white text-sm font-semibold rounded-xl 
+      shadow-sm transition-all cursor-pointer active:scale-95"
+    >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
         strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
         <polyline points="7 10 12 15 17 10"/>
         <line x1="12" y1="15" x2="12" y2="3"/>
-        </svg>
-           <span className=''>{t("exportPDF")}</span> 
-          </button>
-        </div>
+      </svg>
+      <span>{t("exportPDF")}</span>
+    </button>
 
-        <div className="flex items-center gap-1.5 bg-white border border-gray-200 rounded-xl p-1 shadow-sm">
-          <button
-            onClick={() => setViewMode("card")}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition-all cursor-pointer ${viewMode === "card"
-              ? "bg-orange-500 text-white shadow-sm"
-              : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
-              }`}
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-              strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-              <rect x="3" y="3" width="7" height="7" rx="1" />
-              <rect x="14" y="3" width="7" height="7" rx="1" />
-              <rect x="3" y="14" width="7" height="7" rx="1" />
-              <rect x="14" y="14" width="7" height="7" rx="1" />
-            </svg>
-            <span className="hidden sm:inline">{t("cards")}</span>
-          </button>
-          <button
-            onClick={() => setViewMode("chart")}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition-all cursor-pointer ${viewMode === "chart"
-              ? "bg-orange-500 text-white shadow-sm"
-              : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
-              }`}
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-              strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-              <rect x="3" y="3" width="4" height="18" rx="1" />
-              <rect x="10" y="8" width="4" height="13" rx="1" />
-              <rect x="17" y="5" width="4" height="16" rx="1" />
-            </svg>
-            <span className="hidden sm:inline">{t("charts")}</span>
-          </button>
-        </div>
-      </div>
+    {/* Toggle */}
+    <div className="flex items-center gap-1.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-1 shadow-sm">
+      
+      <button
+        onClick={() => setViewMode("card")}
+        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
+          viewMode === "card"
+            ? "bg-orange-500 text-white shadow-sm"
+            : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
+        }`}
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+          strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+          <rect x="3" y="3" width="7" height="7" rx="1" />
+          <rect x="14" y="3" width="7" height="7" rx="1" />
+          <rect x="3" y="14" width="7" height="7" rx="1" />
+          <rect x="14" y="14" width="7" height="7" rx="1" />
+        </svg>
+        <span className="hidden sm:inline">{t("cards")}</span>
+      </button>
+
+      <button
+        onClick={() => setViewMode("chart")}
+        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
+          viewMode === "chart"
+            ? "bg-orange-500 text-white shadow-sm"
+            : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
+        }`}
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+          strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+          <rect x="3" y="3" width="4" height="18" rx="1" />
+          <rect x="10" y="8" width="4" height="13" rx="1" />
+          <rect x="17" y="5" width="4" height="16" rx="1" />
+        </svg>
+        <span className="hidden sm:inline">{t("charts")}</span>
+      </button>
+
+    </div>
+  </div>
+</div>
 
 
       {/* Search Bar */}
@@ -275,6 +301,7 @@ export function Revenue() {
         >
 
           <FiFilter className="w-5 h-5 cursor-pointer" />
+           <span className="text-xs font-medium hidden sm:inline">Filter</span>
         </button>
       </div>
 
@@ -300,7 +327,7 @@ export function Revenue() {
       {/* Summary Modal */}
       {selectedCard && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden border border-gray-100 dark:border-gray-700">
             <div className="bg-gradient-to-r from-gray-50 to-white px-6 py-5 border-b border-gray-200 flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <div className={`p-4 rounded-lg ${selectedCard.bg}`}>{selectedCard.icon}</div>
@@ -320,17 +347,17 @@ export function Revenue() {
       {/* Filter Modal */}
       {isFilterModalOpen && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden border border-gray-100">
-            <div className="flex-shrink-0 flex items-center justify-between px-6 py-5 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
-              <h3 className="text-2xl font-bold text-gray-900 selected-card-title">{t("filters")}</h3>
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden border border-gray-100">
+            <div className="flex-shrink-0 flex items-center justify-between px-6 py-5 border-b border-gray-200 bg-gradient-to-r from-orange-500 to-orange-400">
+              <h3 className="text-2xl font-bold text-white">{t("filters")}</h3>
               <button onClick={() => setIsFilterModalOpen(false)}
-                className="text-gray-500 hover:text-orange-600 text-3xl font-bold transition-colors cursor-pointer">×</button>
+                className="text-white hover:text-orange-600 text-3xl font-bold transition-colors cursor-pointer">×</button>
             </div>
             <div className="flex-grow overflow-y-auto p-6 space-y-6">
-              <h4 className="text-lg font-bold text-gray-900 flex items-center gap-3">
+              <h4 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-3">
                 <CiFilter className="w-6 h-6 text-orange-600" /> {t("groupBy")}
               </h4>
-              <div className="border-t border-gray-200 my-4"></div>
+              <div className="border-t border-orange-200 dark:border-orange-700 my-4"></div>
               <div className="space-y-4">
                 {[
                   { value: "all", label: t("allData") },
@@ -352,16 +379,16 @@ export function Revenue() {
                 ))}
               </div>
             </div>
-            <div className="flex-shrink-0 flex flex-row items-center justify-center sm:justify-between gap-3 px-4 sm:px-6 py-4 sm:py-5 border-t border-gray-200 bg-gray-50/70">
+            <div className="flex-shrink-0 flex flex-row items-center justify-center sm:justify-between gap-3 px-4 sm:px-6 py-4 sm:py-5 border-t border-gray-200 bg-orange-50/50 dark:bg-gray-800">
               <button
                 onClick={() => { setTempGroupBy("all"); setIsFilterModalOpen(false); }}
-                className="flex-1 max-w-[130px] flex items-center justify-center gap-2 px-3 sm:px-7 py-2.5 sm:py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg transition-all text-xs sm:text-sm font-medium cursor-pointer">
+                className="flex-1 max-w-[130px] flex items-center justify-center gap-2 px-3 sm:px-7 py-2.5 sm:py-3 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 text-gray-800 rounded-lg transition-all text-xs sm:text-sm font-medium cursor-pointer">
                 <IoIosCloseCircleOutline className="w-5 h-5 flex-shrink-0" />
                 <span className="whitespace-nowrap">{t("clearAll")}</span>
               </button>
               <button
                 onClick={() => { setGroupBy(tempGroupBy); setIsFilterModalOpen(false); }}
-                className="flex-[2] max-w-[200px] flex items-center justify-center gap-2 px-4 sm:px-12 py-2.5 sm:py-3 bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white rounded-lg transition-all text-xs sm:text-sm font-medium cursor-pointer">
+                className="flex-[2] max-w-[200px] flex items-center justify-center gap-2 px-4 sm:px-12 py-2.5 sm:py-3 bg-orange-500 hover:bg-orange-600 hover:from-orange-500 hover:to-orange-600 text-white rounded-lg transition-all text-xs sm:text-sm font-medium cursor-pointer">
                 <span className="whitespace-nowrap">{t("applyFilters")}</span>
                 <FiCheck className="w-5 h-5 flex-shrink-0" />
               </button>
@@ -373,196 +400,183 @@ export function Revenue() {
 
       {/*  CARD VIEW   */}
 
-      {viewMode === "card" && (
-        <>
-          {/* Revenue by Plan — Cards */}
-          {showByPlan && (
-            <div className="mb-10">
-              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">{t("revenueByPlan")} {searchQuery && `(${filteredData.plans.length} results)`}</h2>
-              <div className="grid grid-cols-1 gap-4 md:gap-6">
-                {filteredData.plans.length > 0 ? filteredData.plans.map((plan, index) => (
-                  <div key={index} className="bg-white rounded-2xl shadow-sm border border-gray-200 p-5 md:p-7 hover:border-orange-300 transition-all">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                      <div>
-                        <div className="flex items-center gap-3 mb-2">
-                          <BsBoxSeam className="w-4 h-4 text-orange-600 flex-shrink-0" />
-                          <h3 className="text-lg font-bold text-gray-900">{plan.planName}</h3>
-                        </div>
-                        <span className="text-sm text-gray-500 font-medium">
-                          ₹{plan.priceMonthly?.toLocaleString() || "0"} / {plan.duration}
-                        </span>
-                      </div>
-                      <p className="text-2xl font-black text-green-600">₹{plan.totalRevenue?.toLocaleString() || "0"}</p>
-                    </div>
-                    <div className="mt-6">
-                      <div className="w-full bg-gray-200 rounded-full h-2.5">
-                        <div className="bg-gradient-to-r from-orange-400 to-orange-500 h-2.5 rounded-full transition-all duration-500"
-                          style={{ width: `${getProgress(plan.totalRevenue)}%` }} />
-                      </div>
-                      <p className="text-xs text-gray-500 mt-1 text-right">{getProgress(plan.totalRevenue)}% of total revenue</p>
-                    </div>
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6 py-4 border-y border-gray-50">
-                      {[
-                        { label: "Purchases", value: plan.totalPurchases, color: "text-gray-900" },
-                        { label: "Active", value: plan.activePurchases, color: "text-green-600" },
-                        { label: "Expired", value: plan.expiredPurchases, color: "text-red-500" },
-                        { label: "Avg.", value: `₹${plan.averageRevenuePerPurchase?.toLocaleString() || "0"}`, color: "text-gray-900" },
-                      ].map((s, i) => (
-                        <div key={i} className="text-center">
-                          <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold">{s.label}</p>
-                          <p className={`text-base font-bold ${s.color}`}>{s.value}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )) : <div className="text-center text-gray-500 py-10">{t("noPlanRevenue")}</div>}
+      {/* --- CARD VIEW --- */}
+{/* --- CARD VIEW --- */}
+{viewMode === "card" && (
+  <div className="space-y-10">
+    
+    {/* 1. Revenue by Plan Section */}
+    {showByPlan && (
+      <div>
+        <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+          <BsBoxSeam className="text-orange-500" /> {t("revenueByPlan")}
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {filteredData.plans.map((plan, index) => (
+            <div key={index} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all border-l-4 border-l-orange-500">
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <h3 className="font-bold text-gray-800 text-lg">{plan.planName}</h3>
+                  <p className="text-sm text-gray-500">₹{plan.priceMonthly}/mo • {plan.duration}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-2xl font-black text-gray-900">₹{plan.totalRevenue?.toLocaleString()}</p>
+                  <p className="text-[10px] font-bold text-green-600 uppercase tracking-wider">{plan.totalPurchases} Purchases</p>
+                </div>
+              </div>
+              
+              <div className="space-y-1">
+                <div className="w-full bg-gray-100 rounded-full h-2">
+                  <div className="bg-orange-500 h-2 rounded-full transition-all duration-700" 
+                    style={{ width: `${getProgress(plan.totalRevenue)}%` }} />
+                </div>
+                <p className="text-[10px] text-gray-400 text-right font-medium">{getProgress(plan.totalRevenue)}% of total share</p>
+              </div>
+
+              <div className="grid grid-cols-3 gap-2 mt-4 pt-4 border-t border-gray-50">
+                <div className="text-center">
+                  <p className="text-[10px] text-gray-400 uppercase font-bold">Active</p>
+                  <p className="text-sm font-bold text-green-600">{plan.activePurchases}</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-[10px] text-gray-400 uppercase font-bold">Expired</p>
+                  <p className="text-sm font-bold text-red-500">{plan.expiredPurchases}</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-[10px] text-gray-400 uppercase font-bold">Avg Rev</p>
+                  <p className="text-sm font-bold text-gray-700">₹{Math.round(plan.averageRevenuePerPurchase)}</p>
+                </div>
               </div>
             </div>
-          )}
+          ))}
+        </div>
+      </div>
+    )}
 
-          {/* Monthly Revenue — Cards */}
-          {showByMonth && (
-            <div className="mb-10">
-              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">{t("monthlyRevenue")} {searchQuery && `(${filteredData.monthly.length} results)`}</h2>
-              <div className="grid grid-cols-1 gap-4 md:gap-6">
-                {filteredData.monthly.length > 0 ? filteredData.monthly.map((month, index) => (
-                  <div key={index} className="bg-white rounded-xl shadow-sm p-5 md:p-6 border border-gray-200 hover:shadow-md hover:border-orange-300 transition-all">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-lg md:text-xl font-bold text-gray-800">{month.monthName}</h3>
-                      <p className="text-xl md:text-2xl font-bold text-green-600">₹{month.totalRevenue.toLocaleString()}</p>
-                    </div>
-                    <div className="mt-4">
-                      <div className="w-full bg-gray-200 rounded-full h-2.5">
-                        <div className="bg-gradient-to-r from-orange-400 to-orange-500 h-2.5 rounded-full transition-all duration-500"
-                          style={{ width: `${getMonthlyProgress(month.totalRevenue)}%` }} />
-                      </div>
-                      <p className="text-xs text-gray-500 mt-1 text-right">{getMonthlyProgress(month.totalRevenue)}% of total revenue</p>
-                    </div>
-                    <p className="text-sm text-gray-600 font-bold flex items-center gap-2 mt-4">
-                      <MdOutlineLocalGroceryStore className="w-5 h-5 text-blue-600" />
-                      {month.totalPurchases} Purchases
-                    </p>
-                  </div>
-                )) : <div className="text-center text-gray-500 py-10">{t("noMonthlyRevenue")}</div>}
+    {/* 2. Revenue by Month Section (Same Design) */}
+    {showByMonth && (
+      <div>
+        <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+          <CiCalendar className="text-orange-500" /> {t("revenueByMonth")}
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {filteredData.monthly.map((month, index) => (
+            <div key={index} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all border-l-4 border-l-orange-500">
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <h3 className="font-bold text-gray-800 text-lg">{month.monthName}</h3>
+                  <p className="text-sm text-gray-500">Year {month.year}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-2xl font-black text-gray-900">₹{month.totalRevenue?.toLocaleString()}</p>
+                  <p className="text-[10px] font-bold text-green-600 uppercase tracking-wider">{month.totalPurchases} Purchases</p>
+                </div>
+              </div>
+              
+              <div className="space-y-1">
+                <div className="w-full bg-gray-100 rounded-full h-2">
+                  <div className="bg-orange-500 h-2 rounded-full transition-all duration-700" 
+                    style={{ width: `${getMonthlyProgress(month.totalRevenue)}%` }} />
+                </div>
+                <p className="text-[10px] text-gray-400 text-right font-medium">{getMonthlyProgress(month.totalRevenue)}% of monthly share</p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-gray-50">
+                <div className="text-center border-r border-gray-100">
+                  <p className="text-[10px] text-gray-400 uppercase font-bold">Total Sales</p>
+                  <p className="text-sm font-bold text-orange-600">{month.totalPurchases}</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-[10px] text-gray-400 uppercase font-bold">Avg Per Day</p>
+                  <p className="text-sm font-bold text-gray-700">₹{Math.round(month.totalRevenue / 30)}</p>
+                </div>
               </div>
             </div>
-          )}
+          ))}
+        </div>
+      </div>
+    )}
 
-          {/* Yearly Revenue — Cards */}
-          {showByYear && (
-            <div className="mb-10">
-              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">{t("yearlyRevenue")} {searchQuery && `(${filteredData.yearly.length} results)`}</h2>
-              <div className="grid grid-cols-1 gap-4 md:gap-6">
-                {filteredData.yearly.length > 0 ? filteredData.yearly.map((year, index) => (
-                  <div key={index} className="bg-white rounded-xl shadow-sm p-5 md:p-6 border border-gray-200 hover:shadow-md hover:border-orange-300 transition-all">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-lg md:text-xl font-bold text-gray-800">{year.year}</h3>
-                      <p className="text-2xl font-bold text-green-600">₹{year.totalRevenue.toLocaleString()}</p>
-                    </div>
-                    <div className="mt-4">
-                      <div className="w-full bg-gray-200 rounded-full h-2.5">
-                        <div className="bg-gradient-to-r from-orange-400 to-orange-500 h-2.5 rounded-full transition-all duration-500"
-                          style={{ width: `${getYearlyProgress(year.totalRevenue)}%` }} />
-                      </div>
-                      <p className="text-xs text-gray-500 mt-1 text-right">{getYearlyProgress(year.totalRevenue)}% of total revenue</p>
-                    </div>
-                    <p className="text-sm text-gray-600 font-medium flex items-center gap-2 mt-4">
-                      <MdOutlineLocalGroceryStore className="w-5 h-5 text-blue-600" />
-                      {year.totalPurchases} Purchases
-                    </p>
-                  </div>
-                )) : <div className="text-center text-gray-500 py-10">No yearly revenue data available</div>}
+    {/* 3. Revenue by Year Section (Same Design) */}
+    {showByYear && (
+      <div>
+        <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+          <FiCalendar className="text-orange-500" /> {t("revenueByYear")}
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {filteredData.yearly.map((year, index) => (
+            <div key={index} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all border-l-4 border-l-orange-500">
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <h3 className="font-bold text-gray-800 text-lg">Financial Year {year.year}</h3>
+                  <p className="text-sm text-gray-500">Annual Summary</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-2xl font-black text-gray-900">₹{year.totalRevenue?.toLocaleString()}</p>
+                  <p className="text-[10px] font-bold text-green-600 uppercase tracking-wider">{year.totalPurchases} Total Sales</p>
+                </div>
+              </div>
+              
+              <div className="space-y-1">
+                <div className="w-full bg-gray-100 rounded-full h-2">
+                  <div className="bg-orange-500 h-2 rounded-full transition-all duration-700" 
+                    style={{ width: `${getYearlyProgress(year.totalRevenue)}%` }} />
+                </div>
+                <p className="text-[10px] text-gray-400 text-right font-medium">{getYearlyProgress(year.totalRevenue)}% of total share</p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-gray-50">
+                <div className="text-center border-r border-gray-100">
+                  <p className="text-[10px] text-gray-400 uppercase font-bold">Yearly Sales</p>
+                  <p className="text-sm font-bold text-orange-600">{year.totalPurchases}</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-[10px] text-gray-400 uppercase font-bold">Monthly Avg</p>
+                  <p className="text-sm font-bold text-gray-700">₹{Math.round(year.totalRevenue / 12).toLocaleString()}</p>
+                </div>
               </div>
             </div>
-          )}
+          ))}
+        </div>
+      </div>
+    )}
 
-          {/* Recent Purchases — Cards */}
-          {groupBy === "all" && (
-            <div className="mb-10">
-              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">{t("recentPurchases")}</h2>
-              <div className="space-y-4">
-                {paginatedPurchases.length > 0 ? paginatedPurchases.map((purchase, index) => (
-                  <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:border-orange-300 hover:shadow-md transition-all">
-                    <div className="p-5 md:p-6 flex flex-col lg:flex-row justify-between gap-6">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-4 mb-4">
-                          <div className={`w-3 h-3 rounded-full ${purchase.remainingDays > 0 ? "bg-green-500 animate-pulse" : "bg-gray-500 animate-pulse"}`} />
-                          <h3 className="font-bold text-gray-900 text-lg">{purchase.planName}</h3>
-                        </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                          <div className="bg-gray-50 p-3 rounded-lg flex items-center gap-3">
-                            <FiCalendar className="w-5 h-5 text-orange-600" />
-                            <div>
-                              <p className="text-[10px] uppercase text-gray-400 font-bold">Purchase Date</p>
-                              <p className="text-xs font-bold">{formatDate(purchase.purchaseDate)}</p>
-                            </div>
-                          </div>
-                          <div className="bg-gray-50 p-3 rounded-lg flex items-center gap-3">
-                            <CiClock2 className="w-5 h-5 text-orange-600" />
-                            <div>
-                              <p className="text-[10px] uppercase text-gray-400 font-bold">Expires On</p>
-                              <p className="text-xs font-bold">{formatDate(purchase.expiryDate)}</p>
-                            </div>
-                          </div>
-                          <div className={`p-3 rounded-lg flex items-center gap-3 ${purchase.remainingDays > 30 ? "bg-green-50" :
-                            purchase.remainingDays > 0 ? "bg-yellow-50" : "bg-red-50"
-                            }`}>
-                            <CiCalendar className="w-5 h-5 text-orange-600" />
-                            <div>
-                              <p className="text-[10px] uppercase text-gray-400 font-bold">Status</p>
-                              <p className={`text-xs font-bold ${purchase.remainingDays > 30 ? "text-green-700" :
-                                purchase.remainingDays > 0 ? "text-yellow-700" : "text-red-700"
-                                }`}>
-                                {purchase.remainingDays > 0 ? `${purchase.remainingDays} days remaining` : "Expired"}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="lg:border-l border-gray-300 lg:pl-8 flex items-center justify-between lg:justify-end lg:min-w-[150px]">
-                        <p className="text-2xl font-black text-green-600">₹{purchase.price?.toLocaleString() || "0"}</p>
-                      </div>
-                    </div>
-                  </div>
-                )) : <div className="text-center text-gray-500 py-10">{t("noPurchases")}</div>}
+    {/* Recent Purchases Section (Aapka existing code) */}
+    {groupBy === "all" && (
+      <div>
+        <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+          <FiActivity className="text-blue-500" /> {t("recentPurchases")}
+        </h2>
+        <div className="grid grid-cols-1 gap-4">
+          {paginatedPurchases.map((purchase, index) => (
+            <div key={index} className="bg-white rounded-xl border border-gray-100 p-4 flex flex-col sm:flex-row items-center justify-between hover:bg-orange-50/30 transition-colors">
+              <div className="flex items-center gap-4 w-full sm:w-auto">
+                <div className={`p-3 rounded-lg ${purchase.remainingDays > 0 ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
+                  <FiCheckCircle className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-gray-800">{purchase.userEmail || "Customer"}</h4>
+                  <p className="text-xs text-gray-500 font-medium">{purchase.planName} • {formatDate(purchase.purchaseDate)}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-8 mt-4 sm:mt-0 w-full sm:w-auto justify-between">
+                <div className="text-center sm:text-right">
+                  <p className="text-[10px] text-gray-400 uppercase font-bold">Status</p>
+                  <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${purchase.remainingDays > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                    {purchase.remainingDays > 0 ? `${purchase.remainingDays} Days Left` : "Expired"}
+                  </span>
+                </div>
+                <div className="text-right">
+                  <p className="text-lg font-black text-gray-900">₹{purchase.price}</p>
+                </div>
               </div>
             </div>
-
-          )}
-          {totalPages > 1 && (
-            <div className="flex justify-center items-center gap-2 mt-10 flex-wrap">
-              <button
-                onClick={() => setCurrentPage((prev) => prev - 1)}
-                disabled={currentPage === 1}
-                className="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50 cursor-pointer hover:bg-gray-300 transition"
-              >
-                Prev
-              </button>
-
-              {Array.from({ length: totalPages }, (_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setCurrentPage(i + 1)}
-                  className={`px-4 py-2 rounded-lg transition-all ${currentPage === i + 1
-                      ? "bg-orange-600 text-white shadow-sm"
-                      : "bg-gray-100 hover:bg-gray-200"
-                    }`}
-                >
-                  {i + 1}
-                </button>
-              ))}
-
-              <button
-                onClick={() => setCurrentPage((prev) => prev + 1)}
-                disabled={currentPage === totalPages}
-                className="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50 cursor-pointer hover:bg-gray-300 transition"
-              >
-                Next
-              </button>
-            </div>
-          )}
-        </>
-      )}
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+)}
 
 
 
@@ -975,6 +989,7 @@ export function Revenue() {
         </>
       )}
 
+    </div>
     </div>
   );
 }

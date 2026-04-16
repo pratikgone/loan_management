@@ -62,7 +62,8 @@ export default function LenderLoans() {
   );
 
   return (
-    <div className="p-4 md:p-6 bg-gray-50 min-h-screen">
+    <div className="min-h-screen pb-12 bg-gradient-to-br from-orange-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
+      <div className="p-5 sm:p-6 lg:p-8">
       <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">My Loans</h2>
 
       {/* Search + Filter */}
@@ -174,6 +175,7 @@ export default function LenderLoans() {
           </button>
         </div>
       )}
+    </div>
     </div>
   );
 }

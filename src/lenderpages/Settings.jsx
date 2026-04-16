@@ -112,7 +112,7 @@ function useToast() {
   return { toasts, showToast, removeToast };
 }
 
-export function ChangePassword() {
+export function Settings() {
 
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
@@ -180,10 +180,7 @@ const handleSubmit = async (e) => {
 
   return (
     <>
-      <div className="min-h-screen pb-12 
-  bg-gradient-to-br from-orange-50 via-white to-green-50 
-  dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
-    <div className="p-5 sm:p-6 lg:p-8 w-full">
+      <div className="p-4 sm:p-6">
         {/* Toast */}
         <ToastContainer toasts={toasts} onRemove={removeToast} t={t} />
 
@@ -362,7 +359,6 @@ const handleSubmit = async (e) => {
             </div>
           </div>
         </div>
-      </div>
       </div>
     </>
   );

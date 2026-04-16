@@ -1,10 +1,9 @@
 import { Outlet } from "react-router-dom";
 import { useState, useEffect } from "react";
-import Navbar from "../components/Navbar";
-import Sidebar from "../components/Sidebar";
+import LenderNavbar from "../lenderpages/LenderNavbar";
+import LenderSidebar from "../lenderpages/LenderSidebar";
 
-
-export default function AdminLayout() {
+const LenderLayout = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
@@ -15,8 +14,11 @@ export default function AdminLayout() {
         setIsCollapsed(false);
       }
     };
+
     handleResize();
+
     window.addEventListener("resize", handleResize);
+
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -29,25 +31,30 @@ export default function AdminLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-  
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
 
-      <Sidebar
+      <LenderSidebar
         isMobileOpen={isMobileOpen}
         setIsMobileOpen={setIsMobileOpen}
         isCollapsed={isCollapsed}
       />
 
-      <div className={`transition-all duration-300 ${isCollapsed ? "lg:ml-20" : "lg:ml-72"}`}>
-        <Navbar 
-          toggleSidebar={toggleSidebar} 
-          isCollapsed={isCollapsed} 
+      <div
+        className={`transition-all duration-300 ${
+          isCollapsed ? "lg:ml-20" : "lg:ml-72"
+        }`}
+      >
+        <LenderNavbar
+          toggleSidebar={toggleSidebar}
+          isCollapsed={isCollapsed}
         />
 
-        <main className="mt-16 min-h-[calc(100vh-64px)]">
+        <main className="mt-16 min-h-[calc(100vh-64px)] p-6">
           <Outlet />
         </main>
       </div>
     </div>
   );
-}
+};
+
+export default LenderLayout;

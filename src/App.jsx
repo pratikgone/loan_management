@@ -20,11 +20,15 @@ import ScrollToTop from './layouts/ScrollToTop'
 import { ActivityDetails } from './adminpages/ActivityDetails'
 import { Home } from './pages/Home'          // ← new
 import PublicLayout from './layouts/PublicLayout'  // ← new
+import LenderLayout from "./layouts/LenderLayout"
 import { LenderBorrowers } from './borrowerpages/LenderBorrowers'
 import { BorrowerDetails } from './borrowerpages/BorrowerDetails'
-import LenderDashboard from './lenderpages/LenderDashboard'
+import {LenderDashboard} from "./lenderpages/LenderDashboard"
 import LenderLoans from './lenderpages/LenderLoans'
 import LenderBorrowersList from './lenderpages/LenderBorrowerList'
+import { Settings } from './lenderpages/Settings'
+
+
 
 
 function App() {
@@ -65,9 +69,14 @@ function App() {
             <Route path='/lenders/:id/borrowers' element={<LenderBorrowers />}/>
             <Route path='/lenders/:id/borrowers/:borrowerId/details' element={<BorrowerDetails/>} />
 
-             <Route path="/lender/dashboard" element={<LenderDashboard />} />
+            
+          </Route>
+          <Route element={<LenderLayout />}>
+           <Route path="/lender/dashboard" element={<LenderDashboard />} />
              <Route path="/lender/borrowers" element={<LenderBorrowersList />} />
              <Route path="/lender/loans" element={<LenderLoans />} />
+             <Route path='/lender/password' element={<Settings />}/>
+
           </Route>
         </Route>
 

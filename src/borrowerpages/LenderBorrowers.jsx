@@ -6,6 +6,7 @@ import { IoIosSearch } from "react-icons/io";
 import { FiDollarSign } from "react-icons/fi";
 import { FiUsers } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
+import { FiFilter } from "react-icons/fi";
 
 export function LenderBorrowers() {
   const { id: lenderId } = useParams();
@@ -19,6 +20,9 @@ export function LenderBorrowers() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+
 
   useEffect(() => {
     dispatch(fetchBorrowersByLender({ lenderId, page: currentPage, search, status: statusFilter }));
@@ -36,8 +40,8 @@ export function LenderBorrowers() {
   );
 
   return (
-    <div className="p-4 md:p-8">
-
+    <div className="min-h-screen pb-12 bg-gradient-to-br from-orange-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
+    <div className="p-5 sm:p-6 lg:p-8">
       {/* Back */}
       <button onClick={() => navigate(-1)}
         className="mb-4 flex items-center gap-2 text-orange-600 font-bold hover:gap-4 transition-all cursor-pointer">
@@ -53,6 +57,29 @@ export function LenderBorrowers() {
           </p>
         )}
       </div>
+
+           {/* Search + Filter */}
+     <div className="mb-6 flex items-center gap-3 bg-white rounded-xl border border-orange-100 shadow-sm p-3 max-w-4xl mx-auto">
+  <IoIosSearch className="w-4 h-4 text-gray-500 flex-shrink-0" />
+
+  <input
+    type="text"
+    value={search}
+    onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
+    placeholder={t("borrowersPage.searchPlaceholder")}
+    className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400 text-sm"
+  />
+
+  <div className="h-5 w-px bg-gray-200 dark:bg-gray-600" />
+
+  <button
+    onClick={() => setIsFilterOpen(true)}
+    className="flex items-center gap-2 text-orange-500 hover:text-orange-600 transition-colors px-2"
+  >
+    <FiFilter className="w-4 h-4" />
+    <span className="text-xs font-medium hidden sm:inline">Filter</span>
+  </button>
+</div>
 
       {/* Summary stats */}
       {summary && (
@@ -71,29 +98,93 @@ export function LenderBorrowers() {
         </div>
       )}
 
-      {/* Search + Filter */}
-       <div className="mb-6 flex items-center gap-3 bg-white rounded-xl border border-orange-100 shadow-sm p-3 max-w-4xl mx-auto">     
-          <IoIosSearch className="w-4 h-4 text-gray-500 flex-shrink-0" />
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
-            placeholder={t("borrowersPage.searchPlaceholder")}
-            className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400 text-sm"
-          />
-     
-        <select
-          value={statusFilter}
-          onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
-          className="px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm text-gray-700 outline-none cursor-pointer">
-          <option value="">{t("borrowersPage.allStatus")}</option>
-          <option value="pending">{t("borrowersPage.pending")}</option>
-          <option value="part paid">{t("borrowersPage.partPaid")}</option>
-          <option value="paid">{t("borrowersPage.paid")}</option>
-          <option value="overdue">{t("borrowersPage.overdue")}</option>
-        </select>
-     
+ 
+
+{isFilterOpen && (
+  <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden border border-gray-100 dark:border-gray-700">
+
+      {/* Header */}
+      <div className="flex-shrink-0 flex items-center justify-between px-6 py-5 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-orange-500 to-orange-400">
+        <h3 className="text-2xl font-bold text-white">
+          {t("filters")}
+        </h3>
+
+        <button
+          onClick={() => setIsFilterOpen(false)}
+          className="text-white text-3xl font-bold cursor-pointer"
+        >
+          ×
+        </button>
       </div>
+
+      {/* Body */}
+      <div className="flex-grow overflow-y-auto p-6 space-y-6">
+
+        <h4 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-3">
+          <FiFilter className="w-6 h-6 text-orange-600" />
+          {t("borrowersPage.allStatus")}
+        </h4>
+
+        <div className="border-t border-orange-200 dark:border-orange-700 my-4"></div>
+
+        <div className="space-y-4">
+          {[
+            { value: "", label: "All" },
+            { value: "pending", label: t("borrowersPage.pending") },
+            { value: "part paid", label: t("borrowersPage.partPaid") },
+            { value: "paid", label: t("borrowersPage.paid") },
+            { value: "overdue", label: t("borrowersPage.overdue") },
+          ].map((opt) => (
+            <label
+              key={opt.value}
+              className={`flex items-center gap-4 p-4 rounded-xl border cursor-pointer transition-all ${
+                statusFilter === opt.value
+                  ? "border-orange-500 bg-orange-50/70 dark:bg-orange-900/20"
+                  : "border-gray-200 dark:border-gray-600 hover:border-orange-300"
+              }`}
+            >
+              <input
+                type="radio"
+                name="status"
+                value={opt.value}
+                checked={statusFilter === opt.value}
+                onChange={() => setStatusFilter(opt.value)}
+                className="w-5 h-5 accent-orange-600"
+              />
+
+              <span className="text-base font-medium text-gray-800 dark:text-gray-200">
+                {opt.label}
+              </span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="flex gap-3 px-6 py-5 border-t border-gray-200 dark:border-gray-700">
+
+        <button
+          onClick={() => {
+            setStatusFilter("");
+            setIsFilterOpen(false);
+          }}
+          className="flex-1 bg-gray-200 dark:bg-gray-700 py-2 rounded-lg"
+        >
+          Clear
+        </button>
+
+        <button
+          onClick={() => setIsFilterOpen(false)}
+          className="flex-1 bg-orange-500 text-white py-2 rounded-lg"
+        >
+          Apply
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
 
       {/* Borrowers list */}
       {borrowersError ? (
@@ -182,6 +273,7 @@ export function LenderBorrowers() {
         </div>
       )}
 
+    </div>
     </div>
   );
 }
