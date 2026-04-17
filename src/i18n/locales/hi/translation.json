@@ -42,6 +42,7 @@
     "support": "सपोर्ट",
     "security": "सुरक्षा",
     "settings": "सेटिंग्स",
+    "profile" : "प्रोफ़ाइल",
     "logout": "लॉगआउट",
     "confirmLogout": "लॉगआउट की पुष्टि करें",
     "logoutQuestion": "क्या आप वाकई लॉगआउट करना चाहते हैं?",
@@ -194,7 +195,9 @@
 
   "na": "उपलब्ध नहीं",
 
-  "revenueByPlan": "प्लान के अनुसार राजस्व",
+  "revenueByPlan": "योजना के अनुसार राजस्व",
+  "revenueByMonth": "महीने के अनुसार राजस्व",
+  "revenueByYear": "योजना के अनुसार राजस्व",
   "monthlyRevenue": "मासिक राजस्व",
   "yearlyRevenue": "वार्षिक राजस्व",
   "recentPurchases": "हाल की खरीद",

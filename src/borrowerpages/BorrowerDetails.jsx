@@ -136,72 +136,28 @@ const borrower = selectedBorrower || state?.borrower;
     
 
         {/* ── Profile Hero Card ── */}
-        {viewMode === "card" && (
-          <>
-        <div className="mb-8">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="h-2 bg-gradient-to-r from-orange-400 to-orange-600" />
-          <div className="p-6 md:p-8 flex flex-col md:flex-row items-center md:items-start gap-6">
-
-            {/* Avatar */}
-            <div className="w-15 h-15 rounded-2xl bg-gradient-to-br from-orange-400 to-orange-600
-              flex items-center justify-center text-white text-3xl font-black shadow-md flex-shrink-0">
-              {borrower.borrowerName?.charAt(0).toUpperCase() || "B"}
-            </div>
-
-            {/* Info */}
-            <div className="flex-1 text-center md:text-left">
-              <h1 className="text-xl md:text-2xl font-bold text-gray-900">
-                {borrower.borrowerName}
-              </h1>
-              {lenderName && (
-                <p className="text-sm text-gray-500 mt-1">
-                  {t("borrowerDetails.loansFromLender")} <span className="font-semibold text-orange-600">{lenderName}</span>
-                </p>
-              )}
-
-              <div className="flex flex-wrap gap-4 mt-4 justify-center md:justify-start">
-                {borrower.mobileNo && borrower.mobileNo !== "N/A" && (
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <FiPhone className="text-orange-500 flex-shrink-0" />
-                    <span className="font-medium">{borrower.mobileNo}</span>
-                  </div>
-                )}
-                {borrower.email && borrower.email !== "N/A" && (
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <FiMail className="text-orange-500 flex-shrink-0" />
-                    <span className="font-medium">{borrower.email}</span>
-                  </div>
-                )}
-                {borrower.aadhaarNumber && (
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <MdOutlineCreditCard className="text-orange-500 flex-shrink-0" />
-                    <span className="font-medium">
-                      {borrower.aadhaarNumber.replace(/(\d{4})(\d{4})(\d{4})/, "$1 $2 $3")}
-                    </span>
-                  </div>
-                )}
+      {viewMode === "card" && (
+        <>
+          {/* Hero banner */}
+          <div className="relative rounded-2xl overflow-hidden mb-6 p-6 md:p-8"
+            style={{ background: "linear-gradient(130deg, #f97316, #fb923c, #fbbf24)" }}>
+            <div className="absolute inset-0 bg-white/10 backdrop-blur-sm" />
+            <div className="absolute rounded-full" style={{ width: 160, height: 160, background: "rgba(255,255,255,0.08)", top: -50, right: 60 }} />
+            <div className="relative flex flex-col sm:flex-row sm:items-center gap-5">
+              <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm border-2 border-white/30 flex items-center justify-center text-white text-2xl font-black flex-shrink-0">
+                {borrower.borrowerName?.charAt(0).toUpperCase() || "B"}
               </div>
-
-              {/* Status badges */}
-              <div className="flex gap-2 mt-4 justify-center md:justify-start flex-wrap">
-                {borrower.hasOverdueLoan && (
-                  <span className="text-xs font-bold px-3 py-1 rounded-full
-                    bg-red-100 text-red-600 border border-red-200">
-                    ⚠ {t("borrowerDetails.hasOverdue")}
-                  </span>
-                )}
-                {borrower.hasActiveLoan && !borrower.hasOverdueLoan && (
-                  <span className="text-xs font-bold px-3 py-1 rounded-full
-                    bg-green-100 text-green-700 border border-green-200">
-                    ✓ {t("borrowerDetails.activeBorrower")}
-                  </span>
-                )}
+              <div>
+                <span className="text-[10px] font-bold text-white/70 bg-white/20 px-2.5 py-1 rounded-full uppercase tracking-widest">Borrower</span>
+                <h2 className="text-xl sm:text-2xl font-bold text-white mt-1">{borrower.borrowerName}</h2>
+                {lenderName && <p className="text-white/70 text-sm mt-0.5">{t("borrowerDetails.loansFromLender")} <span className="text-white font-semibold">{lenderName}</span></p>}
+                <div className="flex flex-wrap gap-3 mt-3">
+                  {borrower.mobileNo && borrower.mobileNo !== "N/A" && <span className="text-xs text-white/80 flex items-center gap-1"><FiPhone size={11} />{borrower.mobileNo}</span>}
+                  {borrower.email && borrower.email !== "N/A" && <span className="text-xs text-white/80 flex items-center gap-1"><FiMail size={11} />{borrower.email}</span>}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        </div>
         
 
         {/* ── Stats Row ── */}
@@ -222,73 +178,50 @@ const borrower = selectedBorrower || state?.borrower;
         </div>
 
         {/* ── Loan History Table ── */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-50 flex items-center justify-between">
-            <h3 className="text-base font-bold text-gray-900">{t("borrowerDetails.loanHistory")}</h3>
-            <span className="text-xs font-semibold text-gray-400 bg-gray-100 px-3 py-1 rounded-full">
-              {borrower.loans?.length || 0} {t("borrowerDetails.loans")}
-            </span>
-          </div>
+       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md border border-orange-100 dark:border-gray-700 overflow-hidden">
+            <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
+              <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{t("borrowerDetails.loanHistory")}</h3>
+              <span className="text-xs font-medium text-gray-400 bg-gray-100 dark:bg-gray-700 px-2.5 py-1 rounded-full">
+                {borrower.loans?.length || 0} {t("borrowerDetails.loans")}
+              </span>
+            </div>
 
-          {borrower.loans?.length > 0 ? (
-            <>
-              {/* Desktop table */}
-              <div className="hidden md:block overflow-x-auto">
-                <table className="w-full border-collapse">
-                  <thead>
-                    <tr className="bg-gray-50 border-b border-gray-100">
-                      <th className="text-left px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">{t("borrowerDetails.index")}</th>
-                      <th className="text-left px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">{t("borrowerDetails.amount")}</th>
-                      <th className="text-left px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">{t("borrowerDetails.totalPaid")}</th>
-                      <th className="text-left px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">{t("borrowerDetails.remaining")}</th>
-                      {/* <th className="text-left px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">Given Date</th> */}
-                      <th className="text-left px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">{t("borrowerDetails.endDate")}</th>
-                      <th className="text-left px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">{t("borrowerDetails.status")}</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-50">
-                    {borrower.loans.map((loan, i) => (
-                      <tr key={i} className="hover:bg-orange-50/30 transition-colors">
-                        <td className="px-6 py-4 text-sm text-gray-400 font-semibold">{i + 1}</td>
-                        <td className="px-6 py-4 text-sm font-black text-gray-900">
-                          ₹{loan.amount?.toLocaleString()}
-                        </td>
-                        <td className="px-6 py-4 text-sm font-semibold text-green-600">
-                          ₹{loan.totalPaid?.toLocaleString() || "0"}
-                        </td>
-                        <td className="px-6 py-4 text-sm font-semibold text-red-500">
-                          ₹{(loan.remainigAmount ?? loan.remainingAmount)?.toLocaleString() || "0"}
-                        </td>
-                        {/* <td className="px-6 py-4 text-sm text-gray-600">{formatDate(loan.loanGivenDate)}</td> */}
-                        <td className="px-6 py-4 text-sm text-gray-600">{formatDate(loan.loanEndDate)}</td>
-                        <td className="px-6 py-4">
-                          <span className={`inline-flex items-center px-2.5 py-1 rounded-full
-                            text-[10px] font-bold border ${statusStyle(loan.paymentStatus)}`}>
-                            {loan.paymentStatus}
-                          </span>
-                        </td>
+           {borrower.loans?.length > 0 ? (
+              <>
+                <div className="hidden md:block overflow-x-auto">
+                  <table className="w-full border-collapse">
+                    <thead>
+                      <tr className="bg-gray-50 dark:bg-gray-700/50 border-b border-gray-100 dark:border-gray-700">
+                        {["#", t("borrowerDetails.amount"), t("borrowerDetails.totalPaid"), t("borrowerDetails.remaining"), t("borrowerDetails.endDate"), t("borrowerDetails.status")].map((h, i) => (
+                          <th key={i} className="text-left px-5 py-3 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{h}</th>
+                        ))}
                       </tr>
-                    ))}
-                  </tbody>
-                  {/* Footer total */}
-                  <tfoot>
-                    <tr className="bg-gray-50 border-t-2 border-gray-200">
-                      <td className="px-6 py-3 text-xs font-bold text-gray-500 uppercase">Total</td>
-                      <td className="px-6 py-3 text-sm font-black text-gray-900">
-                        ₹{borrower.totalLoanAmount?.toLocaleString()}
-                      </td>
-                      <td className="px-6 py-3 text-sm font-black text-green-600">
-                        ₹{borrower.totalPaidAmount?.toLocaleString()}
-                      </td>
-                      <td className="px-6 py-3 text-sm font-black text-red-500">
-                        ₹{borrower.totalRemainingAmount?.toLocaleString()}
-                      </td>
-                      <td colSpan={3} />
-                    </tr>
-                  </tfoot>
-                </table>
-              </div>
-
+                    </thead>
+                    <tbody className="divide-y divide-gray-50 dark:divide-gray-700">
+                      {borrower.loans.map((loan, i) => (
+                        <tr key={i} className="hover:bg-orange-50/30 dark:hover:bg-gray-700/30 transition-colors">
+                          <td className="px-5 py-3.5 text-xs text-gray-400">{i + 1}</td>
+                          <td className="px-5 py-3.5 text-sm font-bold text-gray-900 dark:text-white">₹{loan.amount?.toLocaleString()}</td>
+                          <td className="px-5 py-3.5 text-sm font-semibold text-green-600">₹{loan.totalPaid?.toLocaleString() || "0"}</td>
+                          <td className="px-5 py-3.5 text-sm font-semibold text-red-500">₹{(loan.remainigAmount ?? loan.remainingAmount)?.toLocaleString() || "0"}</td>
+                          <td className="px-5 py-3.5 text-sm text-gray-500 dark:text-gray-400">{formatDate(loan.loanEndDate)}</td>
+                          <td className="px-5 py-3.5">
+                            <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold border ${statusStyle(loan.paymentStatus)}`}>{loan.paymentStatus}</span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                    <tfoot>
+                      <tr className="bg-gray-50 dark:bg-gray-700/50 border-t-2 border-gray-200 dark:border-gray-600">
+                        <td className="px-5 py-3 text-xs font-semibold text-gray-400 uppercase">Total</td>
+                        <td className="px-5 py-3 text-sm font-bold text-gray-900 dark:text-white">₹{borrower.totalLoanAmount?.toLocaleString()}</td>
+                        <td className="px-5 py-3 text-sm font-bold text-green-600">₹{borrower.totalPaidAmount?.toLocaleString()}</td>
+                        <td className="px-5 py-3 text-sm font-bold text-red-500">₹{borrower.totalRemainingAmount?.toLocaleString()}</td>
+                        <td colSpan={2} />
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
               {/* Mobile cards */}
               <div className="md:hidden divide-y divide-gray-50">
                 {borrower.loans.map((loan, i) => (
@@ -326,7 +259,7 @@ const borrower = selectedBorrower || state?.borrower;
               </div>
             </>
           ) : (
-            <div className="text-center py-16 text-gray-400">{t("borrowerDetails.noLoans")}</div>
+            <div className="py-16 text-center text-gray-400 text-sm">{t("borrowerDetails.noLoans")}</div>
           )}
           
         </div>

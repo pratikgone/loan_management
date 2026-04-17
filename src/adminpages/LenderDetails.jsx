@@ -19,6 +19,8 @@ import { MdOutlineDescription } from "react-icons/md";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { CiViewTable } from "react-icons/ci";
+import { RxDashboard } from "react-icons/rx";
 
 export function LenderDetails() {
 
@@ -99,236 +101,169 @@ export function LenderDetails() {
 
 
  return (
-  <div className="min-h-screen pb-12 bg-gradient-to-br from-orange-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
+    <div className="min-h-screen pb-12 bg-gradient-to-br from-orange-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
+    <div className="p-5 sm:p-6 lg:p-8">
 
-   <div className='p-5 sm:p-6 lg:p-8'>
-
-      {/* Back Button + Title + Toggle */}
-      <div className="flex items-center justify-between mb-6">
+      {/* Back + Title + Toggle */}
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <button
-            onClick={() => navigate(-1)}
-            className="mb-2 flex items-center gap-2 text-orange-600 font-bold hover:gap-4 transition-all cursor-pointer"
-          >
+          <button onClick={() => navigate(-1)}
+            className="mb-2 flex items-center gap-1.5 text-orange-500 hover:text-orange-600 text-sm font-medium transition-all hover:gap-2.5 cursor-pointer">
             ← {t('lenderDetails.backToLenders')}
           </button>
-          <h2 className="text-xl md:text-2xl font-bold text-gray-900">{t('lenderDetails.title')}</h2>
+          <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">{t('lenderDetails.title')}</h1>
         </div>
-
-        {/* Toggle Button */}
-        <div className="flex items-center gap-1.5 bg-white border border-gray-200 rounded-xl p-1 shadow-sm">
-          <button
-            onClick={() => setViewMode("card")}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
-              viewMode === "card"
-                ? "bg-orange-500 text-white shadow-sm"
-                : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
-            }`}
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-              strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-              <rect x="3" y="3" width="7" height="7" rx="1" />
-              <rect x="14" y="3" width="7" height="7" rx="1" />
-              <rect x="3" y="14" width="7" height="7" rx="1" />
-              <rect x="14" y="14" width="7" height="7" rx="1" />
-            </svg>
-            <span className="hidden sm:inline">{t('lenderDetails.cards')}</span>
-          </button>
-          <button
-            onClick={() => setViewMode("table")}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
-              viewMode === "table"
-                ? "bg-orange-500 text-white shadow-sm"
-                : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
-            }`}
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-              strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-              <path d="M3 10h18M3 14h18M10 3v18M3 6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6z" />
-            </svg>
-            <span className="hidden sm:inline">{t('lenderDetails.table')}</span>
-          </button>
+        {/* Same toggle as PlanDetails */}
+        <div className="flex items-center bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-1 shadow-sm">
+          {["card", "table"].map(mode => (
+            <button key={mode} onClick={() => setViewMode(mode)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${viewMode === mode ? "bg-orange-500 text-white shadow-sm" : "text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700"}`}>
+              {mode === "card" ? (
+                <RxDashboard className="w-3.5 h-3.5" />
+              ) : (
+              <CiViewTable className="w-3.5 h-3.5" />
+              )}
+              <span className="hidden sm:inline">{mode === "card" ? t('lenderDetails.cards') : t('lenderDetails.table')}</span>
+            </button>
+          ))}
         </div>
       </div>
 
      
       {/*   CARD VIEW   */}
-     
-    
-   {viewMode === "card" && (
-  <>
-    {/* ── Hero Card ── */}
-    <div className="bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden mb-6">
-      <div className="h-1.5 w-full bg-gradient-to-r from-orange-400 to-orange-500" />
-      <div className="p-5 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
-        {/* Left — Avatar + Name */}
-        <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-5">
-          <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-orange-50 shadow-md shrink-0">
-            {lenderData.profileImage ? (
-              <img src={lenderData.profileImage} alt={lenderData.userName} className="w-full h-full object-cover" />
-            ) : (
-              <div className="w-full h-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white text-3xl font-black">
-                {lenderData.userName?.charAt(0).toUpperCase()}
+        {viewMode === "card" && (
+        <>
+          {/* Hero banner */}
+          <div className="relative rounded-2xl overflow-hidden mb-6 p-6 md:p-8"
+            style={{ background: "linear-gradient(130deg, #f97316, #fb923c, #fbbf24)" }}>
+            <div className="absolute inset-0 bg-white/10 backdrop-blur-sm" />
+            <div className="absolute rounded-full" style={{ width: 160, height: 160, background: "rgba(255,255,255,0.08)", top: -50, right: 60 }} />
+            <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm border-2 border-white/30 flex items-center justify-center text-white text-2xl font-black shadow-md overflow-hidden flex-shrink-0">
+                  {lenderData.profileImage ? <img src={lenderData.profileImage} alt="" className="w-full h-full object-cover" /> : lenderData.userName?.charAt(0).toUpperCase()}
+                </div>
+                <div>
+                  <span className="text-[10px] font-bold text-white/70 bg-white/20 px-2.5 py-1 rounded-full uppercase tracking-widest">Lender</span>
+                  <h2 className="text-xl sm:text-2xl font-bold text-white mt-1">{lenderData.userName || t('lenderDetails.na')}</h2>
+                  <p className="text-white/70 text-sm mt-0.5 flex items-center gap-1">
+                    <CiLocationOn className="flex-shrink-0" />{lenderData.address || t('lenderDetails.addressNotProvided')}
+                  </p>
+                </div>
               </div>
-            )}
-          </div>
-          <div>
-            <h1 className="text-xl md:text-2xl font-bold text-gray-900 leading-tight">
-              {lenderData.userName || t('lenderDetails.na')}
-            </h1>
-            <p className="text-orange-600 font-bold flex items-center gap-1 mt-1 text-sm">
-              <CiLocationOn className="stroke-2 flex-shrink-0" />
-              {lenderData.address || t('lenderDetails.addressNotProvided')}
-            </p>
-          </div>
-        </div>
-
-        {/* Right — Status + Email */}
-        <div className="flex flex-row md:flex-col items-center md:items-end gap-3">
-          <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border ${
-            lenderData?.isActive
-              ? "bg-green-100 text-green-700 border-green-200"
-              : "bg-red-100 text-red-700 border-red-200"
-          }`}>
-            {lenderData?.isActive
-              ? <><IoCheckmarkCircleOutline className="w-4 h-4" /> {t('lenderDetails.active')}</>
-              : <><AiOutlineCloseCircle className="w-4 h-4" /> {t("lenderDetails.inactive")}</>}
-          </span>
-          <p className="text-sm text-gray-400 font-medium">{lenderData.email || "N/A"}</p>
-        </div>
-      </div>
-    </div>
-
-    {/* ── Stats Row ── */}
-    <div className='mb-10'>
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-      {[
-        { label: t('lenderDetails.mobileNumber'),       value: lenderData.mobileNo || t('lenderDetails.na'),                                    icon: <IoCallOutline className="w-5 h-5" />,          color: "bg-orange-100 text-orange-600" },
-        { label: t("lenderDetails.planName"),         value: currentPlan?.planName || t('lenderDetails.noPlan'),                              icon: <BsBoxSeam className="w-5 h-5" />,              color: "bg-blue-100 text-blue-600"     },
-        { label: t("lenderDetails.planStatus"),  value: planPurchaseDetails?.planStatus || t('lenderDetails.na'),                        icon: <IoCheckmarkCircleOutline className="w-5 h-5" />, color: planPurchaseDetails?.isPlanActive ? "bg-green-100 text-green-600" : "bg-amber-100 text-amber-600" },
-        { label: t("lenderDetails.remaining"),    value: `${planPurchaseDetails?.remainingDays ?? "0"} Days`,             icon: <CiClock2 className="w-5 h-5" />,               color: planPurchaseDetails?.remainingDays > 0 ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600" },
-      ].map((stat, i) => (
-        <div key={i} className="bg-white rounded-xl border border-gray-200 shadow-sm p-3 md:p-4 flex items-center gap-3">
-          <div className={`w-8 h-8 md:w-10 md:h-10 shrink-0 flex items-center justify-center rounded-xl ${stat.color}`}>
-            {stat.icon}
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest truncate">{stat.label}</p>
-            <p className="text-xs md:text-sm font-bold text-gray-900 truncate">{stat.value}</p>
-          </div>
-        </div>
-      ))}
-    </div>
-    </div>
-
-    {/* ── 2 Column Layout ── */}
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-
-      {/* Personal Information */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-100 bg-gray-50/60 flex items-center gap-3">
-          <div className="bg-orange-100 p-2 rounded-xl">
-            <FiUser className="w-4 h-4 text-orange-600" />
-          </div>
-          <h3 className="text-sm font-bold text-gray-900">{t('lenderDetails.personalInformation')}</h3>
-        </div>
-        <div className="p-5 space-y-1">
-          {[
-            { label: t('lenderDetails.fullName'),      value: lenderData.userName },
-            { label: t('lenderDetails.emailAddress'),  value: lenderData.email },
-            { label: t('lenderDetails.mobileNumber'),  value: lenderData.mobileNo },
-            { label: t('lenderDetails.aadhaarNumber'), value: lenderData.aadharCardNo },
-            { label: t('lenderDetails.address'),        value: lenderData.address },
-          ].map((item, i) => (
-            <div key={i} className="flex items-center justify-between py-2.5 border-b border-gray-50 last:border-0">
-              <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{item.label}</span>
-              <span className="text-sm font-bold text-gray-800 text-right max-w-[55%] truncate">{item.value || t('lenderDetails.na')}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Account Status */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-100 bg-gray-50/60 flex items-center gap-3">
-          <div className="bg-slate-100 p-2 rounded-xl">
-            <MdOutlineShield className="w-4 h-4 text-slate-600" />
-          </div>
-          <h3 className="text-sm font-bold text-gray-900">{t('lenderDetails.accountStatus')}</h3>
-        </div>
-        <div className="p-5 space-y-1">
-          {[
-            { label: t('lenderDetails.status'),          value: lenderData?.isActive ? "Active" : "Inactive", isStatus: true },
-            { label: t('lenderDetails.accountCreated'), value: new Date(lenderData.createdAt).toLocaleDateString("en-IN") },
-            { label: t('lenderDetails.lastUpdated'),    value: new Date(lenderData.updatedAt).toLocaleDateString("en-IN") },
-          ].map((item, i) => (
-            <div key={i} className="flex items-center justify-between py-2.5 border-b border-gray-50 last:border-0">
-              <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{item.label}</span>
-              {item.isStatus ? (
-                <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold ${
-                  lenderData?.isActive ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-                }`}>
-                  {lenderData?.isActive
-                    ? <><IoCheckmarkCircleOutline className="w-3.5 h-3.5" /> {t('lenderDetails.active')}</>
-                    : <><AiOutlineCloseCircle className="w-3.5 h-3.5" /> {t("lenderDetails.inactive")}</>}
+              <div className="flex flex-col items-start sm:items-end gap-2">
+                <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold ${lenderData?.isActive ? "bg-green-400/30 text-white border border-green-300/50" : "bg-red-400/30 text-white border border-red-300/50"}`}>
+                  {lenderData?.isActive ? <><IoCheckmarkCircleOutline className="w-4 h-4" />{t('lenderDetails.active')}</> : <><AiOutlineCloseCircle className="w-4 h-4" />{t("lenderDetails.inactive")}</>}
                 </span>
-              ) : (
-                <span className="text-sm font-bold text-gray-800">{item.value}</span>
-              )}
+                <p className="text-white/70 text-xs">{lenderData.email}</p>
+              </div>
             </div>
-          ))}
-        </div>
-      </div>
-    </div>
+          </div>
 
-    {/* ── Subscription Plan Card ── */}
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-100 bg-gray-50/60 flex items-center gap-3">
-        <div className="bg-blue-100 p-2 rounded-xl">
-          <BsBoxSeam className="w-4 h-4 text-blue-600" />
-        </div>
-        <h3 className="text-sm font-bold text-gray-900">{t('lenderDetails.subscriptionPlan')}</h3>
-      </div>
+      {/* Stats row */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            {[
+              { label: t('lenderDetails.mobileNumber'), value: lenderData.mobileNo || t('lenderDetails.na'), icon: <IoCallOutline className="w-4 h-4" />, color: "bg-orange-50 text-orange-600" },
+              { label: t("lenderDetails.planName"), value: currentPlan?.planName || t('lenderDetails.noPlan'), icon: <BsBoxSeam className="w-4 h-4" />, color: "bg-blue-50 text-blue-600" },
+              { label: t("lenderDetails.planStatus"), value: planPurchaseDetails?.planStatus || t('lenderDetails.na'), icon: <IoCheckmarkCircleOutline className="w-4 h-4" />, color: planPurchaseDetails?.isPlanActive ? "bg-green-50 text-green-600" : "bg-amber-50 text-amber-600" },
+              { label: t("lenderDetails.remaining"), value: `${planPurchaseDetails?.remainingDays ?? "0"} Days`, icon: <CiClock2 className="w-4 h-4" />, color: planPurchaseDetails?.remainingDays > 0 ? "bg-green-50 text-green-600" : "bg-red-50 text-red-600" },
+            ].map((stat, i) => (
+              <div key={i} className="bg-white dark:bg-gray-800 rounded-2xl shadow-md border border-orange-100 dark:border-gray-700 p-4 flex items-center gap-3 hover:-translate-y-0.5 transition-all">
+                <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${stat.color}`}>{stat.icon}</div>
+                <div className="min-w-0">
+                  <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wide">{stat.label}</p>
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white truncate mt-0.5">{stat.value}</p>
+                </div>
+              </div>
+            ))}
+          </div>
 
-      <div className="p-5 grid grid-cols-1 md:grid-cols-2 gap-6">
-
-        {/* Plan Info */}
-        <div className="space-y-1">
-          <p className="text-xs font-black text-gray-400 uppercase tracking-widest mb-3">{t('lenderDetails.planInformation')}</p>
-          {[
-            { label: t('lenderDetails.planName'), value: currentPlan?.planName, highlight: true },
-            { label: t("lenderDetails.duration"),  value: currentPlan?.duration },
-            { label: t("lenderDetails.price"),     value: `₹${currentPlan?.priceMonthly?.toLocaleString() || "0"}` },
-          ].map((row, i) => (
-            <div key={i} className="flex items-center justify-between py-2.5 border-b border-gray-50 last:border-0">
-              <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{row.label}</span>
-              <span className={`text-sm font-bold ${row.highlight ? "text-orange-600" : "text-gray-800"}`}>
-                {row.value || "N/A"}
-              </span>
+   {/* Info grid — 2 columns */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
+            {/* Personal Info */}
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md border border-orange-100 dark:border-gray-700 overflow-hidden">
+              <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center gap-3">
+                <div className="bg-orange-50 dark:bg-orange-900/20 p-2 rounded-xl"><FiUser className="w-4 h-4 text-orange-600" /></div>
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{t('lenderDetails.personalInformation')}</h3>
+              </div>
+              <div className="p-5 space-y-0">
+                {[
+                  [t('lenderDetails.fullName'), lenderData.userName],
+                  [t('lenderDetails.emailAddress'), lenderData.email],
+                  [t('lenderDetails.mobileNumber'), lenderData.mobileNo],
+                  [t('lenderDetails.aadhaarNumber'), lenderData.aadharCardNo],
+                  [t('lenderDetails.address'), lenderData.address],
+                ].map(([label, value], i) => (
+                  <div key={i} className="flex items-center justify-between py-3 border-b border-gray-50 dark:border-gray-700 last:border-0">
+                    <span className="text-[11px] font-medium text-gray-400 uppercase tracking-wide">{label}</span>
+                    <span className="text-sm font-semibold text-gray-800 dark:text-gray-200 text-right max-w-[55%] truncate">{value || t('lenderDetails.na')}</span>
+                  </div>
+                ))}
+              </div>
             </div>
-          ))}
-        </div>
-
-        {/* Purchase Details */}
-        <div className="space-y-1">
-          <p className="text-xs font-black text-gray-400 uppercase tracking-widest mb-3">{t('lenderDetails.purchaseDetails')}</p>
-          {[
-            { label: t('lenderDetails.purchaseDate'), value: planPurchaseDetails?.planPurchaseDate ? new Date(planPurchaseDetails.planPurchaseDate).toLocaleDateString("en-IN") : "N/A", color: "text-gray-800" },
-            { label: t("lenderDetails.expiryDate"),   value: planPurchaseDetails?.planExpiryDate   ? new Date(planPurchaseDetails.planExpiryDate).toLocaleDateString("en-IN")   : "N/A", color: "text-rose-600" },
-            { label: t("lenderDetails.planStatus"),   value: planPurchaseDetails?.planStatus || "N/A", color: planPurchaseDetails?.isPlanActive ? "text-green-600" : "text-amber-600" },
-            { label: t("lenderDetails.remaining"),     value: `${planPurchaseDetails?.remainingDays ?? "0"} Days`, color: planPurchaseDetails?.remainingDays > 0 ? "text-green-600" : "text-red-600" },
-          ].map((row, i) => (
-            <div key={i} className="flex items-center justify-between py-2.5 border-b border-gray-50 last:border-0">
-              <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{row.label}</span>
-              <span className={`text-sm font-bold ${row.color}`}>{row.value}</span>
+            
+ {/* Account Status */}
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md border border-orange-100 dark:border-gray-700 overflow-hidden">
+              <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center gap-3">
+                <div className="bg-slate-50 dark:bg-slate-900/20 p-2 rounded-xl"><MdOutlineShield className="w-4 h-4 text-slate-600" /></div>
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{t('lenderDetails.accountStatus')}</h3>
+              </div>
+              <div className="p-5 space-y-0">
+                {[
+                  { label: t('lenderDetails.status'), isStatus: true },
+                  { label: t('lenderDetails.accountCreated'), value: new Date(lenderData.createdAt).toLocaleDateString("en-IN") },
+                  { label: t('lenderDetails.lastUpdated'), value: new Date(lenderData.updatedAt).toLocaleDateString("en-IN") },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center justify-between py-3 border-b border-gray-50 dark:border-gray-700 last:border-0">
+                    <span className="text-[11px] font-medium text-gray-400 uppercase tracking-wide">{item.label}</span>
+                    {item.isStatus ? (
+                      <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold ${lenderData?.isActive ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+                        {lenderData?.isActive ? <><IoCheckmarkCircleOutline className="w-3 h-3" />{t('lenderDetails.active')}</> : <><AiOutlineCloseCircle className="w-3 h-3" />{t("lenderDetails.inactive")}</>}
+                      </span>
+                    ) : (
+                      <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">{item.value}</span>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
-          ))}
-        </div>
+          </div>
 
-        {/* Plan Features — full width */}
+       {/* Subscription plan card */}
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md border border-orange-100 dark:border-gray-700 overflow-hidden">
+            <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center gap-3">
+              <div className="bg-blue-50 dark:bg-blue-900/20 p-2 rounded-xl"><BsBoxSeam className="w-4 h-4 text-blue-600" /></div>
+              <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{t('lenderDetails.subscriptionPlan')}</h3>
+            </div>
+            <div className="p-5 grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div>
+                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-3">{t('lenderDetails.planInformation')}</p>
+                {[[t('lenderDetails.planName'), currentPlan?.planName, true], [t("lenderDetails.duration"), currentPlan?.duration], [t("lenderDetails.price"), `₹${currentPlan?.priceMonthly?.toLocaleString() || "0"}`]].map(([label, value, hl], i) => (
+                  <div key={i} className="flex justify-between py-2.5 border-b border-gray-50 dark:border-gray-700 last:border-0">
+                    <span className="text-[11px] font-medium text-gray-400 uppercase tracking-wide">{label}</span>
+                    <span className={`text-sm font-semibold ${hl ? "text-orange-600" : "text-gray-800 dark:text-gray-200"}`}>{value || "N/A"}</span>
+                  </div>
+                ))}
+              </div>
+              <div>
+                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-3">{t('lenderDetails.purchaseDetails')}</p>
+                {[
+                  [t('lenderDetails.purchaseDate'), planPurchaseDetails?.planPurchaseDate ? new Date(planPurchaseDetails.planPurchaseDate).toLocaleDateString("en-IN") : "N/A", "text-gray-800 dark:text-gray-200"],
+                  [t("lenderDetails.expiryDate"), planPurchaseDetails?.planExpiryDate ? new Date(planPurchaseDetails.planExpiryDate).toLocaleDateString("en-IN") : "N/A", "text-rose-600"],
+                  [t("lenderDetails.planStatus"), planPurchaseDetails?.planStatus || "N/A", planPurchaseDetails?.isPlanActive ? "text-green-600" : "text-amber-600"],
+                  [t("lenderDetails.remaining"), `${planPurchaseDetails?.remainingDays ?? "0"} Days`, planPurchaseDetails?.remainingDays > 0 ? "text-green-600" : "text-red-600"],
+                ].map(([label, value, color], i) => (
+                  <div key={i} className="flex justify-between py-2.5 border-b border-gray-50 dark:border-gray-700 last:border-0">
+                    <span className="text-[11px] font-medium text-gray-400 uppercase tracking-wide">{label}</span>
+                    <span className={`text-sm font-semibold ${color}`}>{value}</span>
+                  </div>
+                ))}
+              </div>
+
+      
        {/* Plan Features — full width */}
-<div className="md:col-span-2 pt-4 border-t border-gray-100">
-  <p className="text-xs font-black text-gray-400 uppercase tracking-widest mb-3">
+<div className="md:col-span-2 pt-4 border-t border-gray-100 dark:border-gray-700">
+  <p className="text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3bg-green-50/60 border-green-100">
     {t('lenderDetails.planFeatures')}
   </p>
 
@@ -350,8 +285,8 @@ export function LenderDetails() {
             key={key}
             className={`p-3 rounded-xl border ${
               isEnabled
-                ? "bg-green-50/60 border-green-100"
-                : "bg-gray-50/60 border-gray-100"
+                ? "bg-green-50/60 dark:bg-green-900/20 border-green-100 dark:border-green-800"
+                : "bg-gray-50/60 dark:bg-gray-700/40 border-gray-100 dark:border-gray-600"
             }`}
           >
             <div className="flex items-start justify-between gap-3">
@@ -365,10 +300,10 @@ export function LenderDetails() {
                 )}
 
                 <div>
-                  <p className="text-sm font-bold text-gray-800">
+                  <p className="text-sm font-bold text-gray-800 dark:text-white">
                     {label}
                   </p>
-                  <p className="text-xs text-gray-400">
+                  <p className="text-xs text-gray-400 dark:text-gray-400">
                     {desc}
                   </p>
                 </div>

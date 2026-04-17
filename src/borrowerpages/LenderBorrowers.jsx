@@ -40,22 +40,19 @@ export function LenderBorrowers() {
   );
 
   return (
-    <div className="min-h-screen pb-12 bg-gradient-to-br from-orange-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
+  <div className="min-h-screen pb-12 bg-gradient-to-br from-orange-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
     <div className="p-5 sm:p-6 lg:p-8">
-      {/* Back */}
+
       <button onClick={() => navigate(-1)}
-        className="mb-4 flex items-center gap-2 text-orange-600 font-bold hover:gap-4 transition-all cursor-pointer">
+        className="mb-6 flex items-center gap-1.5 text-orange-500 hover:text-orange-600 text-sm font-medium transition-all hover:gap-2.5 cursor-pointer">
         ← {t("borrowersPage.backToLenders")}
       </button>
 
-      {/* Page title + lender info */}
-      <div className="mb-6">
-        <h2 className="text-xl md:text-2xl font-bold text-gray-900">{t("borrowersPage.title")}</h2>
-        {lender && (
-          <p className="text-sm text-gray-500 mt-1">
-            {t("borrowersPage.labels.loansBy")}  <span className="font-bold text-orange-600">{lender.userName}</span>
-          </p>
-        )}
+      <div className="flex justify-between items-start mb-8">
+        <div>
+          <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">{t("borrowersPage.title")}</h1>
+          {lender && <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{t("borrowersPage.labels.loansBy")} <span className="font-semibold text-orange-600">{lender.userName}</span></p>}
+        </div>
       </div>
 
            {/* Search + Filter */}
@@ -83,16 +80,20 @@ export function LenderBorrowers() {
 
       {/* Summary stats */}
       {summary && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           {[
-            { label:  t("borrowersPage.summary.uniqueBorrowers"), value: summary.totalUniqueBorrowers,  color: "text-gray-900",   bg: "bg-white",       border: "border-fuchsia-100" },
-            { label: t("borrowersPage.summary.totalLoans"), value: summary.totalLoans, color: "text-blue-600", bg: "bg-blue-50", border: "border-blue-100" },
-            { label: t("borrowersPage.summary.activeLoans"), value: summary.activeLoans, color: "text-green-600", bg: "bg-green-50", border: "border-green-100" },
-            { label: t("borrowersPage.summary.overdueLoans"), value: summary.overdueLoans, color: "text-red-500", bg: "bg-red-50", border: "border-red-100" },
+            { label: t("borrowersPage.summary.uniqueBorrowers"), value: summary.totalUniqueBorrowers, color: "text-gray-900 dark:text-white", bar: "bg-gray-400", bg: "bg-gray-50 dark:bg-gray-700/50" },
+            { label: t("borrowersPage.summary.totalLoans"), value: summary.totalLoans, color: "text-blue-600", bar: "bg-blue-400", bg: "bg-blue-50 dark:bg-blue-900/20" },
+            { label: t("borrowersPage.summary.activeLoans"), value: summary.activeLoans, color: "text-green-600", bar: "bg-green-400", bg: "bg-green-50 dark:bg-green-900/20" },
+            { label: t("borrowersPage.summary.overdueLoans"), value: summary.overdueLoans, color: "text-red-500", bar: "bg-red-400", bg: "bg-red-50 dark:bg-red-900/20" },
           ].map((s, i) => (
-            <div key={i} className={`${s.bg} rounded-2xl p-5 border border-gray-200`}>
-              <p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">{s.label}</p>
-              <p className={`text-2xl font-black mt-1 ${s.color}`}>{s.value}</p>
+            <div key={i} className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-md border border-orange-100 dark:border-gray-700 p-5 hover:-translate-y-0.5 transition-all overflow-hidden">
+              <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(135deg,rgba(255,255,255,0.45) 0%,transparent 60%)" }} />
+              <p className="text-[10px] font-medium text-gray-400 uppercase tracking-widest relative">{s.label}</p>
+              <p className={`text-2xl font-semibold mt-1 relative ${s.color}`}>{s.value}</p>
+              <div className="flex items-end gap-0.5 h-5 mt-3 relative">
+                {[60,80,50,90,70,100,85].map((h, j) => <div key={j} className={`flex-1 rounded-sm opacity-50 ${s.bar}`} style={{ height: `${h}%` }} />)}
+              </div>
             </div>
           ))}
         </div>
@@ -186,8 +187,7 @@ export function LenderBorrowers() {
   </div>
 )}
 
-      {/* Borrowers list */}
-      {borrowersError ? (
+    {borrowersError ? (
         <div className="text-center py-16 text-red-500">{borrowersError}</div>
       ) : borrowers.length === 0 ? (
         <div className="text-center py-20 bg-white rounded-2xl border border-gray-100 shadow-sm">
@@ -231,43 +231,31 @@ export function LenderBorrowers() {
               </div>
 
               {/* Stats */}
-              <div className="grid grid-cols-3 gap-3 bg-fuchsia-50 rounded-xl p-3 mb-4">
+              <div className="grid grid-cols-3 gap-2 bg-orange-50/60 dark:bg-gray-700/50 rounded-xl p-3 mb-4">
                 {[
-                  { label:  t("borrowersPage.stats.totalLoans"), value: borrower.totalLoansCount, color: "text-gray-900" },
+                  { label: t("borrowersPage.stats.totalLoans"), value: borrower.totalLoansCount, color: "text-gray-900 dark:text-white" },
                   { label: t("borrowersPage.stats.totalAmount"), value: `₹${borrower.totalLoanAmount?.toLocaleString()}`, color: "text-orange-600" },
                   { label: t("borrowersPage.stats.remaining"), value: `₹${borrower.totalRemainingAmount?.toLocaleString()}`, color: "text-red-500" },
-                ].map((s, i) => (
-                  <div key={i} className="text-center border border-gray-100">
-                    <p className="text-[9px] text-gray-400 font-bold uppercase tracking-wide">{s.label}</p>
-                    <p className={`text-sm font-black ${s.color} mt-0.5`}>{s.value}</p>
+                ].map((s, j) => (
+                  <div key={j} className="text-center">
+                    <p className="text-[9px] text-gray-400 font-medium uppercase tracking-wide">{s.label}</p>
+                    <p className={`text-sm font-bold mt-0.5 ${s.color}`}>{s.value}</p>
                   </div>
                 ))}
               </div>
 
               {/* Loans list */}
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 {borrower.loans.slice(0, 3).map((loan, j) => (
-                  <div key={j} className="flex items-center justify-between text-xs py-1.5
-                    border-b border-gray-50 last:border-0">
-                    <span className="text-gray-600 font-medium">
-                      ₹{loan.amount?.toLocaleString()}
-                    </span>
-                    <span className={`px-2 py-0.5 rounded-full font-bold text-[10px] ${loan.paymentStatus === "paid" ? "bg-green-100 text-green-700" :
-                        loan.paymentStatus === "overdue" ? "bg-red-100 text-red-600" :
-                          loan.paymentStatus === "part paid" ? "bg-yellow-100 text-yellow-700" :
-                            "bg-blue-100 text-blue-600"
-                      }`}>
+                  <div key={j} className="flex items-center justify-between py-1.5 border-b border-gray-50 dark:border-gray-700 last:border-0">
+                    <span className="text-xs font-medium text-gray-600 dark:text-gray-400">₹{loan.amount?.toLocaleString()}</span>
+                    <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${loan.paymentStatus === "paid" ? "bg-green-100 text-green-700" : loan.paymentStatus === "overdue" ? "bg-red-100 text-red-600" : loan.paymentStatus === "part paid" ? "bg-yellow-100 text-yellow-700" : "bg-blue-100 text-blue-600"}`}>
                       {loan.paymentStatus}
                     </span>
                   </div>
                 ))}
-                {borrower.loans.length > 3 && (
-                  <p className="text-xs text-gray-400 text-center pt-1">
-                    {t("borrowersPage.labels.moreLoans", { count: borrower.loans.length - 3 })}
-                  </p>
-                )}
+                {borrower.loans.length > 3 && <p className="text-xs text-gray-400 text-center pt-1">{t("borrowersPage.labels.moreLoans", { count: borrower.loans.length - 3 })}</p>}
               </div>
-
             </div>
           ))}
         </div>

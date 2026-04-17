@@ -14,6 +14,7 @@ import { PiClockCounterClockwise } from "react-icons/pi";
 import { CiSettings } from "react-icons/ci";
 import { MdCurrencyRupee } from "react-icons/md";
 import { useTranslation } from "react-i18next";
+import { FiUser } from "react-icons/fi";
 
 const menuItems = [
   { key: "dashboard", path: "/dashboard", icon: <MdOutlineDashboardCustomize /> },
@@ -21,9 +22,8 @@ const menuItems = [
   { key: "revenue", path: "/revenue", icon: <MdCurrencyRupee /> },
   { key: "lenders", path: "/lenders", icon: <FiUsers /> },
   { key: "activity", path: "/activityDetails", icon: <PiClockCounterClockwise /> },
-  // { key: "support", path: "/support", icon: <IoIosHelpCircleOutline className="h-5.5 w-5.5 stroke-[1]" /> },
-  // { key: "security", path: "/security", icon: <FiShield /> },
   { key: "settings", path: "/password", icon: <CiSettings className="h-5.5 w-5.5" /> },
+  { key: "profile", path: "/profile", icon: <FiUser /> }
 ];
 
 
@@ -173,75 +173,75 @@ export default function Sidebar({
               : "justify-between px-5 py-4"
             }`}>
 
-       {isCollapsed ? (
-  // ── Collapsed: orange gradient LH icon ──
-  <div className="relative flex-shrink-0">
-    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center shadow-md">
-      <span style={{
-        fontFamily: "system-ui, sans-serif",
-        fontSize: "14px",
-        fontWeight: 900,
-        color: "white",
-        letterSpacing: "-1px",
-        lineHeight: 1,
-      }}>LH</span>
-    </div>
-    {/* White dot accent */}
-    <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-white rounded-full border-2 border-orange-500" />
-  </div>
+            {isCollapsed ? (
+              // ── Collapsed: orange gradient LH icon ──
+              <div className="relative flex-shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center shadow-md">
+                  <span style={{
+                    fontFamily: "system-ui, sans-serif",
+                    fontSize: "14px",
+                    fontWeight: 900,
+                    color: "white",
+                    letterSpacing: "-1px",
+                    lineHeight: 1,
+                  }}>LH</span>
+                </div>
+                {/* White dot accent */}
+                <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-white rounded-full border-2 border-orange-500" />
+              </div>
 
-) : (
-  // ── Expanded: full LoanHub logo ──
-  <div className="flex items-center gap-3">
-    {/* Icon */}
-    <div className="relative flex-shrink-0">
-      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center shadow-md">
-        <span style={{
-          fontFamily: "system-ui, sans-serif",
-          fontSize: "14px",
-          fontWeight: 900,
-          color: "white",
-          letterSpacing: "-1px",
-          lineHeight: 1,
-        }}>LH</span>
-      </div>
-      {/* White dot accent */}
-      <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-white rounded-full border-2 border-orange-500" />
-    </div>
+            ) : (
+              // ── Expanded: full LoanHub logo ──
+              <div className="flex items-center gap-3">
+                {/* Icon */}
+                <div className="relative flex-shrink-0">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center shadow-md">
+                    <span style={{
+                      fontFamily: "system-ui, sans-serif",
+                      fontSize: "14px",
+                      fontWeight: 900,
+                      color: "white",
+                      letterSpacing: "-1px",
+                      lineHeight: 1,
+                    }}>LH</span>
+                  </div>
+                  {/* White dot accent */}
+                  <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-white rounded-full border-2 border-orange-500" />
+                </div>
 
-    {/* Text */}
-    <div>
-      <p style={{ margin: 0, lineHeight: 1.2 }}>
-        <span style={{
-          fontFamily: "system-ui, sans-serif",
-          fontSize: "17px",
-          fontWeight: 900,
-          letterSpacing: "-0.5px",
-          background: "linear-gradient(135deg, #f97316, #ea580c)",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-          backgroundClip: "text",
-        }}>Loan</span>
-        <span style={{
-          fontFamily: "system-ui, sans-serif",
-          fontSize: "17px",
-          fontWeight: 900,
-          letterSpacing: "-0.5px",
-          color: "#0f172a",
-        }}>Hub</span>
-      </p>
-      <p style={{
-        fontFamily: "system-ui, sans-serif",
-        fontSize: "8px",
-        fontWeight: 600,
-        color: "#f97316",
-        letterSpacing: "2.5px",
-        margin: 0,
-        opacity: 0.8,
-      }}>LENDING PLATFORM</p>
-    </div>
-  </div>
-)}
+                {/* Text */}
+                <div>
+                  <p style={{ margin: 0, lineHeight: 1.2 }}>
+                    <span style={{
+                      fontFamily: "system-ui, sans-serif",
+                      fontSize: "17px",
+                      fontWeight: 900,
+                      letterSpacing: "-0.5px",
+                      background: "linear-gradient(135deg, #f97316, #ea580c)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      backgroundClip: "text",
+                    }}>Loan</span>
+                    <span style={{
+                      fontFamily: "system-ui, sans-serif",
+                      fontSize: "17px",
+                      fontWeight: 900,
+                      letterSpacing: "-0.5px",
+                      color: "#0f172a",
+                    }}>Hub</span>
+                  </p>
+                  <p style={{
+                    fontFamily: "system-ui, sans-serif",
+                    fontSize: "8px",
+                    fontWeight: 600,
+                    color: "#f97316",
+                    letterSpacing: "2.5px",
+                    margin: 0,
+                    opacity: 0.8,
+                  }}>LENDING PLATFORM</p>
+                </div>
+              </div>
+            )}
 
             {/* Mobile close button */}
             <button
@@ -256,36 +256,36 @@ export default function Sidebar({
 
           {/* Navigation */}
           <nav className="flex-1 px-3 py-6 space-y-1.5 overflow-y-auto dark:bg-gray-900">
-             {menuItems.map((item) => (
-  <Link
-    key={item.path}
-    to={item.path}
-    onClick={() => setIsMobileOpen(false)}
-    className={`group flex relative items-center rounded-xl 
+            {menuItems.map((item) => (
+              <Link
+                key={item.path}
+                to={item.path}
+                onClick={() => setIsMobileOpen(false)}
+                className={`group flex relative items-center rounded-xl 
       ${isCollapsed ? "justify-center py-4" : "px-4 py-3 gap-3"}
       ${location.pathname === item.path
-        ? "bg-gradient-to-r from-orange-50 to-orange-100 text-orange-700 font-medium shadow-sm"
-        : "text-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-orange-400 hover:bg-orange-50 hover:text-orange-700"
-      }`}
-  >
-    {/* Tooltip when collapsed */}
-    {isCollapsed && (
-      <span className="fixed left-[70px] bg-gray-900 text-white text-xs font-medium px-3 py-1.5 rounded-md shadow-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all z-[9999]">
-        {t(`sidebar.${item.key}`)}
-      </span>
-    )}
+                    ? "bg-gradient-to-r from-orange-50 to-orange-100 text-orange-700 font-medium shadow-sm"
+                    : "text-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-orange-400 hover:bg-orange-50 hover:text-orange-700"
+                  }`}
+              >
+                {/* Tooltip when collapsed */}
+                {isCollapsed && (
+                  <span className="fixed left-[70px] bg-gray-900 text-white text-xs font-medium px-3 py-1.5 rounded-md shadow-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all z-[9999]">
+                    {t(`sidebar.${item.key}`)}
+                  </span>
+                )}
 
-    {/* Icon */}
-    <span className={`text-xl transition-colors ${location.pathname === item.path ? "text-orange-600" : "text-gray-500 group-hover:text-orange-600 dark:text-gray-400 dark:group-hover:text-orange-400"}`}>
-      {item.icon}
-    </span>
+                {/* Icon */}
+                <span className={`text-xl transition-colors ${location.pathname === item.path ? "text-orange-600" : "text-gray-500 group-hover:text-orange-600 dark:text-gray-400 dark:group-hover:text-orange-400"}`}>
+                  {item.icon}
+                </span>
 
-    {/* Menu Name - Translated */}
-    <span className={`text-sm font-medium ${isCollapsed ? "lg:hidden" : "block"}`}>
-      {t(`sidebar.${item.key}`)}
-    </span>
-  </Link>
-))}
+                {/* Menu Name - Translated */}
+                <span className={`text-sm font-medium ${isCollapsed ? "lg:hidden" : "block"}`}>
+                  {t(`sidebar.${item.key}`)}
+                </span>
+              </Link>
+            ))}
           </nav>
 
 
@@ -321,7 +321,7 @@ export default function Sidebar({
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-sm w-full overflow-hidden border border-white/70 dark:border-gray-700">
 
             {/* Header */}
-          <div className="bg-orange-500 px-6 py-5 border-b border-orange-200">
+            <div className="bg-orange-500 px-6 py-5 border-b border-orange-200">
               <h3 className="text-xl font-bold !text-white flex items-center gap-3">
                 <FiLogOut className="w-6 h-6 text-white" />
                 {t("sidebar.confirmLogout")}

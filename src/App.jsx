@@ -27,6 +27,9 @@ import {LenderDashboard} from "./lenderpages/LenderDashboard"
 import LenderLoans from './lenderpages/LenderLoans'
 import LenderBorrowersList from './lenderpages/LenderBorrowerList'
 import { Settings } from './lenderpages/Settings'
+import { Profile } from './adminpages/Profile'
+
+
 
 
 
@@ -65,6 +68,7 @@ function App() {
             <Route path="/admin/support" element={<HelpSupport />} />
             <Route path="/admin/security" element={<PrivacySecurity />} />
             <Route path="/password" element={<ChangePassword />} />
+            <Route path='/profile' element={<Profile/>} />
             <Route path="/activityDetails" element={<ActivityDetails />} />
             <Route path='/lenders/:id/borrowers' element={<LenderBorrowers />}/>
             <Route path='/lenders/:id/borrowers/:borrowerId/details' element={<BorrowerDetails/>} />

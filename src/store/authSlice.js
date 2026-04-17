@@ -105,139 +105,106 @@ export const updateProfile = createAsyncThunk(
 
 
 
-// Helper to get initial state from localStorage
 const getInitialAuthState = () => {
-    const token = localStorage.getItem('token');
-    const userStr = localStorage.getItem('user');
+  const token = localStorage.getItem("token");
+  const userStr = localStorage.getItem("user");
+  const isImpersonating = localStorage.getItem("isImpersonating") === "true";
+  const originalToken = localStorage.getItem("originalToken");
+  const originalUserStr = localStorage.getItem("originalUser");
 
-    let user = null;
-    if (userStr) {
-        try {
-            const parsed = JSON.parse(userStr);
-            // Handle both formats: full response with .user property or direct user object
-            user = parsed.user || parsed;
-        } catch (e) {
-            user = null;
-        }
-    }
+  let user = null;
+  if (userStr) {
+    try { user = JSON.parse(userStr); } catch (e) { user = null; }
+  }
 
-    return {
-        user,
-        token,
-        isLoading: false,
-        error: null,
+  let originalUser = null;
+  if (originalUserStr) {
+    try { originalUser = JSON.parse(originalUserStr); } catch (e) { originalUser = null; }
+  }
 
-        //impersonate state
-        isImpersonating: false,
-        originalToken: null,
-        originalUser: null,
-        adminId: null,
-        adminName: null,
-    };
+  return {
+    user,
+    token,
+    isLoading: false,
+    error: null,
+    isImpersonating: isImpersonating || false,
+    originalToken: originalToken || null,
+    originalUser: originalUser || null,
+    adminId: null,
+    adminName: null,
+  };
 };
 
 const authSlice = createSlice({
-    name: "auth",
-    initialState: getInitialAuthState(),
-    reducers: {
-        logout: (state) => {
-            state.user = null;
-            state.token = null;
-            localStorage.removeItem("token");
-            localStorage.removeItem("user");
-        },
-         clearError: (state) => {
-         state.error = null;
-        },
-   
-// authSlice.js
-startImpersonation: (state, action) => {
-  const payload = action.payload;           
-  const data = payload.data || payload;     
+  name: "auth",
+  initialState: getInitialAuthState(),
 
-  // Original admin state save karo
-//   if (!state.originalToken) {
-//     state.originalToken = state.token;
-//     state.originalUser = state.user ? { ...state.user } : null;
-//   }
-if (!state.originalToken) {
+  reducers: {
+    logout: (state) => {
+      localStorage.clear();
+      return getInitialAuthState();
+    },
+
+  startImpersonation: (state, action) => {
+  const payload = action.payload;
+  const data = payload.data || payload;
+
+  // each time original admin data save 
   state.originalToken = state.token;
   state.originalUser = state.user ? { ...state.user } : null;
 
   localStorage.setItem("originalToken", state.token || "");
   localStorage.setItem("originalUser", JSON.stringify(state.user || {}));
-}
 
-  //  token with user set 
+  // New lender data set 
   state.token = data.impersonateToken || data.token;
-  state.user = data.lender || data.user || data;   // lender object
-
+  state.user = data.lender || data.user || data;   
   state.isImpersonating = true;
-  state.impersonatedLenderId = data.lender?._id || null;
+  state.adminId = data.adminId || null;
+  state.adminName = data.adminName || null;
 
-  // LocalStorage save 
+  // LocalStorage update
   if (state.token) localStorage.setItem("token", state.token);
   if (state.user) localStorage.setItem("user", JSON.stringify(state.user));
   localStorage.setItem("isImpersonating", "true");
 
-  console.log(" Final Impersonation State - User:", state.user);
+  console.log("✅ Impersonation Started - Current User:", state.user);
 },
-//    stopImpersonation: (state) => {
-//   // Original Admin ka data restore karo
-//   if (state.originalToken && state.originalUser) {
-//     state.token = state.originalToken;
-//     state.user = state.originalUser;
-//   }
 
-//   // Impersonation 
-//   state.isImpersonating = false;
-//   state.impersonatedLenderId = null;
+   stopImpersonation: (state) => {
+  console.log("StopImpersonation called. Current state before restore:", {
+    isImpersonating: state.isImpersonating,
+    currentUser: state.user?.userName,
+    originalUser: state.originalUser?.userName,
+  });
 
-//   
-//   // state.originalToken = null;     
-//   // state.originalUser = null;      
-
-//   // LocalStorage update
-//   if (state.token) {
-//     localStorage.setItem("token", state.token);
-//   }
-//   if (state.user) {
-//     localStorage.setItem("user", JSON.stringify(state.user));
-//   }
-
-//   localStorage.removeItem("isImpersonating");
-
-//   console.log("✅ Impersonation Stopped - Back to Admin");
-// },
-stopImpersonation: (state) => {
-  // Original Admin data restore 
+  // Restore original admin data
   if (state.originalToken && state.originalUser) {
     state.token = state.originalToken;
-    state.user = state.originalUser;
+    state.user = { ...state.originalUser };   // Deep copy important
+    console.log("Restored original admin:", state.user?.userName);
+  } else {
+    console.log("Warning: No original data found to restore!");
   }
 
+  // Clear impersonation flags
   state.isImpersonating = false;
+  state.adminId = null;
+  state.adminName = null;
   state.impersonatedLenderId = null;
 
-  // Clear temporary impersonation data
-  state.originalToken = null;
-  state.originalUser = null;
-
-  // LocalStorage update
-  if (state.token) {
-    localStorage.setItem("token", state.token);
-  }
-  if (state.user) {
-    localStorage.setItem("user", JSON.stringify(state.user));
-  }
-
+  // Clean localStorage properly
+  localStorage.setItem("token", state.token || "");
+  localStorage.setItem("user", JSON.stringify(state.user || {}));
   localStorage.removeItem("isImpersonating");
   localStorage.removeItem("originalToken");
   localStorage.removeItem("originalUser");
 
-  console.log(" Impersonation Stopped - Back to Admin. Clean state restored.");
+  console.log("✅ Impersonation Stopped - Back to Admin. Clean state restored.");
 },
-    },
+
+    clearError: (state) => { state.error = null; },
+  },
     extraReducers: (builder) => {
         //login
         builder

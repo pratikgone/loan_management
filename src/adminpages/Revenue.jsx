@@ -204,79 +204,38 @@ export function Revenue() {
   }
 
   return (
-    <div   className="min-h-screen pb-12 
-  bg-gradient-to-br from-orange-50 via-white to-green-50 
-  dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
-    <div className="p-5 sm:p-6 lg:p-8 w-full">
+  <div className="min-h-screen pb-12 bg-gradient-to-br from-orange-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
+    <div className="p-5 sm:p-6 lg:p-8">
 
-      {/* Title + Toggle */}
-     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+      {/* Header */}
+      <div className="flex justify-between items-start mb-8 flex-wrap gap-3">
+        <div>
+          <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">{t("revenueReport")}</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Track revenue across plans, months and years</p>
+        </div>
+        <div className="flex items-center gap-2">
+          {/* Export PDF button */}
+          <button onClick={() => exportRevenuePDF({ summary, plans, monthly, yearly, purchases, groupBy })}
+            className="flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-300 hover:border-orange-300 hover:text-orange-600 transition-all cursor-pointer active:scale-95">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            <span>{t("exportPDF")}</span>
+          </button>
 
-  {/* LEFT SIDE (Title) */}
-  <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white tracking-tight">
-    {t("revenueReport")}
-  </h2>
-
-  {/* RIGHT SIDE (Buttons) */}
-  <div className="flex items-center gap-3 flex-wrap">
-
-    {/* Export PDF */}
-    <button
-      onClick={() =>
-        exportRevenuePDF({ summary, plans, monthly, yearly, purchases, groupBy })
-      }
-      className="flex items-center gap-2 px-4 py-2 
-      bg-orange-500 hover:bg-orange-600
-      text-white text-sm font-semibold rounded-xl 
-      shadow-sm transition-all cursor-pointer active:scale-95"
-    >
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-        strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-        <polyline points="7 10 12 15 17 10"/>
-        <line x1="12" y1="15" x2="12" y2="3"/>
-      </svg>
-      <span>{t("exportPDF")}</span>
-    </button>
-
-    {/* Toggle */}
-    <div className="flex items-center gap-1.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-1 shadow-sm">
-      
-      <button
-        onClick={() => setViewMode("card")}
-        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
-          viewMode === "card"
-            ? "bg-orange-500 text-white shadow-sm"
-            : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
-        }`}
-      >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-          strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-          <rect x="3" y="3" width="7" height="7" rx="1" />
-          <rect x="14" y="3" width="7" height="7" rx="1" />
-          <rect x="3" y="14" width="7" height="7" rx="1" />
-          <rect x="14" y="14" width="7" height="7" rx="1" />
-        </svg>
-        <span className="hidden sm:inline">{t("cards")}</span>
-      </button>
-
-      <button
-        onClick={() => setViewMode("chart")}
-        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
-          viewMode === "chart"
-            ? "bg-orange-500 text-white shadow-sm"
-            : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
-        }`}
-      >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-          strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-          <rect x="3" y="3" width="4" height="18" rx="1" />
-          <rect x="10" y="8" width="4" height="13" rx="1" />
-          <rect x="17" y="5" width="4" height="16" rx="1" />
-        </svg>
-        <span className="hidden sm:inline">{t("charts")}</span>
-      </button>
-
+          {/* Card / Chart toggle */}
+          <div className="flex items-center bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-1 shadow-sm">
+            {[
+              { mode: "card", icon: <><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></> },
+              { mode: "chart", icon: <><rect x="3" y="3" width="4" height="18" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="17" y="5" width="4" height="16" rx="1"/></> },
+            ].map(({ mode, icon }) => (
+              <button key={mode} onClick={() => setViewMode(mode)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${viewMode === mode ? "bg-orange-500 text-white shadow-sm" : "text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700"}`}>
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">{icon}</svg>
+                <span className="hidden sm:inline capitalize">{mode === "card" ? t("cards") : t("charts")}</span>
+              </button>
+            ))}
     </div>
   </div>
 </div>
@@ -306,19 +265,24 @@ export function Revenue() {
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-10 ">
-        {summaryCards.map((card, index) => (
-          <div
-            key={index}
-            onClick={() => setSelectedCard(card)}
-            className={`bg-white rounded-xl shadow-sm p-5 md:p-6 border border-gray-200 hover:shadow-md cursor-pointer transition-all ${card.bg} hover:scale-[1.02]`}
-          >
-            <div className="flex items-center gap-4 md:gap-5">
-              <div className={`p-3 md:p-4 rounded-lg ${card.bg}`}>{card.icon}</div>
-              <div className="overflow-hidden">
-                <p className="text-xs md:text-sm text-gray-600 font-medium">{card.title}</p>
-                <p className={`text-xl md:text-2xl font-bold ${card.color} mt-1`}>{card.value}</p>
+      {/* Summary stat cards — dashboard */}
+      {/* <p className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">Revenue Overview</p> */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        {summaryCards.map((card, i) => (
+          <div key={i} onClick={() => setSelectedCard(card)}
+            className="relative rounded-2xl p-5 overflow-hidden transition-all duration-300 hover:-translate-y-1 cursor-pointer bg-white shadow-md border border-orange-100 dark:bg-gray-800 dark:border-gray-700">
+            <div className="absolute inset-0 rounded-2xl pointer-events-none" style={{ background: "linear-gradient(135deg,rgba(255,255,255,0.45) 0%,transparent 60%)" }} />
+            <div className="relative flex items-center justify-between mb-3">
+              <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${card.bg || "bg-orange-50"}`}>
+                {card.icon}
               </div>
+            </div>
+            <p className="text-xs text-gray-400 dark:text-gray-500 relative">{card.title}</p>
+            <p className={`text-xl font-semibold relative ${card.color}`}>{card.value}</p>
+            <div className="flex items-end gap-0.5 h-5 mt-3 relative">
+              {[50,70,45,85,60,100,75].map((h, j) => (
+                <div key={j} className="flex-1 rounded-sm opacity-50 bg-orange-400" style={{ height: `${h}%` }} />
+              ))}
             </div>
           </div>
         ))}
@@ -408,7 +372,7 @@ export function Revenue() {
     {/* 1. Revenue by Plan Section */}
     {showByPlan && (
       <div>
-        <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+        <h2 className="text-base font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
           <BsBoxSeam className="text-orange-500" /> {t("revenueByPlan")}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -456,7 +420,7 @@ export function Revenue() {
     {/* 2. Revenue by Month Section (Same Design) */}
     {showByMonth && (
       <div>
-        <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+        <h2 className="text-base font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
           <CiCalendar className="text-orange-500" /> {t("revenueByMonth")}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -500,7 +464,7 @@ export function Revenue() {
     {/* 3. Revenue by Year Section (Same Design) */}
     {showByYear && (
       <div>
-        <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+        <h2 className="text-base font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
           <FiCalendar className="text-orange-500" /> {t("revenueByYear")}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -544,7 +508,7 @@ export function Revenue() {
     {/* Recent Purchases Section (Aapka existing code) */}
     {groupBy === "all" && (
       <div>
-        <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+        <h2 className="text-base font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
           <FiActivity className="text-blue-500" /> {t("recentPurchases")}
         </h2>
         <div className="grid grid-cols-1 gap-4">

@@ -13,7 +13,7 @@ import { MdOutlineDescription } from "react-icons/md";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import { IoMdCheckmark } from "react-icons/io";
 import { useTranslation } from "react-i18next";
-
+import { IoCheckmarkCircleOutline } from "react-icons/io5";
 
 
 export function PlanDetails() {
@@ -69,39 +69,52 @@ export function PlanDetails() {
         </div>
 
         {/* Toggle Button */}
-        <div className="flex items-center gap-1.5 bg-white border border-gray-200 rounded-xl p-1 shadow-sm">
-          <button
-            onClick={() => setViewMode("card")}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
-              viewMode === "card"
-                ? "bg-orange-500 text-white shadow-sm"
-                : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
-            }`}
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-              strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-              <rect x="3" y="3" width="7" height="7" rx="1" />
-              <rect x="14" y="3" width="7" height="7" rx="1" />
-              <rect x="3" y="14" width="7" height="7" rx="1" />
-              <rect x="14" y="14" width="7" height="7" rx="1" />
-            </svg>
-            <span className="hidden sm:inline">{t('planDetails.cards')}</span>
-          </button>
-          <button
-            onClick={() => setViewMode("table")}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
-              viewMode === "table"
-                ? "bg-orange-500 text-white shadow-sm"
-                : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
-            }`}
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-              strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-              <path d="M3 10h18M3 14h18M10 3v18M3 6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6z" />
-            </svg>
-            <span className="hidden sm:inline">{t('planDetails.table')}</span>
-          </button>
-        </div>
+       {/* View Mode Toggle - Dark Mode Supported */}
+<div className="flex items-center bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-1 shadow-sm">
+  {["card", "table"].map((mode) => (
+    <button
+      key={mode}
+      onClick={() => setViewMode(mode)}
+      className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-medium transition-all cursor-pointer ${
+        viewMode === mode
+          ? "bg-orange-500 text-white shadow-sm"
+          : "text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700"
+      }`}
+    >
+      {mode === "card" ? (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.25"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="w-4 h-4"
+        >
+          <rect x="3" y="3" width="7" height="7" rx="1" />
+          <rect x="14" y="3" width="7" height="7" rx="1" />
+          <rect x="3" y="14" width="7" height="7" rx="1" />
+          <rect x="14" y="14" width="7" height="7" rx="1" />
+        </svg>
+      ) : (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.25"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="w-4 h-4"
+        >
+          <path d="M3 10h18M3 14h18M10 3v18M3 6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6z" />
+        </svg>
+      )}
+      <span className="hidden sm:inline">
+        {mode === "card" ? t('planDetails.cards') : t('planDetails.table')}
+      </span>
+    </button>
+  ))}
+</div>
       </div>
 
      
@@ -110,139 +123,157 @@ export function PlanDetails() {
       {viewMode === "card" && (
         <>
           {/* Hero Card */}
-         <div className="bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden mb-6">
-          <div className="h-1.5 w-full bg-gradient-to-r from-orange-400 to-orange-500" />
-            <div className="px-6 py-6 md:px-8 md:py-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 shrink-0 flex items-center justify-center rounded-2xl bg-orange-100">
-                  <BsBoxSeam className="w-6 h-6 text-orange-600" />
-                </div>
-                <div>
-                  <h1 className="text-xl md:text-2xl font-bold text-gray-900 leading-tight">
-                    {singlePlan.planName}
-                  </h1>
-                  <div className="flex items-center gap-2 text-gray-500 mt-1">
-                    <CiClock2 className="w-4 h-4 text-orange-500" />
-                    <span className="text-sm font-medium">{singlePlan.duration || "N/A"}</span>
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-row md:flex-col items-center md:items-end gap-4">
-                <span className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border ${
-                  singlePlan.isActive
-                    ? "bg-green-100 text-green-700 border-green-200"
-                    : "bg-red-100 text-red-700 border-red-200"
-                }`}>
-                  {singlePlan.isActive
-                    ? <><IoMdCheckmarkCircleOutline className="w-4 h-4" /> {t('planDetails.active')}</>
-                    : <><IoMdCloseCircleOutline className="w-4 h-4" /> {t("planDetails.inactive")}</>}
-                </span>
-                <div>
-                  <span className="text-2xl font-extrabold text-orange-600">
-                    ₹{singlePlan.priceMonthly?.toLocaleString() || "0"}
-                  </span>
-                  <span className="text-sm text-gray-400 ml-1">/{t('planDetails.month')}</span>
-                </div>
-              </div>
-            </div>
-          </div>
+        {/* Hero Banner - Plan Details with Lender Style */}
+<div className="relative rounded-2xl overflow-hidden mb-6 p-6 md:p-8"
+  style={{ 
+    background: "linear-gradient(130deg, #f97316, #fb923c, #fbbf24)" 
+  }}>
+  
+  {/* Glassmorphism Overlay */}
+  <div className="absolute inset-0 bg-white/10 backdrop-blur-sm" />
+  
+  {/* Decorative Circle */}
+  <div className="absolute rounded-full" 
+       style={{ 
+         width: 160, 
+         height: 160, 
+         background: "rgba(255,255,255,0.08)", 
+         top: -50, 
+         right: 60 
+       }} 
+  />
+
+  <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+    
+    {/* Left Side - Plan Info */}
+    <div className="flex items-center gap-4">
+      <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm border-2 border-white/30 flex items-center justify-center text-white text-2xl font-black shadow-md flex-shrink-0 overflow-hidden">
+        <BsBoxSeam className="w-7 h-7" />
+      </div>
+      
+      <div>
+        <span className="text-[10px] font-bold text-white/70 bg-white/20 px-2.5 py-1 rounded-full uppercase tracking-widest">
+          PLAN
+        </span>
+        <h1 className="text-xl sm:text-2xl font-bold text-white mt-1 leading-tight">
+          {singlePlan.planName}
+        </h1>
+        <div className="flex items-center gap-2 text-white/70 mt-1">
+          <CiClock2 className="w-4 h-4" />
+          <span className="text-sm font-medium">{singlePlan.duration || "N/A"}</span>
+        </div>
+      </div>
+    </div>
+
+    {/* Right Side - Status + Price */}
+    <div className="flex flex-col items-start sm:items-end gap-3">
+      
+      {/* Status Badge */}
+      <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border ${
+        singlePlan.isActive 
+          ? "bg-green-400/30 text-white border-green-300/50" 
+          : "bg-red-400/30 text-white border-red-300/50"
+      }`}>
+        {singlePlan.isActive 
+          ? <><IoCheckmarkCircleOutline className="w-4 h-4" /> Active</>
+          : <><AiOutlineCloseCircle className="w-4 h-4" /> Inactive</>
+        }
+      </span>
+
+      {/* Price */}
+      <div className="text-right">
+        <span className="text-3xl sm:text-4xl font-extrabold text-white tracking-tighter">
+          ₹{singlePlan.priceMonthly?.toLocaleString() || "0"}
+        </span>
+        <span className="text-white/70 text-sm ml-1">/{t('planDetails.month')}</span>
+      </div>
+
+    </div>
+  </div>
+</div>
 
           {/* Stats Row */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6">
+            {/* Stats Row */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             {[
-              { label: t('planDetails.stats.monthlyPrice'), value: `₹${singlePlan.priceMonthly?.toLocaleString() || "0"}`, icon: <FiDollarSign className="w-5 h-5" />, color: "bg-orange-100 text-orange-600" },
-              { label: t('planDetails.stats.duration'),      value: singlePlan.duration || "N/A",                            icon: <CiClock2 className="w-5 h-5" />,     color: "bg-blue-100 text-blue-600"   },
-              { label: t("planDetails.stats.status"),        value: singlePlan.isActive ? t('planDetails.active') : t("planDetails.inactive"),             icon: <IoMdCheckmarkCircleOutline className="w-5 h-5" />, color: singlePlan.isActive ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600" },
-              { label: t('planDetails.stats.razorpayId'),   value: singlePlan.razorpayPlanId || t('planDetails.notSet'),                  icon: <FiCreditCard className="w-5 h-5" />, color: "bg-purple-100 text-purple-600" },
+              { label: t('planDetails.stats.monthlyPrice'), value: `₹${singlePlan.priceMonthly?.toLocaleString() || "0"}`, icon: <FiDollarSign className="w-4 h-4" />, color: "bg-orange-50 text-orange-600" },
+              { label: t('planDetails.stats.duration'), value: singlePlan.duration || "N/A", icon: <CiClock2 className="w-4 h-4" />, color: "bg-blue-50 text-blue-600" },
+              { label: t("planDetails.stats.status"), value: singlePlan.isActive ? t('planDetails.active') : t("planDetails.inactive"), icon: <IoMdCheckmarkCircleOutline className="w-4 h-4" />, color: singlePlan.isActive ? "bg-green-50 text-green-600" : "bg-red-50 text-red-600" },
+              { label: t('planDetails.stats.razorpayId'), value: singlePlan.razorpayPlanId || t('planDetails.notSet'), icon: <FiCreditCard className="w-4 h-4" />, color: "bg-purple-50 text-purple-600" },
             ].map((stat, i) => (
-              <div key={i} className="bg-white rounded-xl md:rounded-2xl border border-gray-200 shadow-sm p-3 md:p-4 flex items-center gap-3">
-                <div className={`w-8 h-8 md:w-10 md:h-10 shrink-0 flex items-center justify-center rounded-xl ${stat.color}`}>
-                  {stat.icon}
-                </div>
+              <div key={i} className="bg-white dark:bg-gray-800 rounded-2xl shadow-md border border-orange-100 dark:border-gray-700 p-4 flex items-center gap-3 hover:-translate-y-0.5 transition-all">
+                <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${stat.color}`}>{stat.icon}</div>
                 <div className="min-w-0">
-                  <p className="text-[10px] text-gray-400 font-medium truncate uppercase tracking-wider">{stat.label}</p>
-                  <p className="text-xs md:text-sm font-bold text-gray-900 truncate">{stat.value}</p>
+                  <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wide truncate">{stat.label}</p>
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white truncate mt-0.5">{stat.value}</p>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Plan Info + Features + Description */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Plan Information */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-              <div className="px-6 py-4 border-b border-gray-200 bg-gray-50/60 flex items-center gap-3">
-                <div className="bg-orange-100 p-2 rounded-xl">
-                  <BsBoxSeam className="w-4 h-4 text-orange-600" />
-                </div>
-                <h3 className="text-sm font-bold text-gray-900">{t('planDetails.planInformation')}</h3>
+            {/* Info cards */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            {/* Plan Info */}
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md border border-orange-100 dark:border-gray-700 overflow-hidden">
+              <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center gap-3">
+                <div className="bg-orange-50 dark:bg-orange-900/20 p-2 rounded-xl"><BsBoxSeam className="w-4 h-4 text-orange-600" /></div>
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{t('planDetails.planInformation')}</h3>
               </div>
-              <div className="p-5 space-y-1">
+              <div className="p-5 space-y-0">
                 {[
-                  { label: t('planDetails.planName'),     value: singlePlan.planName },
-                  { label: t("planDetails.duration"),      value: singlePlan.duration || t('planDetails.na')  },
+                  { label: t('planDetails.planName'), value: singlePlan.planName },
+                  { label: t("planDetails.duration"), value: singlePlan.duration || "N/A" },
                   { label: t("planDetails.monthlyPrice"), value: `₹${singlePlan.priceMonthly?.toLocaleString() || "0"}` },
-                  { label: t("planDetails.createdAt"),    value: new Date(singlePlan.createdAt).toLocaleString("en-IN", { day: "numeric", month: "short", year: "numeric" }) },
-                  { label: t("planDetails.lastUpdated"),  value: new Date(singlePlan.updatedAt).toLocaleString("en-IN", { day: "numeric", month: "short", year: "numeric" }) },
-                  { label: t('planDetails.razorpayPlanId'),   value: singlePlan.razorpayPlanId || t('planDetails.notConfigured') },
+                  { label: t("planDetails.createdAt"), value: new Date(singlePlan.createdAt).toLocaleString("en-IN", { day: "numeric", month: "short", year: "numeric" }) },
+                  { label: t("planDetails.lastUpdated"), value: new Date(singlePlan.updatedAt).toLocaleString("en-IN", { day: "numeric", month: "short", year: "numeric" }) },
+                  { label: t('planDetails.razorpayPlanId'), value: singlePlan.razorpayPlanId || t('planDetails.notConfigured') },
                 ].map((item, idx) => (
-                  <div key={idx} className="flex items-center justify-between py-2.5 border-b border-gray-100 last:border-0">
-                    <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{item.label}</span>
-                    <span className="text-sm font-bold text-gray-800 text-right max-w-[55%] truncate">{item.value}</span>
+                  <div key={idx} className="flex items-center justify-between py-3 border-b border-gray-50 dark:border-gray-700 last:border-0">
+                    <span className="text-[11px] font-medium text-gray-400 uppercase tracking-wide">{item.label}</span>
+                    <span className="text-sm font-semibold text-gray-800 dark:text-gray-200 text-right max-w-[55%] truncate">{item.value}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Features + Description */}
-            <div className="flex flex-col gap-6">
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                <div className="px-6 py-4 border-b border-gray-200 bg-gray-50/60 flex items-center gap-3">
-                  <div className="bg-green-100 p-2 rounded-xl">
-                    <IoMdCheckmark className="w-4 h-4 text-green-600" />
-                  </div>
-                  <h3 className="text-sm font-bold text-gray-900">{t('planDetails.planFeatures')}</h3>
+           <div className="flex flex-col gap-5">
+              {/* Features */}
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md border border-orange-100 dark:border-gray-700 overflow-hidden">
+                <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center gap-3">
+                  <div className="bg-green-50 dark:bg-green-900/20 p-2 rounded-xl"><IoMdCheckmark className="w-4 h-4 text-green-600" /></div>
+                  <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{t('planDetails.planFeatures')}</h3>
                 </div>
-                <div className="p-5 space-y-3">
+                <div className="p-4 space-y-2.5">
                   {[
-                    { label: t('planDetails.features.unlimitedLoans'),    value: true,  desc: t('planDetails.features.unlimitedLoansDesc') },
+                    { label: t('planDetails.features.unlimitedLoans'), value: true, desc: t('planDetails.features.unlimitedLoansDesc') },
                     { label: t('planDetails.features.advancedAnalytics'), value: singlePlan.planFeatures?.advancedAnalytics, desc: t('planDetails.features.advancedAnalyticsDesc') },
-                    { label: t('planDetails.features.prioritySupport'),   value: singlePlan.planFeatures?.prioritySupport,   desc: t("planDetails.features.prioritySupportDesc") },
-                  ].map((feature, i) => (
-                    <div key={i} className={`flex items-center justify-between p-3 rounded-xl border ${
-                      feature.value ? "bg-green-50/60 border-green-300" : "bg-gray-50/60 border-gray-300"
-                    }`}>
-                      <div className="flex items-center gap-3">
-                        {feature.value
-                          ? <IoMdCheckmarkCircleOutline className="w-5 h-5 text-green-600 shrink-0" />
-                          : <IoMdCloseCircleOutline className="w-5 h-5 text-red-400 shrink-0" />}
+                    { label: t('planDetails.features.prioritySupport'), value: singlePlan.planFeatures?.prioritySupport, desc: t("planDetails.features.prioritySupportDesc") },
+                  ].map((f, i) => (
+                    <div key={i} className={`flex items-center justify-between p-3 rounded-xl border ${f.value ? "bg-green-50/60 dark:bg-green-900/10 border-green-200 dark:border-green-800" : "bg-gray-50/60 dark:bg-gray-700/30 border-gray-200 dark:border-gray-700"}`}>
+                      <div className="flex items-center gap-2.5">
+                        {f.value ? <IoMdCheckmarkCircleOutline className="w-4 h-4 text-green-600 flex-shrink-0" /> : <IoMdCloseCircleOutline className="w-4 h-4 text-red-400 flex-shrink-0" />}
                         <div>
-                          <p className="text-sm font-bold text-gray-900">{feature.label}</p>
-                          <p className="text-xs text-gray-400">{feature.desc}</p>
+                          <p className="text-xs font-semibold text-gray-900 dark:text-white">{f.label}</p>
+                          <p className="text-[10px] text-gray-400">{f.desc}</p>
                         </div>
                       </div>
-                      <span className={`text-xs font-bold px-2 py-1 rounded-full ${
-                        feature.value ? "bg-green-100 text-green-700" : "bg-red-100 text-red-500"
-                      }`}>
-                        {feature.value ? t("planDetails.enabled") : t("planDetails.disabled")}
+                      <span className={`text-[10px] font-bold px-2 py-1 rounded-full ${f.value ? "bg-green-100 text-green-700" : "bg-red-50 text-red-500"}`}>
+                        {f.value ? t("planDetails.enabled") : t("planDetails.disabled")}
                       </span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                <div className="px-6 py-4 border-b border-gray-200 bg-gray-50/60 flex items-center gap-3">
-                  <div className="bg-blue-100 p-2 rounded-xl">
-                    <MdOutlineDescription className="w-4 h-4 text-blue-600" />
-                  </div>
-                  <h3 className="text-sm font-bold text-gray-900">{t('planDetails.description')}</h3>
+              {/* Description */}
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md border border-orange-100 dark:border-gray-700 overflow-hidden">
+                <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center gap-3">
+                  <div className="bg-blue-50 dark:bg-blue-900/20 p-2 rounded-xl"><MdOutlineDescription className="w-4 h-4 text-blue-600" /></div>
+                  <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{t('planDetails.description')}</h3>
                 </div>
-                <div className="p-5">
-                  <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-wrap">
-                    {singlePlan.description || t('planDetails.noDescription')}
-                  </p>
-                </div>
+                <p className="p-5 text-sm text-gray-600 dark:text-gray-400 leading-relaxed whitespace-pre-wrap">
+                  {singlePlan.description || t('planDetails.noDescription')}
+                </p>
               </div>
             </div>
           </div>
@@ -253,7 +284,7 @@ export function PlanDetails() {
       {/*   TABLE VIEW    */}
   
 {viewMode === "table" && (
-  <div className="bg-white rounded-2xl shadow-sm border border-gray-300 overflow-hidden">
+  <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md border border-orange-100 dark:border-gray-700 overflow-hidden">
 
     {/* Table Header */}
     <div className="px-6 py-4 border-b border-gray-300 bg-white flex items-center justify-between">

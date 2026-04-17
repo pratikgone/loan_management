@@ -45,6 +45,7 @@
     "support": "Support",
     "security": "Security",
     "settings": "Settings",
+    "profile" : "Profile",
     "logout": "Logout",
     "confirmLogout": "Confirm Logout",
     "logoutQuestion": "Are you sure you want to logout?",
@@ -198,6 +199,8 @@
   "na": "N/A",
 
   "revenueByPlan": "Revenue by Plan",
+  "revenueByMonth": "Revenue by Month",
+  "revenueByYear": "Revenue by Year",
   "monthlyRevenue": "Monthly Revenue",
   "yearlyRevenue": "Yearly Revenue",
   "recentPurchases": "Recent Purchases",
