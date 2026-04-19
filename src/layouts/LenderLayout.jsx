@@ -16,9 +16,7 @@ const LenderLayout = () => {
     };
 
     handleResize();
-
     window.addEventListener("resize", handleResize);
-
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -39,17 +37,15 @@ const LenderLayout = () => {
         isCollapsed={isCollapsed}
       />
 
-      <div
-        className={`transition-all duration-300 ${
-          isCollapsed ? "lg:ml-20" : "lg:ml-72"
-        }`}
-      >
+      <div className={`transition-all duration-300 ${isCollapsed ? "lg:ml-20" : "lg:ml-72"}`}>
+
         <LenderNavbar
           toggleSidebar={toggleSidebar}
           isCollapsed={isCollapsed}
         />
 
-        <main className="mt-16 min-h-[calc(100vh-64px)] p-6">
+        {/* Main Content - Same as AdminLayout */}
+        <main className="mt-16 min-h-[calc(100vh-64px)]">
           <Outlet />
         </main>
       </div>

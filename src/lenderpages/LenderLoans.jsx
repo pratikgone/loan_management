@@ -3,6 +3,8 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { IoIosSearch } from "react-icons/io";
 import { FiFileText } from "react-icons/fi";
+import { FiFilter } from "react-icons/fi";
+import { FiCheck } from "react-icons/fi";
 
 const BASE_URL = "https://loan-backend-cv1k.onrender.com/api";
 
@@ -15,6 +17,7 @@ export default function LenderLoans() {
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => { fetchLoans(); }, [search, statusFilter, currentPage]);
+   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const fetchLoans = async () => {
     try {
@@ -65,21 +68,24 @@ export default function LenderLoans() {
         </div>
 
         {/* Search + Filter */}
-        <div className="mb-6 flex items-center gap-3 bg-white/60 dark:bg-gray-800 backdrop-blur-xl rounded-2xl border border-white/70 dark:border-gray-700 shadow-sm p-4">
-          <IoIosSearch className="w-4 h-4 text-gray-400 flex-shrink-0" />
-          <input type="text" value={search} onChange={e => { setSearch(e.target.value); setCurrentPage(1); }}
-            placeholder="Search by borrower name..."
-            className="flex-1 bg-transparent outline-none text-gray-700 dark:text-gray-200 placeholder-gray-400 text-sm" />
-          <div className="h-4 w-px bg-gray-200 dark:bg-gray-600 hidden sm:block" />
-          <select value={statusFilter} onChange={e => { setStatusFilter(e.target.value); setCurrentPage(1); }}
-            className="bg-transparent text-xs font-medium text-gray-600 dark:text-gray-300 outline-none cursor-pointer">
-            <option value="">All Status</option>
-            <option value="pending">Pending</option>
-            <option value="part paid">Part Paid</option>
-            <option value="paid">Paid</option>
-            <option value="overdue">Overdue</option>
-          </select>
-        </div>
+      <div className="mb-6 flex items-center gap-3 bg-white rounded-xl border border-orange-100 shadow-sm p-3 max-w-4xl mx-auto">
+        <IoIosSearch className="w-4 h-4 text-gray-400 flex-shrink-0" />
+        <input 
+          type="text" 
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          placeholder="Search borrower by name or Aadhaar..." 
+          className="flex-1 bg-transparent outline-none text-gray-700 dark:text-gray-200 placeholder-gray-400 text-sm" 
+        />
+        <div className="h-5 w-px bg-gray-200 dark:bg-gray-600" />
+        <button 
+          onClick={() => setIsFilterOpen(true)}
+          className="flex items-center gap-2 text-orange-500 hover:text-orange-600 transition-colors px-2"
+        >
+          <FiFilter className="w-4 h-4" />
+          <span className="text-xs font-medium hidden sm:inline">Filter</span>
+        </button>
+      </div>
 
         <p className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">
           {loans.length} results
@@ -173,6 +179,86 @@ export default function LenderLoans() {
         )}
 
       </div>
+           {/* Filter Modal - Same as Lenders page */}
+      {isFilterOpen && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden border border-gray-100 dark:border-gray-700">
+      
+            {/* Header */}
+            <div className="flex-shrink-0 flex items-center justify-between px-6 py-5 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-orange-500 to-orange-400">
+              <h3 className="text-2xl font-bold text-white">Filters</h3>
+              <button
+                onClick={() => setIsFilterOpen(false)}
+                className="text-white text-3xl font-bold transition-colors cursor-pointer"
+              >
+                ×
+              </button>
+            </div>
+      
+            {/* Body */}
+            <div className="flex-grow overflow-y-auto p-6 space-y-6">
+              <h4 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-3">
+                <FiFilter className="w-6 h-6 text-orange-600" />
+                Loan Status
+              </h4>
+      
+              <div className="border-t border-orange-200 dark:border-orange-700 my-4"></div>
+      
+              <div className="space-y-4">
+                {[
+                  { value: "", label: "All Status" },
+                  { value: "pending", label: "Pending" },
+                  { value: "part paid", label: "Part Paid" },
+                  { value: "paid", label: "Paid" },
+                  { value: "overdue", label: "Overdue" },
+                ].map((opt) => (
+                  <label
+                    key={opt.value}
+                    className={`flex items-center gap-4 p-4 rounded-xl border cursor-pointer transition-all duration-200 ${
+                      statusFilter === opt.value
+                        ? "border-orange-500 bg-orange-50/70 dark:bg-orange-900/20 shadow-md ring-1 ring-orange-300/30"
+                        : "border-gray-200 dark:border-gray-600 hover:border-orange-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="statusFilter"
+                      value={opt.value}
+                      checked={statusFilter === opt.value}
+                      onChange={() => setStatusFilter(opt.value)}
+                      className="w-5 h-5 accent-orange-600 cursor-pointer"
+                    />
+                    <span className="text-base font-medium text-gray-800 dark:text-gray-200">
+                      {opt.label}
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </div>
+      
+            {/* Footer */}
+            <div className="flex-shrink-0 flex flex-row items-center justify-center sm:justify-between gap-3 px-4 sm:px-6 py-4 sm:py-5 border-t border-gray-200 dark:border-gray-700 bg-orange-50/50 dark:bg-gray-800">
+              <button
+                onClick={() => {
+                  setStatusFilter("");
+                  setIsFilterOpen(false);
+                }}
+                className="flex-1 max-w-[130px] flex items-center justify-center gap-2 px-3 sm:px-7 py-2.5 sm:py-3 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-white rounded-lg transition-all text-xs sm:text-sm font-medium cursor-pointer"
+              >
+                 <span className="whitespace-nowrap">Clear All</span> 
+              </button>
+      
+              <button
+                onClick={() => setIsFilterOpen(false)}
+                className="flex-[2] max-w-[200px] flex items-center justify-center gap-2 px-4 sm:px-12 py-2.5 sm:py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-all text-xs sm:text-sm font-medium cursor-pointer"
+              >
+               <span className="whitespace-nowrap">Apply Filters</span> 
+                <FiCheck className="w-5 h-5 flex-shrink-0" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

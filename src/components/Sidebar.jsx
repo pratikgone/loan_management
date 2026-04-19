@@ -22,8 +22,8 @@ const menuItems = [
   { key: "revenue", path: "/revenue", icon: <MdCurrencyRupee /> },
   { key: "lenders", path: "/lenders", icon: <FiUsers /> },
   { key: "activity", path: "/activityDetails", icon: <PiClockCounterClockwise /> },
+  { key: "profile", path: "/profile", icon: <FiUser /> },
   { key: "settings", path: "/password", icon: <CiSettings className="h-5.5 w-5.5" /> },
-  { key: "profile", path: "/profile", icon: <FiUser /> }
 ];
 
 
@@ -339,30 +339,45 @@ export default function Sidebar({
             </div>
 
             {/* Buttons */}
-            <div className="flex items-center gap-4 px-6 py-5 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
-              <button
-                onClick={() => setShowLogoutConfirm(false)}
-                className="flex-1 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-xl transition-all cursor-pointer"
-              >
-                {t("sidebar.cancel")}
-              </button>
+  {/* Buttons - Strong Dark Mode Red Button */}
+<div className="flex items-center gap-4 px-6 py-5 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
 
-              <button
-                onClick={() => {
-                  setShowLogoutConfirm(false);
-                  showToast({ type: "success", message: "Logout successfully!" });
-                  setTimeout(() => {
-                    dispatch(logout());
-                    localStorage.removeItem("token");
-                    localStorage.removeItem("user");
-                    navigate("/");
-                  }, 1500);
-                }}
-                className="flex-1 py-3 bg-red-600 hover:bg-red-700 text-white font-medium rounded-xl shadow-md transition-all cursor-pointer"
-              >
-                {t("sidebar.confirm")}
-              </button>
-            </div>
+  {/* Cancel Button */}
+  <button
+    onClick={() => setShowLogoutConfirm(false)}
+    className="flex-1 py-3 
+               bg-gray-200 hover:bg-gray-300 
+               dark:bg-gray-700 dark:hover:bg-gray-600 
+               text-gray-800 dark:text-gray-200 
+               font-medium rounded-xl transition-all cursor-pointer"
+  >
+    {t("sidebar.cancel")}
+  </button>
+
+  {/* Logout Button - Bright Red in Dark Mode */}
+  <button
+    onClick={() => {
+      setShowLogoutConfirm(false);
+      showToast({ type: "success", message: "Logout successfully!" });
+      setTimeout(() => {
+        dispatch(logout());
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        navigate("/");
+      }, 1500);
+    }}
+    className="flex-1 py-3 
+              bg-red-600 hover:bg-red-700 
+             dark:bg-red-500 dark:hover:bg-red-600 
+             dark:!bg-red-500 dark:!text-white
+             ring-2 ring-red-400 dark:ring-red-400
+             text-white font-semibold rounded-xl shadow-lg 
+             transition-all cursor-pointer active:scale-95"
+  >
+    {t("sidebar.confirm")}
+  </button>
+
+</div>
 
           </div>
         </div>

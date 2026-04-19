@@ -1,190 +1,112 @@
-import { useState } from 'react';
-import { FiLock, FiShield, FiEyeOff, FiCheckCircle, FiChevronDown } from 'react-icons/fi';
+import { useState } from "react";
+import { FiLock, FiShield, FiEyeOff, FiCheckCircle, FiChevronDown } from "react-icons/fi";
 
 const sections = [
-  {
-    title: '1. Acceptance of Terms',
-    content:
-      'By accessing and using the LoanHub application, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services.',
-  },
-  {
-    title: '2. Description of Service',
-    content:
-      'LoanHub provides a platform for managing personal loans between lenders and borrowers. Our service facilitates loan tracking, payment management, and financial record keeping. We do not provide financial advice or act as a financial institution.',
-  },
-  {
-    title: '3. User Accounts',
-    content:
-      'To use our services, you must create an account with accurate and complete information. You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account. You must notify us immediately of any unauthorized use.',
-  },
-  {
-    title: '4. User Responsibilities',
-    content:
-      'Users agree to use the service only for lawful purposes and in accordance with these terms. You shall not use the service to engage in any fraudulent, misleading, or illegal activities. All loan agreements made through the platform are between the respective parties.',
-  },
-  {
-    title: '5. Privacy & Data',
-    content:
-      'Your use of the service is also governed by our Privacy Policy. We collect and process personal data as described in our Privacy Policy. By using our service, you consent to such processing and warrant that all data provided by you is accurate.',
-  },
-  {
-    title: '6. Intellectual Property',
-    content:
-      'The service and its original content, features, and functionality are owned by LoanHub and are protected by international copyright, trademark, and other intellectual property laws. You may not copy, modify, or distribute any part of our service without permission.',
-  },
-  {
-    title: '7. Limitation of Liability',
-    content:
-      'LoanHub shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use of or inability to use the service. We do not guarantee the accuracy of loan calculations or the reliability of user-provided information.',
-  },
-  {
-    title: '8. Termination',
-    content:
-      'We may terminate or suspend your account and access to the service immediately, without prior notice, for conduct that we believe violates these Terms of Service or is harmful to other users, us, or third parties, or for any other reason at our sole discretion.',
-  },
-  {
-    title: '9. Changes to Terms',
-    content:
-      'We reserve the right to modify these terms at any time. We will notify users of any material changes via the app or email. Your continued use of the service after such modifications constitutes acceptance of the updated terms.',
-  },
-  {
-    title: '10. Contact Information',
-    content:
-      'If you have any questions about these Terms of Service, please contact us at support@loanhub.com or through our in-app support feature.',
-  },
+  { title: "1. Acceptance of Terms", content: "By accessing and using the LoanHub application, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service." },
+  { title: "2. Description of Service", content: "LoanHub provides a platform for managing personal loans between lenders and borrowers. We facilitate loan tracking, payment management, and financial record keeping." },
+  { title: "3. User Accounts", content: "To use our services, you must create an account with accurate and complete information. You are responsible for maintaining the confidentiality of your account credentials." },
+  { title: "4. User Responsibilities", content: "Users agree to use the service only for lawful purposes. You shall not engage in fraudulent, misleading, or illegal activities through the platform." },
+  { title: "5. Privacy & Data", content: "Your use is governed by our Privacy Policy. We collect and process personal data as described therein. By using our service, you consent to such processing." },
+  { title: "6. Intellectual Property", content: "The service and its content are owned by LoanHub and protected by copyright and trademark laws. You may not copy, modify, or distribute any part without permission." },
+  { title: "7. Limitation of Liability", content: "LoanHub shall not be liable for any indirect, incidental, or consequential damages from your use of the service." },
+  { title: "8. Termination", content: "We may terminate your account without prior notice for violations of these Terms or conduct harmful to other users or third parties." },
+  { title: "9. Changes to Terms", content: "We reserve the right to modify these terms at any time. Continued use after modifications constitutes acceptance of updated terms." },
+  { title: "10. Contact Information", content: "Questions about these Terms? Contact us at support@loanhub.com or through our in-app support feature." },
+];
+
+const highlights = [
+  { icon: <FiShield className="w-5 h-5 text-orange-500" />, title: "Data Encryption", desc: "All data is encrypted in transit (TLS 1.3) and at rest (AES-256).", accent: "border-orange-100 bg-orange-50/50" },
+  { icon: <FiLock className="w-5 h-5 text-blue-500" />, title: "Two-Factor Auth", desc: "Enable 2FA for an extra layer of protection on your account.", accent: "border-blue-100 bg-blue-50/50" },
+  { icon: <FiEyeOff className="w-5 h-5 text-purple-500" />, title: "Privacy First", desc: "We never sell your data. Full control over your personal information.", accent: "border-purple-100 bg-purple-50/50" },
 ];
 
 export function PrivacySecurity() {
   const [expanded, setExpanded] = useState(null);
 
   return (
-    <>
-    <div className='p-4 sm:p-6'>
-      {/* Heading */}
-      <div className="mb-10 flex flex-col items-center">
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Privacy & Security</h1>
-        <p className="mt-2 text-sm md:text-base text-gray-500">
-          Your personal and financial information is protected with bank-grade security standards.
-        </p>
-      </div>
+    <div className="min-h-screen bg-white">
 
-      {/* Security Highlight Cards */}
-      <div className="mb-10">
-        <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">Security Highlights</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
-          {[
-            {
-              icon: <FiShield className="w-5 h-5 text-orange-500" />,
-              title: 'Data Encryption',
-              desc: 'All data is encrypted in transit (TLS 1.3) and at rest (AES-256).',
-              border: 'border-orange-100',
-              iconBg: 'bg-white',
-            },
-            {
-              icon: <FiLock className="w-5 h-5 text-orange-500" />,
-              title: 'Two-Factor Auth',
-              desc: 'Enable 2FA for an extra layer of protection on your account.',
-              border: 'border-orange-100',
-              iconBg: 'bg-white',
-            },
-            {
-              icon: <FiEyeOff className="w-5 h-5 text-orange-500" />,
-              title: 'Privacy First',
-              desc: 'We never sell your data. Full control over your personal information.',
-              border: 'border-orange-100',
-              iconBg: 'bg-white',
-            },
-          ].map((card, i) => (
-            <div
-              key={i}
-              className={`${card.bg} rounded-2xl border ${card.border} shadow-sm p-5 md:p-6 hover:shadow-lg hover:scale-[1.02] transition-all duration-300`}
-            >
-              <div className="flex items-center gap-4 mb-3">
-                <div className={`${card.iconBg} p-3 rounded-xl shadow-sm`}>
-                  {card.icon}
-                </div>
-                <h3 className="text-base font-bold text-gray-900">{card.title}</h3>
-              </div>
-              <p className="text-sm text-gray-600 leading-relaxed">{card.desc}</p>
-            </div>
-          ))}
+      {/* Page Hero */}
+      <div className="relative overflow-hidden py-20 text-center"
+        style={{ background: "linear-gradient(160deg,#fff7ed 0%,#ffffff 60%,#f0fdf4 100%)" }}>
+        <div className="absolute inset-0 opacity-[0.03]"
+          style={{ backgroundImage: "radial-gradient(circle,#000 1px,transparent 1px)", backgroundSize: "28px 28px" }} />
+        <div className="relative max-w-2xl mx-auto px-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-orange-200 rounded-full shadow-sm mb-6">
+            <FiShield className="w-4 h-4 text-orange-500" />
+            <span className="text-xs font-semibold text-orange-600 uppercase tracking-widest">Privacy & Security</span>
+          </div>
+          <h1 className="text-4xl sm:text-5xl font-black text-gray-900 tracking-tight mb-4">
+            Your Data is{" "}
+            <span style={{ background: "linear-gradient(135deg,#f97316,#ea580c)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+              Safe with Us
+            </span>
+          </h1>
+          <p className="text-gray-400 text-base max-w-md mx-auto">
+            Protected with bank-grade security standards and complete transparency.
+          </p>
         </div>
       </div>
 
-      {/* Accordion — Privacy Policy & Terms */}
-      <div className="mb-10">
-        <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
-          Privacy Policy & Security Guidelines
-        </h2>
-        <div className="bg-white rounded-2xl border border-orange-100 shadow-sm p-6">
-          <div className="space-y-3">
-            {sections.map((section, index) => (
-              <div
-                key={index}
-                className={`rounded-xl border transition-all duration-300 overflow-hidden ${
-                  expanded === index
-                    ? 'border-orange-300 bg-orange-50/40'
-                    : 'border-gray-200 hover:border-orange-200'
-                }`}
-              >
-                <button
-                  onClick={() => setExpanded(expanded === index ? null : index)}
-                  className="w-full flex items-center justify-between px-5 py-4 text-left cursor-pointer"
-                >
-                  <div className="flex items-center gap-3">
-                    <FiShield
-                      className={`w-5 h-5 flex-shrink-0 transition-colors ${
-                        expanded === index ? 'text-orange-500' : 'text-gray-400'
-                      }`}
-                    />
-                    <h3 className="text-sm md:text-base font-semibold text-gray-900">
-                      {section.title}
-                    </h3>
-                  </div>
-                  <FiChevronDown
-                    className={`w-5 h-5 text-gray-400 flex-shrink-0 transition-transform duration-300 ${
-                      expanded === index ? 'rotate-180 text-orange-500' : ''
-                    }`}
-                  />
-                </button>
+      <div className="max-w-5xl mx-auto px-6 sm:px-8 py-16 space-y-20">
 
-                <div
-                  className={`transition-all duration-300 ease-in-out overflow-hidden ${
-                    expanded === index ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
-                  }`}
-                >
-                  <div className="px-5 pb-5">
-                    <div className="border-t border-orange-100 pt-4">
-                      <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">
-                        {section.content}
-                      </p>
-                    </div>
+        {/* Security Highlights */}
+        <div>
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-6">Security Highlights</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {highlights.map((card, i) => (
+              <div key={i}
+                className={`rounded-2xl border ${card.accent} p-6 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300`}>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="bg-white p-2.5 rounded-xl shadow-sm flex-shrink-0">{card.icon}</div>
+                  <h3 className="text-sm font-bold text-gray-900">{card.title}</h3>
+                </div>
+                <p className="text-sm text-gray-500 leading-relaxed">{card.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Policy Accordion */}
+        <div>
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-6">Privacy Policy & Terms of Service</p>
+          <div className="space-y-2.5">
+            {sections.map((section, i) => (
+              <div key={i}
+                className={`rounded-2xl border overflow-hidden transition-all duration-300 ${expanded === i ? "border-orange-300 bg-orange-50/40" : "border-gray-100 hover:border-orange-200 bg-white shadow-sm"}`}>
+                <button onClick={() => setExpanded(expanded === i ? null : i)}
+                  className="w-full flex items-center justify-between px-5 py-4 text-left cursor-pointer">
+                  <div className="flex items-center gap-3">
+                    <FiShield className={`w-4 h-4 flex-shrink-0 transition-colors ${expanded === i ? "text-orange-500" : "text-gray-400"}`} />
+                    <h3 className="text-sm font-semibold text-gray-900">{section.title}</h3>
+                  </div>
+                  <FiChevronDown className={`w-4 h-4 text-gray-400 flex-shrink-0 transition-transform duration-300 ${expanded === i ? "rotate-180 text-orange-500" : ""}`} />
+                </button>
+                <div className={`transition-all duration-300 overflow-hidden ${expanded === i ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}>
+                  <div className="px-5 pb-5 border-t border-orange-100">
+                    <p className="text-sm text-gray-600 leading-relaxed pt-4">{section.content}</p>
                   </div>
                 </div>
               </div>
             ))}
           </div>
         </div>
-      </div>
 
-      {/* Footer Note */}
-      <div className="mb-10">
-        <div className="bg-white rounded-2xl border border-orange-100 shadow-sm p-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+        {/* Footer note */}
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <FiCheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
-            <p className="text-sm font-semibold text-gray-700">
-              Your security is our priority · Last updated: March 2026
-            </p>
+            <div className="w-8 h-8 rounded-xl bg-green-50 flex items-center justify-center flex-shrink-0">
+              <FiCheckCircle className="w-4 h-4 text-green-500" />
+            </div>
+            <p className="text-sm font-medium text-gray-700">Your security is our priority · Last updated: March 2026</p>
           </div>
-          <a
-            href="mailto:privacy@loanhub.com"
-            className="text-sm text-orange-500 hover:text-orange-600 font-medium transition-colors"
-          >
+          <a href="mailto:privacy@loanhub.com"
+            className="text-sm text-orange-500 hover:text-orange-600 font-medium transition-colors">
             privacy@loanhub.com
           </a>
         </div>
+
       </div>
-      </div>
-    </>
+    </div>
   );
 }

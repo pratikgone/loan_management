@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";   // ← useEffect add kiya
 import { CiLogout } from "react-icons/ci";
 import { logout, stopImpersonation } from "../store/authSlice";
+import { useDarkMode } from "../components/useDarkMode";
+import { useTranslation } from "react-i18next";
 
 export function LenderNavbar({ toggleSidebar, isCollapsed }) {
   const dispatch = useDispatch();
@@ -10,6 +12,11 @@ export function LenderNavbar({ toggleSidebar, isCollapsed }) {
   
 
   const { user, isImpersonating: reduxIsImpersonating } = useSelector(s => s.auth);
+
+  
+    const { isDark, toggle } = useDarkMode();
+
+    const {t} = useTranslation();
 
   // LocalStorage 
   const [isImpersonating, setIsImpersonating] = useState(false);
@@ -56,6 +63,43 @@ export function LenderNavbar({ toggleSidebar, isCollapsed }) {
                 </div>
               </div>
 
+               {/* Dark Mode Toggle */}
+              <button
+                onClick={toggle}
+                className="relative w-14 h-7 rounded-full transition-colors duration-300 cursor-pointer focus:outline-none flex-shrink-0"
+                style={{
+                  background: isDark
+                    ? "linear-gradient(135deg, #1e1b4b, #3730a3)"
+                    : "linear-gradient(135deg, #fed7aa, #f97316)",
+                }}
+                title={isDark ? t("navbar.lightMode") : t("navbar.darkMode")}
+              >
+                {/* Track icons */}
+                <span className="absolute left-1.5 top-1/2 -translate-y-1/2 text-[10px]">
+                  ☀️
+                </span>
+                <span className="absolute right-1.5 top-1/2 -translate-y-1/2 text-[10px]">
+                  🌙
+                </span>
+
+                {/* Thumb */}
+                <span
+                  className={`absolute top-0.5 w-6 h-6 bg-white rounded-full shadow-md
+      transition-transform duration-300 flex items-center justify-center text-xs
+      ${isDark ? "translate-x-7" : "translate-x-0.5"}`}
+                >
+                  {isDark ? "🌙" : "☀️"}
+                </span>
+              </button>
+
+                {/* Language */}
+            <select onChange={(e) => i18n.changeLanguage(e.target.value)}
+              className="hidden sm:block bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-2 py-1.5 text-xs font-medium text-gray-600 dark:text-gray-300 cursor-pointer outline-none">
+              <option value="en">EN</option>
+              <option value="hi">हि</option>
+              <option value="mr">म</option>
+            </select>
+
               {/* Exit Impersonation Button */}
               {isImpersonating && (
                 <button
@@ -63,7 +107,7 @@ export function LenderNavbar({ toggleSidebar, isCollapsed }) {
                   className="flex items-center gap-2 text-sm font-semibold text-amber-600 
                     hover:bg-amber-50 px-4 py-2 rounded-xl transition-colors cursor-pointer border border-amber-200"
                 >
-                  ✕ Exit Impersonation
+                  ✕ Exit 
                 </button>
               )}
 

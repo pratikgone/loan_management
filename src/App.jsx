@@ -26,8 +26,10 @@ import { BorrowerDetails } from './borrowerpages/BorrowerDetails'
 import {LenderDashboard} from "./lenderpages/LenderDashboard"
 import LenderLoans from './lenderpages/LenderLoans'
 import LenderBorrowersList from './lenderpages/LenderBorrowerList'
-import { Settings } from './lenderpages/Settings'
+// import { Settings } from './lenderpages/Settings'
 import { Profile } from './adminpages/Profile'
+import { LenderProfile } from './lenderpages/LenderProfile'
+
 
 
 
@@ -79,7 +81,8 @@ function App() {
            <Route path="/lender/dashboard" element={<LenderDashboard />} />
              <Route path="/lender/borrowers" element={<LenderBorrowersList />} />
              <Route path="/lender/loans" element={<LenderLoans />} />
-             <Route path='/lender/password' element={<Settings />}/>
+             <Route path='/lender/profile' element={<LenderProfile />}/>
+             {/* <Route path='/lender/password' element={<Settings />}/> */}
 
           </Route>
         </Route>

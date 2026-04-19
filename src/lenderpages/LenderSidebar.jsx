@@ -3,21 +3,123 @@ import { MdOutlineDashboardCustomize } from "react-icons/md";
 import { FiUsers, FiFileText, FiLogOut } from "react-icons/fi";
 import { CiSettings } from "react-icons/ci";
 import { useDispatch } from "react-redux";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { logout } from "../store/authSlice";
+import { FiUser } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 
 const lenderMenuItems = [
   { label: "Dashboard", path: "/lender/dashboard", icon: <MdOutlineDashboardCustomize /> },
   { label: "Borrowers",  path: "/lender/borrowers",  icon: <FiUsers /> },
   { label: "My Loans",   path: "/lender/loans",      icon: <FiFileText /> },
-  { label: "Settings",   path: "/lender/password",          icon: <CiSettings /> },
+  { label: "Profile", path: "/lender/profile", icon: <FiUser /> },
+  // { label: "Settings",   path: "/lender/password",          icon: <CiSettings /> },
 ];
+
+
+// ─── Toast Icons ─────────────────────────────────────────────
+const ToastIcons = {
+  success: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+      strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  ),
+  error: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+      strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+      <circle cx="12" cy="12" r="10" />
+      <line x1="12" y1="8" x2="12" y2="12" />
+      <line x1="12" y1="16" x2="12.01" y2="16" />
+    </svg>
+  ),
+};
+
+const toastStyles = {
+  success: { icon: "bg-green-100 text-green-700", bar: "bg-green-500" },
+  error: { icon: "bg-red-100   text-red-700", bar: "bg-red-500" },
+};
+
+function ToastItem({ id, type, message, duration = 4000, onRemove }) {
+  const [removing, setRemoving] = useState(false);
+  const s = toastStyles[type] || toastStyles.error;
+
+  const dismiss = useCallback(() => {
+    setRemoving(true);
+    setTimeout(() => onRemove(id), 220);
+  }, [id, onRemove]);
+
+  useEffect(() => {
+    const t = setTimeout(dismiss, duration);
+    return () => clearTimeout(t);
+  }, [dismiss, duration]);
+
+  return (
+    <div className={`relative flex items-start gap-3 bg-white border border-gray-200
+      rounded-xl shadow-md p-4 min-w-[280px] max-w-sm overflow-hidden
+      transition-all duration-[220ms]
+      ${removing ? "opacity-0 translate-x-full" : "opacity-100 translate-x-0"}`}>
+      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${s.icon}`}>
+        {ToastIcons[type]}
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-medium text-gray-900 leading-snug">{message}</p>
+        <p className="text-xs text-gray-500 mt-0.5">
+          {type === "success" ? "Action completed successfully." : "Something went wrong."}
+        </p>
+      </div>
+      <button onClick={dismiss}
+        className="text-gray-400 hover:text-gray-600 hover:bg-gray-100
+          rounded p-0.5 transition-colors flex-shrink-0 mt-0.5 border-0 bg-transparent cursor-pointer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+          strokeLinecap="round" className="w-3 h-3">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+      <div className={`absolute bottom-0 left-0 h-0.5 ${s.bar}`}
+        style={{ animation: `shrink ${duration}ms linear forwards` }} />
+      <style>{`@keyframes shrink { from { width: 100%; } to { width: 0%; } }`}</style>
+    </div>
+  );
+}
+
+function ToastContainer({ toasts, onRemove }) {
+  return (
+    <div className="fixed top-5 right-5 z-[200] flex flex-col gap-2.5 pointer-events-none">
+      {toasts.map((t) => (
+        <div key={t.id} className="pointer-events-auto">
+          <ToastItem {...t} onRemove={onRemove} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+let _toastId = 0;
+function useToast() {
+  const [toasts, setToasts] = useState([]);
+
+  const showToast = useCallback(({ type, message, duration = 4000 }) => {
+    const id = ++_toastId;
+    setToasts((prev) => [...prev, { id, type, message, duration }]);
+  }, []);
+
+  const removeToast = useCallback((id) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  }, []);
+
+  return { toasts, showToast, removeToast };
+}
 
 export function LenderSidebar({ isMobileOpen, setIsMobileOpen, isCollapsed }) {
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showLogout, setShowLogout] = useState(false);
+
+  const {t} = useTranslation();
+  const { toasts, showToast, removeToast } = useToast();
 
   return (
     <>
@@ -121,34 +223,65 @@ export function LenderSidebar({ isMobileOpen, setIsMobileOpen, isCollapsed }) {
       </aside>
 
       {/* Logout Modal */}
-      {showLogout && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[100] p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-sm w-full overflow-hidden">
-            <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-6 py-5 border-b border-orange-200">
-              <h3 className="text-xl font-bold text-gray-900 flex items-center gap-3">
-                <FiLogOut className="w-6 h-6 text-orange-600" /> Confirm Logout
-              </h3>
-            </div>
-            <div className="p-6 text-center text-gray-700">Are you sure you want to logout?</div>
-            <div className="flex gap-4 px-6 py-5 border-t bg-gray-50">
-              <button onClick={() => setShowLogout(false)}
-                className="flex-1 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800
-                  font-medium rounded-xl cursor-pointer">
-                Cancel
-              </button>
-              <button onClick={() => {
-                dispatch(logout());
-                localStorage.removeItem("token");
-                localStorage.removeItem("user");
-                navigate("/");
-              }} className="flex-1 py-3 bg-red-600 hover:bg-red-700 text-white
-                font-medium rounded-xl cursor-pointer">
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+       {showLogout && (
+              <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
+                <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-sm w-full overflow-hidden border border-white/70 dark:border-gray-700">
+      
+                  {/* Header */}
+                  <div className="bg-orange-500 px-6 py-5 border-b border-orange-200">
+                    <h3 className="text-xl font-bold !text-white flex items-center gap-3">
+                      <FiLogOut className="w-6 h-6 text-white" />
+                      {t("sidebar.confirmLogout")}
+                    </h3>
+                  </div>
+      
+                  {/* Body */}
+                  <div className="p-6 space-y-4">
+                    <p className="text-gray-800 dark:text-gray-200 text-center font-medium">
+                      {t("sidebar.logoutQuestion")}
+                    </p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
+                      {t("sidebar.logoutNote")}
+                    </p>
+                  </div>
+      
+                  {/* Buttons */}
+                  <div className="flex items-center gap-4 px-6 py-5 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
+                    <button
+                      onClick={() => setShowLogout(false)}
+                      className="flex-1 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-xl transition-all cursor-pointer"
+                    >
+                      {t("sidebar.cancel")}
+                    </button>
+      
+                    <button
+                      onClick={() => {
+                        setShowLogout(false);
+                        showToast({ type: "success", message: "Logout successfully!" });
+                        setTimeout(() => {
+                          dispatch(logout());
+                          localStorage.removeItem("token");
+                          localStorage.removeItem("user");
+                          navigate("/");
+                        }, 1500);
+                      }}
+                      className="flex-1 py-3 bg-red-600 hover:bg-red-700 
+             dark:bg-red-500 dark:hover:bg-red-600 
+             dark:!bg-red-500 dark:!text-white
+             ring-2 ring-red-400 dark:ring-red-400
+             text-white font-semibold rounded-xl shadow-lg 
+             transition-all cursor-pointer active:scale-95"
+                    >
+                      {t("sidebar.confirm")}
+                    </button>
+                  </div>
+      
+                </div>
+              </div>
+            )}
+      
+            {/* toast */}
+            <ToastContainer toasts={toasts} onRemove={removeToast} />
     </>
   );
 }

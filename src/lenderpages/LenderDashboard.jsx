@@ -35,8 +35,10 @@ export function LenderDashboard() {
   );
 
   return (
-    <div className="min-h-screen pb-12 bg-gradient-to-br from-orange-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
-      <div className="p-5 sm:p-6 lg:p-8">
+    <div className="min-h-screen pb-12 
+  bg-gradient-to-br from-orange-50 via-white to-green-50 
+  dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
+      <div className="p-5 sm:p-6 lg:p-8 w-full">
 
         {/* Header */}
         <div className="flex justify-between items-start mb-8">
@@ -54,13 +56,13 @@ export function LenderDashboard() {
         </div>
 
         {/* Hero Banner */}
-        <div className="relative rounded-2xl overflow-hidden mb-8"
+        <div  className="relative rounded-3xl overflow-hidden mb-10 p-8"
           style={{ background: "linear-gradient(130deg, #f97316, #fb923c, #fbbf24)" }}>
           <div className="absolute inset-0 bg-white/10 backdrop-blur-sm" />
-          <div className="absolute rounded-full" style={{ width: 180, height: 180, background: "rgba(255,255,255,0.08)", top: -50, right: 60 }} />
-          <div className="absolute rounded-full" style={{ width: 90, height: 90, background: "rgba(255,255,255,0.05)", bottom: -20, right: 200 }} />
+          <div className="absolute rounded-full" style={{ width: 200, height: 200, background: "rgba(255,255,255,0.08)", top: -70, right: 80 }} />
+          <div className="absolute rounded-full" style={{ width: 110, height: 110, background: "rgba(255,255,255,0.05)", bottom: -30, right: 24 }} />
 
-          <div className="relative px-6 py-8 md:px-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div>
               <span className="inline-block text-[10px] font-bold text-white/80 bg-white/20 px-3 py-1 rounded-full uppercase tracking-widest mb-3">
                 {isImpersonating ? "Impersonated Session" : "Lender Panel"}

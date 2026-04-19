@@ -348,15 +348,13 @@ export function Navbar({ toggleSidebar, isCollapsed }) {
               </button>
 
                
-              <select
-                onChange={(e) => i18n.changeLanguage(e.target.value)}
-                className="border px-2 py-1 rounded cursor-pointer"
-              >
-               
-                <option value="en">English</option>
-                <option value="hi">Hindi</option>
-                <option value="mr">Marathi</option>
-              </select>
+             {/* Language */}
+            <select onChange={(e) => i18n.changeLanguage(e.target.value)}
+              className="hidden sm:block bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-2 py-1.5 text-xs font-medium text-gray-600 dark:text-gray-300 cursor-pointer outline-none">
+              <option value="en">EN</option>
+              <option value="hi">हि</option>
+              <option value="mr">म</option>
+            </select>
              
 
            
